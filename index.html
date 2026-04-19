@@ -9,20 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d1117;--card:#161b22;--card-h:#1c2333;--brd:#21262d;--txt:#e6edf3;--dim:#8b949e;--mut:#484f58;--grn:#3fb950;--grn-bg:rgba(63,185,80,.12);--red:#f85149;--red-bg:rgba(248,81,73,.12);--yel:#d29922;--yel-bg:rgba(210,153,34,.12);--blu:#58a6ff;--blu-bg:rgba(88,166,255,.12);--cya:#39d2c0;--pur:#bc8cff;--ora:#f0883e}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-serif;padding:14px;-webkit-font-smoothing:antialiased;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-serif;padding:14px;-webkit-font-smoothing:antialiased}
 .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
 .hdr h1{font-size:20px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,var(--blu),var(--cya));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .dt{color:var(--dim);font-size:12px;font-weight:500;background:var(--card);padding:5px 12px;border-radius:16px;border:1px solid var(--brd)}
-.pills{display:flex;gap:4px;flex-wrap:wrap}
-.pill{font-size:10px;font-weight:600;padding:4px 10px;border-radius:12px;border:1px solid var(--brd);background:var(--card);color:var(--dim);cursor:pointer;transition:all .15s;font-family:inherit}
-.pill:hover{border-color:var(--blu)}
-.pill.on{border-color:var(--blu);background:var(--blu-bg);color:var(--blu)}
 .filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.srch-w{position:relative;flex:1;min-width:200px;max-width:340px}
-.srch{width:100%;padding:8px 12px 8px 32px;border-radius:8px;border:1px solid var(--brd);background:var(--card);color:var(--txt);font-size:12px;font-family:inherit;outline:none;transition:border .15s}
-.srch:focus{border-color:var(--blu)}
+.srch-w{position:relative;flex:1;min-width:200px;max-width:360px}
+.srch{width:100%;padding:8px 12px 8px 32px;border-radius:8px;border:1px solid var(--brd);background:var(--card);color:var(--txt);font-size:12px;font-family:inherit;outline:none}.srch:focus{border-color:var(--blu)}
 .srch-i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none}
 .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px}
 .flt-tag{font-size:10px;color:var(--dim);background:var(--card);border:1px solid var(--brd);padding:3px 8px;border-radius:10px}
@@ -34,413 +27,196 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-1px;line-height:1.1}
 .sub{font-size:11px;color:var(--dim);margin-top:4px;font-weight:500}
 .bdg{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;margin-top:6px}
-.sem{display:flex;gap:4px;margin-top:6px}
-.sd{width:9px;height:9px;border-radius:50%;opacity:.15;transition:all .2s}.sd.on{opacity:1}
+.sem{display:flex;gap:4px;margin-top:6px}.sd{width:9px;height:9px;border-radius:50%;opacity:.15}.sd.on{opacity:1}
 .sg{background:var(--grn)}.sy{background:var(--yel)}.sr{background:var(--red)}
 .sd.on.sg{box-shadow:0 0 7px var(--grn)}.sd.on.sy{box-shadow:0 0 7px var(--yel)}.sd.on.sr{box-shadow:0 0 7px var(--red)}
-.dd{margin-top:10px;overflow:hidden;animation:si .25s ease}
-@keyframes si{from{opacity:0;max-height:0}to{opacity:1;max-height:800px}}
-.ddr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11px;gap:8px}
-.ddr:last-child{border-bottom:none}
-.ddr .n{color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.ddr .v{font-family:'JetBrains Mono',monospace;font-weight:600;flex-shrink:0}
+.dd{margin-top:10px;animation:si .25s ease}@keyframes si{from{opacity:0}to{opacity:1}}
+.ddr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11px;gap:8px}.ddr:last-child{border-bottom:none}
+.ddr .n{color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.ddr .v{font-family:'JetBrains Mono',monospace;font-weight:600;flex-shrink:0}
 .bkg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}
 .bkp{display:flex;justify-content:space-between;background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:6px;padding:7px 10px}
 .bkn{font-size:10px;color:var(--dim);font-weight:600}.bkv{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
 .sec{font-size:13px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1.3px;margin:20px 0 10px 4px;display:flex;align-items:center;gap:7px}
 .sec::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--blu)}
 .dc{background:rgba(248,81,73,.06);border-radius:7px;padding:9px 11px;margin-bottom:5px;border-left:3px solid var(--red)}
-.dcn{font-size:11px;font-weight:700;margin-bottom:3px}
-.dcd{display:flex;gap:12px;font-size:10px;flex-wrap:wrap}
-.fr2{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--brd);font-size:11px}
-.fr2:last-child{border-bottom:none}
+.dcn{font-size:11px;font-weight:700;margin-bottom:3px}.dcd{display:flex;gap:12px;font-size:10px;flex-wrap:wrap}
+.fr2{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--brd);font-size:11px}.fr2:last-child{border-bottom:none}
 .fp{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;margin-left:8px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
-.prog{margin-bottom:8px}
-.progh{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.prog{margin-bottom:8px}.progh{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
 .progv{font-family:'JetBrains Mono',monospace;font-weight:600}
-.progb{background:var(--brd);border-radius:3px;height:6px;overflow:hidden}
-.progf{height:100%;border-radius:3px;transition:width .5s ease}
+.progb{background:var(--brd);border-radius:3px;height:6px;overflow:hidden}.progf{height:100%;border-radius:3px;transition:width .5s ease}
 .al{display:flex;gap:10px;padding:10px 12px;border-radius:7px;margin-bottom:6px;font-size:12px;line-height:1.35}
-.al.ok{background:var(--grn-bg);border-left:3px solid var(--grn)}
-.al.cr{background:var(--red-bg);border-left:3px solid var(--red)}
-.al.wa{background:var(--yel-bg);border-left:3px solid var(--yel)}
+.al.ok{background:var(--grn-bg);border-left:3px solid var(--grn)}.al.cr{background:var(--red-bg);border-left:3px solid var(--red)}.al.wa{background:var(--yel-bg);border-left:3px solid var(--yel)}
 .al b{display:block;margin-bottom:1px}.al .ad{color:var(--dim)}
 .ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
-.ic{text-align:center}
-.iv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700}
-.iu{font-size:13px;color:var(--dim)}
+.ic{text-align:center}.iv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700}.iu{font-size:13px;color:var(--dim)}
 .ftr{text-align:center;color:var(--mut);font-size:10px;padding:16px 0 6px;letter-spacing:.4px}
-@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.anim{animation:fu .35s ease both}
-/* Fluxo chart agrupado */
-.fluxo-chart{margin-top:10px}
-.fluxo-row{display:grid;grid-template-columns:70px 1fr 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--brd)}
-.fluxo-row:last-child{border-bottom:none}
-.fluxo-bars{position:relative;height:36px;display:flex;align-items:flex-end;gap:2px}
-.fluxo-bar{border-radius:3px 3px 0 0;display:flex;align-items:flex-end;justify-content:center;font-size:8px;font-weight:700;color:#fff;padding-bottom:2px;transition:height .4s ease;min-width:30px}
+.fluxo-row{display:grid;grid-template-columns:70px 1fr 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--brd)}.fluxo-row:last-child{border-bottom:none}
+.fluxo-bar{border-radius:3px 3px 0 0;display:flex;align-items:flex-end;justify-content:center;font-size:8px;font-weight:700;color:#fff;padding-bottom:2px;min-width:30px;transition:height .4s ease}
 .fluxo-bar.e{background:linear-gradient(180deg,#3fb950,#238636)}.fluxo-bar.s{background:linear-gradient(180deg,#f85149,#da3633)}
-.fluxo-lbl{font-size:8px;color:var(--dim);text-align:center;margin-top:2px}
-.saldo-line{margin-top:14px;display:flex;align-items:center;gap:6px}
-.saldo-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.saldo-bar-bg{flex:1;height:6px;background:var(--brd);border-radius:3px;overflow:hidden;position:relative}
-.saldo-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.aging-bar{display:flex;height:24px;border-radius:4px;overflow:hidden;margin-top:8px;font-size:9px;font-weight:600}
+.aging-bar div{display:flex;align-items:center;justify-content:center;color:#fff;min-width:20px}
 @media(max-width:600px){.val{font-size:22px}.hdr h1{font-size:17px}.fluxo-row{grid-template-columns:55px 1fr 65px}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-// ==================== DADOS ====================
-const D = {
-  data_ref: "16/04/2026", periodo_ref: "Abril/2026",
-  saldos: {"Itaú":56351.76,"Inter":29007.23,"Stone":26751.83,"Caixa":1011.46},
-  receber: [
-    {c:"ANNA FLAVIA CAIRO PRIMO",v:2520,vc:"2026-04-08",p:0},
-    {c:"EDNALDO CARLOS PINTO",v:1386,vc:"2026-04-08",p:0},
-    {c:"AGUINALDO MESSIAS DE ANDRADE",v:637.5,vc:"2026-04-15",p:0},
-    {c:"IGOR GABRIEL FERREIRA NAZARE",v:636,vc:"2026-04-15",p:0},
-    {c:"PAULO ROGERIO DA SILVA",v:577.5,vc:"2026-04-15",p:0},
-    {c:"FRANSOA TELES PAULUTE",v:1245,vc:"2026-04-21",p:0},
-    {c:"ALQ LISBOA E-COMMERCE",v:3816,vc:"2026-04-08",p:1},
-    {c:"KEDOLL CALÇADOS LTDA.",v:1204,vc:"2026-04-15",p:1},
-    {c:"WALLAS MURILO VILELA ALVIN",v:6077.5,vc:"2026-04-01",p:1},
-    {c:"HARDY INDUSTRIA E COMERCIO",v:4620,vc:"2026-04-01",p:1},
-    {c:"IGOR GABRIEL FERREIRA NAZARE",v:5380,vc:"2026-04-22",p:0},
-    {c:"IGOR GABRIEL FERREIRA NAZARE",v:7200,vc:"2026-04-28",p:0},
-    {c:"IGOR GABRIEL FERREIRA NAZARE",v:10799.08,vc:"2026-05-05",p:0},
-    {c:"ANNA FLAVIA CAIRO PRIMO",v:1647,vc:"2026-04-25",p:0},
-    {c:"SCHUHSTORE CALÇADOS",v:18410,vc:"2026-04-22",p:0},
-    {c:"LUCAS MATEUS ROSA",v:13950,vc:"2026-04-22",p:0},
-    {c:"WALLAS MURILO VILELA ALVIN",v:14850,vc:"2026-04-25",p:0},
-    {c:"RALF SILVA LOURENCO",v:3875.5,vc:"2026-04-28",p:0},
-    {c:"MARCOS DONIZETI SILVA",v:3114.3,vc:"2026-04-28",p:0},
-    {c:"R. M. DE OLIVEIRA",v:1981.75,vc:"2026-04-21",p:0},
-    {c:"BORGES SOUZA COM.",v:3600,vc:"2026-04-28",p:0},
-    {c:"JANE MARIA DE ALMEIDA",v:8232,vc:"2026-04-30",p:0},
-    {c:"M V SANTANA CONFECÇAO",v:12500,vc:"2026-05-01",p:0},
-    {c:"MILENA APARECIDA",v:8600,vc:"2026-05-02",p:0},
-    {c:"PEDRO HENRIQUE",v:6500,vc:"2026-05-05",p:0},
-    {c:"CLAYTON RICHARD",v:11200,vc:"2026-05-07",p:0},
-    {c:"DK KIDS LTDA",v:5400,vc:"2026-04-30",p:0},
-    {c:"WILLIBAGS COMERCIO",v:4250,vc:"2026-05-03",p:0},
-    {c:"STARCOM ARTIGOS",v:3072,vc:"2026-04-28",p:0},
-    {c:"BRUNO FERNANDO",v:6766.9,vc:"2026-04-22",p:0},
-    {c:"L C DE SOUZA FONSECA",v:4980,vc:"2026-04-22",p:0},
-    {c:"CARLOS MURILO",v:2812,vc:"2026-04-25",p:0},
-    {c:"IVO MANHANI",v:550.8,vc:"2026-04-30",p:0},
-    {c:"GIOLO CALÇADOS",v:2626.8,vc:"2026-04-28",p:0},
-    {c:"TROPEIRO INDUSTRIA",v:1750,vc:"2026-04-28",p:0},
-    {c:"ANA LAURA DE S",v:5100,vc:"2026-05-01",p:0},
-    {c:"ESPACO LETICIA SOUZA",v:3318,vc:"2026-04-25",p:0},
-    {c:"LIDIANE KARLA",v:750,vc:"2026-04-07",p:1},
-    {c:"MILENA APARECIDA",v:1014,vc:"2026-04-02",p:1},
-    {c:"ANA PAULA OLIVEIRA",v:2872.8,vc:"2026-04-02",p:1},
-    {c:"LUIS CARLOS DO CARMO",v:3180,vc:"2026-04-07",p:1},
-    {c:"STREET WALKER",v:1582.57,vc:"2026-04-07",p:1},
-    {c:"SERGIO HENRIQUE",v:1411.58,vc:"2026-04-10",p:1},
-    {c:"MILENA LEANDRO DUARTE",v:7749.45,vc:"2026-04-08",p:1},
-    {c:"C SCHIARELLI",v:2794,vc:"2026-04-06",p:1},
-    {c:"ARTIGOS DA MODA",v:2900,vc:"2026-04-07",p:1},
-    {c:"LIGIA MARIA AMARAL",v:588.5,vc:"2026-04-14",p:1},
-    {c:"GRANTEX COMPONENTES",v:470,vc:"2026-04-06",p:1},
-    {c:"SÓ SINTETICOS",v:525,vc:"2026-04-09",p:1}
-  ],
-  pagar: [
-    {f:"ICAC",v:92324.56,cat:"MATÉRIA-PRIMA",p:0,vc:"2026-04-20"},
-    {f:"GLAUCO CICERO BARBOSA",v:71687.58,cat:"COMISSÕES",p:1,vc:"2026-04-15"},
-    {f:"ADINA INDUSTRIA",v:22222.22,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-14"},
-    {f:"ZAHONERO BRASIL",v:16167.68,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-14"},
-    {f:"KICOLLA ADESIVOS",v:9425,cat:"MATÉRIA-PRIMA",p:0,vc:"2026-04-20"},
-    {f:"POLLIBOXSUL",v:8490,cat:"MATÉRIA-PRIMA",p:0,vc:"2026-04-22"},
-    {f:"ATHAYDE & CARNEIRO",v:6307,cat:"MATÉRIA-PRIMA",p:0,vc:"2026-04-18"},
-    {f:"J S ESPUMAS",v:5200,cat:"MATÉRIA-PRIMA",p:0,vc:"2026-04-25"},
-    {f:"AGNELLO IMÓVEIS",v:7157.23,cat:"ALUGUEL",p:1,vc:"2026-04-06"},
-    {f:"RECEITA FEDERAL",v:951.62,cat:"IMPOSTOS",p:0,vc:"2026-04-20"},
-    {f:"HAPVIDA",v:1058.99,cat:"SAÚDE",p:1,vc:"2026-04-15"},
-    {f:"RACE TRANSPORTE",v:4831,cat:"FRETES",p:1,vc:"2026-04-13"},
-    {f:"HERVAL INDUSTRIA",v:8289.88,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-07"},
-    {f:"TEXTIL EVEREST",v:4050.28,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-14"},
-    {f:"BIATEX IMPREGNADORA",v:5794.29,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-02"},
-    {f:"DUBLATEX",v:475,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-02"},
-    {f:"RHEMA COMPONENTES",v:2141.6,cat:"MATÉRIA-PRIMA",p:1,vc:"2026-04-13"},
-    {f:"AZUL CONTABILIDADE",v:831.93,cat:"CONTABILIDADE",p:1,vc:"2026-04-10"}
-  ],
-  fluxo:[
-    {s:"Sem 1",pr:"16-23/abr",e:20358,sa:8400},
-    {s:"Sem 2",pr:"23-30/abr",e:34593,sa:14852},
-    {s:"Sem 3",pr:"30/abr-7/mai",e:54581,sa:18946},
-    {s:"Sem 4",pr:"7-14/mai",e:52481,sa:39327}
-  ],
-  pmr:17, pmp:5
-};
-
-const HOJE=new Date('2026-04-16');
-const f=v=>Math.round(v).toLocaleString('pt-BR');
-const ST=Object.values(D.saldos).reduce((a,b)=>a+b,0);
-
-// State
-let state = { per:'mes', busca:'', dd:null };
+const D = {"data_ref": "19/04/2026", "periodo_ref": "Abril/2026", "saldos": {"Itaú": 72053.18, "Inter": 5955.71, "Stone": 8725.22, "Caixa": 1011.46}, "saldo_total": 87745.57, "receber": {"aberto": 394074.81, "recebido": 4947372.76, "n_aberto": 211, "abr_aberto": 243571.09, "abr_recebido": 108981.6, "abr_titulos": 184}, "pagar": {"aberto": 633882.81, "pago": 5435439.47, "n_aberto": 324, "abr_total": 310046.6, "abr_pago": 128337.89, "abr_aberto": 181708.71, "vencidas": 95889.35, "n_vencidas": 30}, "inadimplencia": {"total": 137886.29, "n_titulos": 73, "taxa": 2.6, "aging": {"1-15d": 14172.2, "16-30d": 9365.21, "31-90d": 60465.78, ">90d": 53883.1}}, "top_devedores": [{"c": "MAIKON HENRIQUE DA COSTA ", "v": 53381.12, "d": 68}, {"c": "KENAI CALCANHEIRAS", "v": 18032.14, "d": 166}, {"c": "JP SILVA E-COMMERCE", "v": 13126.47, "d": 255}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 9342.0, "d": 2}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 7042.3, "d": 44}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 6184.84, "d": 356}, {"c": "DE PAULA SHOES  INDUSTRIA E COMERCIO DE ", "v": 6076.8, "d": 219}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 4078.55, "d": 27}, {"c": "J C DE MENESES LTDA. ", "v": 3171.95, "d": 425}, {"c": "CASAS BOLELI LTDA. ", "v": 2671.92, "d": 64}], "devedores_comprando": [{"c": "JP SILVA E-COMMERCE", "div": 13126.47, "nov": 10764.0, "dias": 255}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "div": 9342.0, "nov": 22376.52, "dias": 2}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "div": 7042.3, "nov": 11659.5, "dias": 44}, {"c": "RONERIO ALEXANDRE SILVA ", "div": 4078.55, "nov": 11695.55, "dias": 27}, {"c": "ANNA FLAVIA CAIRO PRIMO 42206198878", "div": 2520.0, "nov": 1647.0, "dias": 5}, {"c": "GIOLO CALÇADOS LTDA. ", "div": 2388.0, "nov": 2626.8, "dias": 36}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "div": 636.0, "nov": 24879.08, "dias": 4}], "fornecedores": [{"f": "ICAC - IND E COM IMPORTAÇÃO E EXPOR", "total": 120135.1, "pago": 0.0, "aberto": 120135.1}, {"f": "GLAUCO CICERO BARBOSA", "total": 71088.58, "pago": 69214.11, "aberto": 1874.47}, {"f": "ADINA INDUSTRIA , COMERCIO , IMPORT", "total": 22222.22, "pago": 22222.22, "aberto": 0.0}, {"f": "ZAHONERO BRASIL ", "total": 16167.68, "pago": 16167.68, "aberto": 0.0}, {"f": "RECEITA FEDERAL", "total": 10619.85, "pago": 0.0, "aberto": 10619.85}, {"f": "KICOLLA ADESIVOS", "total": 9425.0, "pago": 3770.0, "aberto": 5655.0}], "categorias": [{"cat": "MATERIA-PRIMA", "v": 196340.43}, {"cat": "COMISSOES", "v": 70063.85}, {"cat": "DAS", "v": 10619.85}, {"cat": "ALUGUEL", "v": 7157.23}, {"cat": "ICMS", "v": 6723.03}, {"cat": "FRETES", "v": 5641.0}], "fluxo": [{"s": "Sem 1", "pr": "19/04-26/04", "e": 38378.06, "sa": 138854.48, "saldo": -12730.85}, {"s": "Sem 2", "pr": "26/04-03/05", "e": 48415.19, "sa": 118273.63, "saldo": -82589.29}, {"s": "Sem 3", "pr": "03/05-10/05", "e": 63378.96, "sa": 87505.6, "saldo": -106715.93}, {"s": "Sem 4", "pr": "10/05-17/05", "e": 68574.05, "sa": 79957.99, "saldo": -118099.87}], "pmr": 17, "pmp": 22, "evo_rec": [{"m": "2025-01", "t": 225349.62}, {"m": "2025-02", "t": 138639.9}, {"m": "2025-03", "t": 227269.4}, {"m": "2025-04", "t": 340832.97}, {"m": "2025-05", "t": 330284.89}, {"m": "2025-06", "t": 312002.61}, {"m": "2025-07", "t": 352019.07}, {"m": "2025-08", "t": 386230.24}, {"m": "2025-09", "t": 492268.67}, {"m": "2025-10", "t": 427860.21}, {"m": "2025-12", "t": 516033.15}, {"m": "2026-01", "t": 607264.25}, {"m": "2026-02", "t": 632839.9}, {"m": "2026-04", "t": 352552.69}], "rec_items": [{"c": "J C DE MENESES LTDA. ", "v": 3171.95, "vc": "2025-02-18", "p": 0}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 1437.8, "vc": "2025-04-30", "p": 0}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 1186.76, "vc": "2025-04-28", "p": 0}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 1186.76, "vc": "2025-05-05", "p": 0}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 1186.76, "vc": "2025-05-12", "p": 0}, {"c": "TERAPIA DOS PÉS INDUSTRIA E COMERCIO DE ", "v": 1186.76, "vc": "2025-05-19", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 2278.55, "vc": "2025-08-07", "p": 0}, {"c": "BALCAO RAPIDO", "v": 53.0, "vc": "2025-07-11", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 4167.8, "vc": "2025-08-11", "p": 0}, {"c": "RHEMA COMPONENTES ", "v": 2120.0, "vc": "2025-07-31", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 1136.34, "vc": "2025-08-18", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 5543.78, "vc": "2025-08-29", "p": 0}, {"c": "DE PAULA SHOES  INDUSTRIA E COMERCIO DE ", "v": 2025.6, "vc": "2025-09-12", "p": 0}, {"c": "DE PAULA SHOES  INDUSTRIA E COMERCIO DE ", "v": 2025.6, "vc": "2025-09-19", "p": 0}, {"c": "DE PAULA SHOES  INDUSTRIA E COMERCIO DE ", "v": 2025.6, "vc": "2025-09-26", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1344.0, "vc": "2025-11-04", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1550.0, "vc": "2025-11-07", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1036.0, "vc": "2025-11-25", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1036.0, "vc": "2025-11-15", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 2496.0, "vc": "2025-11-20", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1030.0, "vc": "2025-11-24", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 700.0, "vc": "2025-11-17", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 2720.0, "vc": "2025-11-20", "p": 0}, {"c": "HARDY INDUSTRIA E COMERCIO LTDA ", "v": 25.0, "vc": "2025-11-06", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 669.0, "vc": "2025-11-25", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 672.0, "vc": "2025-11-25", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 780.0, "vc": "2025-11-26", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 700.0, "vc": "2025-11-20", "p": 0}, {"c": "RODRIGO JACOBINI EIRELLI", "v": 1951.9, "vc": "2025-11-13", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1366.0, "vc": "2025-11-27", "p": 0}, {"c": "RODRIGO JACOBINI EIRELLI", "v": 655.0, "vc": "2025-11-13", "p": 0}, {"c": "PRISCILA FERRANTE COMERCIO DE CALÇADOS L", "v": 1089.0, "vc": "2025-11-30", "p": 0}, {"c": "KENAI CALCANHEIRAS", "v": 1933.14, "vc": "2025-11-28", "p": 0}, {"c": "PRISCILA FERRANTE COMERCIO DE CALÇADOS L", "v": 1089.0, "vc": "2025-12-15", "p": 0}, {"c": "RAFAELA CAPEL INDUSTRIA E COMERCIO DE BO", "v": 308.0, "vc": "2025-12-17", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 833.33, "vc": "2026-05-08", "p": 0}, {"c": "BALCAO RAPIDO", "v": 209.2, "vc": "2026-04-04", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1790.46, "vc": "2026-05-09", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1790.46, "vc": "2026-04-22", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1911.15, "vc": "2026-05-09", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1911.15, "vc": "2026-04-22", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 810.03, "vc": "2026-04-29", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 810.03, "vc": "2026-05-13", "p": 0}, {"c": "GIOLO CALÇADOS LTDA. ", "v": 2626.8, "vc": "2026-04-27", "p": 0}, {"c": "GIOLO CALÇADOS LTDA. ", "v": 2388.0, "vc": "2026-03-14", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 3007.2, "vc": "2026-02-10", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2880.0, "vc": "2026-02-17", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 4250.0, "vc": "2026-02-18", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2880.0, "vc": "2026-03-09", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1716.21, "vc": "2026-04-24", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1716.21, "vc": "2026-05-24", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 6290.67, "vc": "2026-02-25", "p": 0}, {"c": "CASAS BOLELI LTDA. ", "v": 1036.0, "vc": "2026-03-05", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2560.66, "vc": "2026-02-19", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2560.67, "vc": "2026-02-26", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2560.67, "vc": "2026-03-05", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2462.41, "vc": "2026-02-20", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2462.42, "vc": "2026-02-27", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2462.42, "vc": "2026-03-06", "p": 0}, {"c": "CASAS BOLELI LTDA. ", "v": 235.92, "vc": "2026-03-09", "p": 0}, {"c": "LENILTON DONIZETE DOS SANTOS REIS ", "v": 39.1, "vc": "2026-02-16", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 3280.0, "vc": "2026-02-25", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 3280.0, "vc": "2026-03-04", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 3280.0, "vc": "2026-03-11", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 412.3, "vc": "2026-03-06", "p": 0}, {"c": "TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP", "v": 887.6, "vc": "2026-05-06", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 1835.24, "vc": "2026-03-05", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 3250.0, "vc": "2026-03-09", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 1115.4, "vc": "2026-03-10", "p": 0}, {"c": "HARDY INDUSTRIA E COMERCIO LTDA ", "v": 230.0, "vc": "2026-02-25", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 2600.0, "vc": "2026-03-27", "p": 0}, {"c": "CASAS BOLELI LTDA. ", "v": 1400.0, "vc": "2026-02-14", "p": 0}, {"c": "MAIKON HENRIQUE DA COSTA ", "v": 2963.36, "vc": "2026-03-13", "p": 0}, {"c": "TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP", "v": 435.0, "vc": "2026-04-19", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 3178.15, "vc": "2026-03-23", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 900.4, "vc": "2026-03-25", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1343.34, "vc": "2026-03-19", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1343.33, "vc": "2026-03-26", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1343.33, "vc": "2026-04-02", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 9342.0, "vc": "2026-04-17", "p": 0}, {"c": "FRANSOA TELES PAULUTE", "v": 1245.0, "vc": "2026-04-21", "p": 0}, {"c": "FRANSOA TELES PAULUTE", "v": 1245.0, "vc": "2026-05-11", "p": 0}, {"c": "FRANSOA TELES PAULUTE", "v": 1245.0, "vc": "2026-05-01", "p": 0}, {"c": "PARADISE MODA E VESTUARIO LTDA ", "v": 1411.92, "vc": "2026-04-22", "p": 0}, {"c": "E. A. P. CALÇADOS LTDA. ", "v": 1732.5, "vc": "2026-04-29", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 3406.41, "vc": "2026-05-13", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 636.0, "vc": "2026-04-15", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 636.0, "vc": "2026-04-22", "p": 0}, {"c": "MARCIO NEVES DOS SANTOS ", "v": 1894.2, "vc": "2026-04-29", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 2686.41, "vc": "2026-04-30", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 2686.42, "vc": "2026-04-23", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 2686.41, "vc": "2026-05-07", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 3084.48, "vc": "2026-05-14", "p": 0}, {"c": "PAULO ROGERIO DA SILVA ", "v": 577.5, "vc": "2026-04-09", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 697.81, "vc": "2026-04-30", "p": 0}, {"c": "ESPACO LETICIA SOUZA LTDA ", "v": 75.2, "vc": "2026-04-30", "p": 0}, {"c": "STARCOM ARTIGOS PARA CALÇADOS LTDA. ", "v": 542.85, "vc": "2026-04-20", "p": 0}, {"c": "DK KIDS LTDA ", "v": 530.7, "vc": "2026-04-20", "p": 0}, {"c": "P. B. IMPORTS LTDA. ", "v": 3000.0, "vc": "2026-04-20", "p": 0}, {"c": "JOSE ROBERTO PANDOLFO ", "v": 1092.0, "vc": "2026-05-04", "p": 0}, {"c": "BRUNO FERNANDO DOMINGOS ", "v": 2472.0, "vc": "2026-04-20", "p": 0}, {"c": "59753866 MILENA APARECIDA MALDONADO DOS ", "v": 375.0, "vc": "2026-04-22", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 848.0, "vc": "2026-05-12", "p": 0}, {"c": "P. B. IMPORTS LTDA. ", "v": 1800.0, "vc": "2026-04-21", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 848.0, "vc": "2026-05-05", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 848.0, "vc": "2026-04-28", "p": 0}, {"c": "KEDOLL CALÇADOS LTDA. ", "v": 702.0, "vc": "2026-04-21", "p": 0}, {"c": "WEBE FLEX INDUSTRIA DE CALÇADO LTDA ", "v": 903.5, "vc": "2026-05-05", "p": 0}, {"c": "ANNA FLAVIA CAIRO PRIMO 42206198878", "v": 2520.0, "vc": "2026-04-14", "p": 0}, {"c": "MARCIO NEVES DOS SANTOS ", "v": 3624.0, "vc": "2026-05-05", "p": 0}, {"c": "STARCOM ARTIGOS PARA CALÇADOS LTDA. ", "v": 1247.7, "vc": "2026-04-22", "p": 0}, {"c": "JOSE ROBERTO PANDOLFO ", "v": 1050.0, "vc": "2026-05-06", "p": 0}, {"c": "WESLEY DE OLIVEIRA ALMEIDA", "v": 2899.12, "vc": "2026-05-06", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 2175.0, "vc": "2026-05-06", "p": 0}, {"c": "STARCOM ARTIGOS PARA CALÇADOS LTDA. ", "v": 1320.0, "vc": "2026-04-22", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 740.0, "vc": "2026-05-06", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 740.0, "vc": "2026-04-29", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 636.0, "vc": "2026-05-06", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 9077.5, "vc": "2026-05-06", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 718.0, "vc": "2026-05-06", "p": 0}, {"c": "ESPACO LETICIA SOUZA LTDA ", "v": 6947.45, "vc": "2026-05-06", "p": 0}, {"c": "ADRIANO  CARLOS BARROS ", "v": 820.1, "vc": "2026-05-06", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1692.0, "vc": "2026-05-14", "p": 0}, {"c": "TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP", "v": 337.73, "vc": "2026-05-09", "p": 0}, {"c": "DK KIDS LTDA ", "v": 1089.0, "vc": "2026-04-23", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1692.0, "vc": "2026-05-07", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 1692.0, "vc": "2026-04-30", "p": 0}, {"c": "ALQ LISBOA E-COMMERCE ", "v": 3150.4, "vc": "2026-04-23", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 792.0, "vc": "2026-05-21", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 1575.0, "vc": "2026-05-21", "p": 0}, {"c": "LIGIA MARIA AMARAL TEIXEIRA RODRIGUES", "v": 1093.95, "vc": "2026-05-07", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 897.5, "vc": "2026-05-07", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 864.0, "vc": "2026-05-08", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 3898.8, "vc": "2026-05-08", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 990.0, "vc": "2026-05-08", "p": 0}, {"c": "RODRIGO FONSECA DA COSTA ", "v": 953.56, "vc": "2026-04-27", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1880.17, "vc": "2026-05-18", "p": 0}, {"c": "FRANSOA TELES PAULUTE", "v": 827.75, "vc": "2026-05-11", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1880.17, "vc": "2026-05-11", "p": 0}, {"c": "59753866 MILENA APARECIDA MALDONADO DOS ", "v": 1830.6, "vc": "2026-04-27", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1880.16, "vc": "2026-05-04", "p": 0}, {"c": "PARADISE MODA E VESTUARIO LTDA ", "v": 480.0, "vc": "2026-04-27", "p": 0}, {"c": "KEDOLL CALÇADOS LTDA. ", "v": 312.0, "vc": "2026-04-27", "p": 0}, {"c": "WESLEY DE OLIVEIRA ALMEIDA", "v": 3035.27, "vc": "2026-05-11", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 1379.5, "vc": "2026-05-11", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 2424.5, "vc": "2026-05-11", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 4274.14, "vc": "2026-05-11", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 1072.5, "vc": "2026-05-25", "p": 0}, {"c": "ESPACO LETICIA SOUZA LTDA ", "v": 1321.5, "vc": "2026-05-12", "p": 0}, {"c": "JOSE ROBERTO PANDOLFO ", "v": 1050.0, "vc": "2026-05-12", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 2800.0, "vc": "2026-05-12", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 2442.6, "vc": "2026-05-12", "p": 0}, {"c": "WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS", "v": 726.0, "vc": "2026-05-12", "p": 0}, {"c": "PARADISE MODA E VESTUARIO LTDA ", "v": 650.0, "vc": "2026-05-12", "p": 0}, {"c": "TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP", "v": 1785.0, "vc": "2026-06-13", "p": 0}, {"c": "THIAGO HENRIQUE JUSTINO", "v": 2443.72, "vc": "2026-04-28", "p": 0}, {"c": "RCA INDUSTRIA E COMERCIO DE ARTEFATOS DE", "v": 2111.3, "vc": "2026-05-12", "p": 0}, {"c": "BRUNA PIMENTEL PEREIRA ", "v": 2410.0, "vc": "2026-04-21", "p": 0}, {"c": "WESLEY DE OLIVEIRA ALMEIDA", "v": 1653.85, "vc": "2026-05-13", "p": 0}, {"c": "LIGIA MARIA AMARAL TEIXEIRA RODRIGUES", "v": 496.39, "vc": "2026-05-13", "p": 0}, {"c": "BRUNO FERNANDO DOMINGOS ", "v": 4625.5, "vc": "2026-04-29", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 1815.0, "vc": "2026-05-13", "p": 0}, {"c": "BALCAO RAPIDO", "v": 250.0, "vc": "2026-04-15", "p": 0}, {"c": "LIDIANE KARLA RODRIGUES", "v": 750.0, "vc": "2026-05-07", "p": 0}, {"c": "LIDIANE KARLA RODRIGUES", "v": 750.0, "vc": "2026-06-07", "p": 0}, {"c": "LIDIANE KARLA RODRIGUES", "v": 750.0, "vc": "2026-07-07", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 2773.8, "vc": "2026-05-13", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 2773.8, "vc": "2026-05-06", "p": 0}, {"c": "JP SILVA E-COMMERCE", "v": 2773.8, "vc": "2026-04-29", "p": 0}, {"c": "LIGIA MARIA AMARAL TEIXEIRA RODRIGUES", "v": 496.38, "vc": "2026-05-20", "p": 0}, {"c": "LIGIA MARIA AMARAL TEIXEIRA RODRIGUES", "v": 496.38, "vc": "2026-05-27", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 1127.5, "vc": "2026-04-29", "p": 0}, {"c": "AGUINALDO MESSIAS DE ANDRADE ", "v": 637.5, "vc": "2026-04-15", "p": 0}, {"c": "MARCOS DONIZETI SILVA ", "v": 2833.6, "vc": "2026-04-23", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 2937.6, "vc": "2026-05-21", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 2937.6, "vc": "2026-06-04", "p": 0}, {"c": "JANE MARIA DE ALMEIDA PEREIRA ", "v": 2937.6, "vc": "2026-05-28", "p": 0}, {"c": "ANNA FLAVIA CAIRO PRIMO 42206198878", "v": 1647.0, "vc": "2026-05-14", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 706.08, "vc": "2026-05-14", "p": 0}, {"c": "MARCOS DONIZETI SILVA ", "v": 2248.4, "vc": "2026-04-30", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 2110.31, "vc": "2026-05-21", "p": 0}, {"c": "KEDOLL CALÇADOS LTDA. ", "v": 459.0, "vc": "2026-04-30", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 2110.31, "vc": "2026-05-14", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 1550.0, "vc": "2026-05-14", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 2110.32, "vc": "2026-05-07", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 706.08, "vc": "2026-05-21", "p": 0}, {"c": "WALLAS MURILO VILELA ALVIN ", "v": 6355.2, "vc": "2026-04-30", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 789.8, "vc": "2026-05-14", "p": 0}, {"c": "RALF SILVA LOURENCO", "v": 5072.65, "vc": "2026-04-23", "p": 0}, {"c": "MARCIO NEVES DOS SANTOS ", "v": 2937.6, "vc": "2026-04-30", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 3989.7, "vc": "2026-05-14", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 897.5, "vc": "2026-05-14", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 2265.25, "vc": "2026-05-22", "p": 0}, {"c": "50.833.209 IGOR GABRIEL FERREIRA NAZARE", "v": 1500.0, "vc": "2026-05-15", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 2265.25, "vc": "2026-06-12", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 2265.25, "vc": "2026-06-05", "p": 0}, {"c": "61655465 PEDRO HENRIQUE GONCALVES PINTO", "v": 2265.25, "vc": "2026-05-29", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 1012.66, "vc": "2026-05-01", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 4673.76, "vc": "2026-05-08", "p": 0}, {"c": "PARADISE MODA E VESTUARIO LTDA ", "v": 1912.5, "vc": "2026-05-15", "p": 0}, {"c": "MILENA LEANDRO DUARTE", "v": 4384.8, "vc": "2026-05-15", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 764.67, "vc": "2026-05-22", "p": 0}, {"c": "KEDOLL CALÇADOS LTDA. ", "v": 1091.2, "vc": "2026-05-01", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 4673.76, "vc": "2026-05-22", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 764.67, "vc": "2026-05-15", "p": 0}, {"c": "58.614.509 CLAYTON RICHARD DE PAULA ", "v": 700.0, "vc": "2026-05-01", "p": 0}, {"c": "R. M. DE OLIVEIRA ACESSORIOS ", "v": 1012.66, "vc": "2026-05-08", "p": 0}, {"c": "M V SANTANA CONFECÇAO ", "v": 4673.76, "vc": "2026-05-15", "p": 0}, {"c": "61.062.255 ANA LAURA DE SOUZA ALVES", "v": 764.66, "vc": "2026-05-08", "p": 0}, {"c": "MARCIO NEVES DOS SANTOS ", "v": 4016.5, "vc": "2026-05-01", "p": 0}, {"c": "RONERIO ALEXANDRE SILVA ", "v": 900.24, "vc": "2026-05-15", "p": 0}], "pag_items": [{"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-05-06", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-06-05", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-07-05", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-08-04", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-09-03", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-10-03", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-11-02", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2026-12-02", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-01-01", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-01-31", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-03-02", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-04-01", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-05-01", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-05-31", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-06-30", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-07-30", "p": 0, "cat": "VEICULOS"}, {"f": "DESTAQUE FIAT POA", "v": 2368.74, "vc": "2027-08-29", "p": 0, "cat": "VEICULOS"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 13789.42, "vc": "2025-12-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 274.58, "vc": "2025-12-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-06-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-07-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-08-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-09-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "COMERCIAL AUTOMOTIVO", "v": 55.59, "vc": "2026-10-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "DUBLATEX COMPONENTES PARA BOLSAS E CALÇA", "v": 21910.0, "vc": "2026-02-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ATHAYDE & CARNEIRO DE OLIVEIRA LTDA. ", "v": 3089.5, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 64.7, "vc": "2026-02-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 958.4, "vc": "2026-03-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3170.3, "vc": "2026-02-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 264.23, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 75.16, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 652.83, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-05-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-06-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-07-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-08-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-09-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-10-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-11-01", "p": 0, "cat": "OUTROS"}, {"f": "MAGALU", "v": 280.0, "vc": "2026-12-01", "p": 0, "cat": "OUTROS"}, {"f": "ESPACO LETICIA SOUZA LTDA ", "v": 2781.53, "vc": "2026-03-19", "p": 0, "cat": "nan"}, {"f": "ESPACO LETICIA SOUZA LTDA ", "v": 2044.21, "vc": "2026-03-20", "p": 0, "cat": "nan"}, {"f": "WESLEY DE OLIVEIRA ALMEIDA", "v": 3933.98, "vc": "2026-03-13", "p": 0, "cat": "nan"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 257.01, "vc": "2026-04-29", "p": 0, "cat": "EMBALAGENS"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2232.19, "vc": "2026-04-29", "p": 0, "cat": "EMBALAGENS"}, {"f": "FRANTUB TUBETES PARA INDUSTRIA TEXTIL LT", "v": 311.9, "vc": "2026-04-20", "p": 0, "cat": "INSUMOS"}, {"f": "FRANTUB TUBETES PARA INDUSTRIA TEXTIL LT", "v": 311.9, "vc": "2026-05-04", "p": 0, "cat": "INSUMOS"}, {"f": "FRANTUB TUBETES PARA INDUSTRIA TEXTIL LT", "v": 311.9, "vc": "2026-04-27", "p": 0, "cat": "INSUMOS"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 294.88, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "POLLIBOXSUL ECOADESIVOS LTDA", "v": 1890.17, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 99.09, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 99.09, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 99.09, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 77.4, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 77.4, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 80.44, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 80.44, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 80.44, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 305.29, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 187.34, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 187.34, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 209.02, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 209.02, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 209.02, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 26.02, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 26.02, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 26.02, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 3472.0, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 3472.0, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 3472.0, "vc": "2026-05-05", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 3472.0, "vc": "2026-05-12", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 577.0, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 577.0, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 577.0, "vc": "2026-05-05", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 577.0, "vc": "2026-05-12", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 10776.34, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4930.29, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4930.28, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4243.41, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9194.02, "vc": "2026-04-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2561.12, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 860.61, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 860.61, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 860.61, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 672.29, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 698.66, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 698.66, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 698.66, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2651.51, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1627.06, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1627.06, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1815.38, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1815.38, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1815.38, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 225.98, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 225.98, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 225.98, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 1382.76, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 1382.76, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3266.2, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 480.0, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 383.33, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 1233.33, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "CACILDO PEIXOTO ALVES & CIA LTDA. ", "v": 1399.2, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 499.99, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 499.99, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 499.99, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 499.99, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 143.68, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 143.68, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 86.74, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 86.73, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 86.73, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 86.73, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 86.73, "vc": "2026-05-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 44.52, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 44.52, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 622.45, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 622.43, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 622.43, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 622.43, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 622.43, "vc": "2026-05-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 462.27, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 462.27, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 462.27, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1382.4, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1382.4, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1382.4, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1382.4, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 45.37, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 45.4, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 45.39, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 45.39, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 45.39, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 226.65, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 226.65, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 226.65, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 257.01, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 257.01, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 257.01, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "APOLO ARTES COMERCIO ATACADISTA ", "v": 20.16, "vc": "2026-04-18", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9376.18, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9376.18, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7442.79, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7442.79, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7442.8, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 1158.0, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 720.0, "vc": "2026-03-16", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 1250.0, "vc": "2026-03-11", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 288.0, "vc": "2026-03-16", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 2074.14, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 2074.14, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4660.08, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4660.08, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4660.07, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7671.03, "vc": "2026-04-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7671.03, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7671.03, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 597.5, "vc": "2026-04-17", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 622.5, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4342.6, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4342.6, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4342.6, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4342.6, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1247.92, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1247.92, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 753.27, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 753.27, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 753.27, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 753.27, "vc": "2026-05-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 386.68, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 386.68, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 5405.97, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 5405.97, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 5405.97, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 5405.97, "vc": "2026-05-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4014.93, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4014.93, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 4014.93, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1968.54, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1968.54, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1968.54, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2232.19, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2232.19, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 2232.19, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3106.72, "vc": "2026-04-24", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3106.71, "vc": "2026-05-01", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 5114.02, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 5114.02, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 1100.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 147.45, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 147.44, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 147.44, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 147.44, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 147.44, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 445.8, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 445.79, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 445.79, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 445.79, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 445.79, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7378.33, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7378.32, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 7378.33, "vc": "2026-05-11", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 1015.45, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 1013.0, "vc": "2026-05-04", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 1013.0, "vc": "2026-05-11", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 1013.0, "vc": "2026-05-18", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "TEXTIL EVEREST LTDA. ", "v": 1013.0, "vc": "2026-05-25", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 315.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 525.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 1323.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 6810.88, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 6810.89, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 394.21, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 394.21, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 394.21, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 394.21, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 394.21, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1280.56, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1280.56, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1280.56, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1280.56, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 1280.56, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3871.81, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3871.81, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3871.81, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3871.81, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 3871.81, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 4540.62, "vc": "2026-04-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ALGAR TELECOM S/A", "v": 151.48, "vc": "2026-04-20", "p": 0, "cat": "TELEFONE/INTERNET"}, {"f": "ALGAR TELECOM S/A", "v": 20.0, "vc": "2026-05-01", "p": 0, "cat": "TELEFONE/INTERNET"}, {"f": "POSTO DE COMBUSTIVEL", "v": 168.71, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "POSTO DE COMBUSTIVEL", "v": 100.0, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "POSTO DE COMBUSTIVEL", "v": 121.54, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "AGENCIA DE CORREIO SANTOS DUMONT", "v": 38.2, "vc": "2026-05-01", "p": 0, "cat": "CORREIOS"}, {"f": "AGENCIA DE CORREIO SANTOS DUMONT", "v": 29.7, "vc": "2026-05-01", "p": 0, "cat": "CORREIOS"}, {"f": "RODRIGO HUSSEIN VITORIANO", "v": 209.0, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO"}, {"f": "VAREJAO E SUPERMERCADO PATROCINIO LTDA", "v": 101.95, "vc": "2026-05-01", "p": 0, "cat": "ALIMENTACAO"}, {"f": "VAREJAO E SUPERMERCADO PATROCINIO LTDA", "v": 74.85, "vc": "2026-04-24", "p": 0, "cat": "ALIMENTACAO"}, {"f": "VAREJAO E SUPERMERCADO PATROCINIO LTDA", "v": 83.59, "vc": "2026-05-01", "p": 0, "cat": "ALIMENTACAO"}, {"f": "POSTO DE COMBUSTIVEL", "v": 23.45, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "PALACIO DAS TINTAS FRANCA EIRELLI EPP ", "v": 78.0, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}, {"f": "PORTAS E CIA ", "v": 580.0, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO PREDIAL"}, {"f": "DROGAFARMA PRONTO SOCORRO", "v": 28.47, "vc": "2026-05-01", "p": 0, "cat": "MEDICAMENTOS"}, {"f": "RECEITA FEDERAL", "v": 10619.85, "vc": "2026-04-20", "p": 0, "cat": "DAS"}, {"f": "ICMS", "v": 5267.47, "vc": "2026-04-30", "p": 0, "cat": "ICMS"}, {"f": "ICMS", "v": 1455.56, "vc": "2026-05-29", "p": 0, "cat": "ICMS"}, {"f": "ABRASFRAN IND E COM FITAS ADESIVAS LTDA", "v": 338.34, "vc": "2026-05-14", "p": 0, "cat": "INSUMOS"}, {"f": "ABRASFRAN IND E COM FITAS ADESIVAS LTDA", "v": 338.33, "vc": "2026-05-29", "p": 0, "cat": "INSUMOS"}, {"f": "ABRASFRAN IND E COM FITAS ADESIVAS LTDA", "v": 338.33, "vc": "2026-06-13", "p": 0, "cat": "INSUMOS"}, {"f": "KICOLLA ADESIVOS", "v": 1508.0, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 1508.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 1508.0, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 725.0, "vc": "2026-05-08", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 750.0, "vc": "2026-05-10", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 1820.0, "vc": "2026-05-15", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RHEMA COMPONENTES ", "v": 360.0, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "METALFRAN IND E COM DE METAIS LTDA", "v": 1200.0, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "CACILDO PEIXOTO ALVES & CIA LTDA. ", "v": 759.23, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 109.32, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 109.27, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 109.27, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 109.27, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 109.27, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9454.52, "vc": "2026-05-12", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9454.51, "vc": "2026-05-19", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9454.51, "vc": "2026-05-26", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "BRASIL TAPE IND E COM DE FITAS ADESIVAS", "v": 666.0, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RENATA BARBARA GOMES MACHADO", "v": 2200.0, "vc": "2026-05-12", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9270.18, "vc": "2026-05-14", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9270.18, "vc": "2026-05-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 9270.18, "vc": "2026-05-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 2929.19, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 2929.2, "vc": "2026-05-14", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 2929.2, "vc": "2026-05-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 6104.35, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 6104.36, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 6104.36, "vc": "2026-05-27", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3011.93, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3011.93, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3011.92, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 381.33, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 381.33, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 381.33, "vc": "2026-05-05", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "HERVAL INDUSTRIA DE MOVEIS COLCHOES E ES", "v": 6990.6, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 377.0, "vc": "2026-04-23", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 377.0, "vc": "2026-04-30", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "KICOLLA ADESIVOS", "v": 377.0, "vc": "2026-05-07", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 5639.33, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 5639.33, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 5639.33, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 949.12, "vc": "2026-04-22", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 949.12, "vc": "2026-04-29", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 949.12, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 949.12, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "J S ESPUMAS FLEXIVEIS ", "v": 949.12, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 1525.33, "vc": "2026-04-21", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 1525.33, "vc": "2026-04-28", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "VIA SUL INJETADOS LTDA ME", "v": 1525.35, "vc": "2026-05-05", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3635.53, "vc": "2026-05-06", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3635.53, "vc": "2026-05-13", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "ICAC - IND E COM IMPORTAÇÃO E EXPORTAÇÃO", "v": 3635.53, "vc": "2026-05-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "RACE TRANSPORTE FRANCA LTDA", "v": 185.0, "vc": "2026-04-20", "p": 0, "cat": "MATERIA-PRIMA"}, {"f": "GLAUCO CICERO BARBOSA", "v": 1874.47, "vc": "2026-04-20", "p": 0, "cat": "COMISSOES"}, {"f": "SABESP", "v": 350.77, "vc": "2026-04-22", "p": 0, "cat": "AGUA"}, {"f": "MARANGONI E SOUZA COMERCIO DE EQUIPAMENT", "v": 110.0, "vc": "2026-05-01", "p": 0, "cat": "EPI/UNIFORME"}, {"f": "COMPANHIA PAULISTA DE FORÇA E LUZ", "v": 2733.45, "vc": "2026-04-23", "p": 0, "cat": "LUZ"}, {"f": "SCALA SISTEMAS ELETRONICOS LTDA", "v": 105.51, "vc": "2026-05-10", "p": 0, "cat": "SEGURO PREDIAL"}, {"f": "FUNDO DE GARANTIA POR TEMPO DE SERVICO ", "v": 1111.37, "vc": "2026-04-20", "p": 0, "cat": "FGTS"}, {"f": "MINISTERIO DA PREVIDENCIA E ASSITENCIA S", "v": 1321.43, "vc": "2026-04-20", "p": 0, "cat": "INSS"}, {"f": "POSTO DE COMBUSTIVEL", "v": 115.56, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "POSTO DE COMBUSTIVEL", "v": 81.63, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "POSTO DE COMBUSTIVEL", "v": 131.84, "vc": "2026-05-01", "p": 0, "cat": "COMBUSTIVEL"}, {"f": "AGENCIA DE CORREIO SANTOS DUMONT", "v": 31.6, "vc": "2026-05-01", "p": 0, "cat": "CORREIOS"}, {"f": "AGENCIA DE CORREIO SANTOS DUMONT", "v": 34.9, "vc": "2026-05-01", "p": 0, "cat": "CORREIOS"}, {"f": "RACE TRANSPORTE FRANCA LTDA", "v": 850.0, "vc": "2026-04-20", "p": 0, "cat": "FRETES"}, {"f": "J. S. FRANCA TRANSPORTADORA DE CARGAS EI", "v": 462.0, "vc": "2026-04-20", "p": 0, "cat": "FRETES"}, {"f": "J. S. FRANCA TRANSPORTADORA DE CARGAS EI", "v": 266.0, "vc": "2026-04-20", "p": 0, "cat": "FRETES"}, {"f": "RACE TRANSPORTE FRANCA LTDA", "v": 918.0, "vc": "2026-04-20", "p": 0, "cat": "FRETES"}, {"f": "DJALES PNEUS LTDA ME", "v": 20.0, "vc": "2026-05-01", "p": 0, "cat": "MANUTENCAO"}, {"f": "VAREJAO E SUPERMERCADO PATROCINIO LTDA", "v": 57.36, "vc": "2026-05-01", "p": 0, "cat": "ALIMENTACAO"}, {"f": "VAREJAO E SUPERMERCADO PATROCINIO LTDA", "v": 168.01, "vc": "2026-05-01", "p": 0, "cat": "ALIMENTACAO"}, {"f": "FIOCOM AUTOMAÇÃO E MAQUINAS", "v": 149.0, "vc": "2026-05-13", "p": 0, "cat": "MANUTENCAO E EQUIPAMENTOS"}]};
+const HOJE = new Date('2026-04-19');
+const f = v => Math.round(v).toLocaleString('pt-BR');
+let state = {busca:'',dd:null};
 
 function semH(lv){return '<div class="sem">'+['sg','sy','sr'].map(l=>'<div class="sd '+l+(l==='s'+lv?' on':'')+'"></div>').join('')+'</div>';}
 
-function calc(){
-  let busca = state.busca.toLowerCase();
-  // Filtro por busca (clientes E fornecedores)
-  let rec = busca ? D.receber.filter(x=>x.c.toLowerCase().includes(busca)) : D.receber;
-  let pag = busca ? D.pagar.filter(x=>x.f.toLowerCase().includes(busca)) : D.pagar;
-
-  // Filtro por período
-  let perRanges = {
-    mes: {ini:'2026-04-01',fim:'2026-05-01'},
-    sem1:{ini:'2026-04-16',fim:'2026-04-23'},
-    sem2:{ini:'2026-04-23',fim:'2026-04-30'},
-    prox30:{ini:'2026-04-16',fim:'2026-05-16'}
-  };
-  let pr = perRanges[state.per];
-  if(state.per!=='mes'){
-    rec = rec.filter(x=> x.vc >= pr.ini && x.vc < pr.fim);
-    pag = pag.filter(x=> x.vc >= pr.ini && x.vc < pr.fim);
-  }
-
-  let nr=rec.filter(x=>!x.p), rc=rec.filter(x=>x.p);
-  let venc=nr.filter(x=>new Date(x.vc)<HOJE), av=nr.filter(x=>new Date(x.vc)>=HOJE);
-  let tAR=nr.reduce((a,x)=>a+x.v,0), tR=rc.reduce((a,x)=>a+x.v,0), tV=venc.reduce((a,x)=>a+x.v,0);
-  let ci=[...new Set(venc.map(x=>x.c))], cf=[...new Set(av.map(x=>x.c))];
-  let dc=ci.filter(c=>cf.includes(c));
-  let dcD=dc.map(c=>({c,div:venc.filter(x=>x.c===c).reduce((a,x)=>a+x.v,0),nov:av.filter(x=>x.c===c).reduce((a,x)=>a+x.v,0)}));
-  let np=pag.filter(x=>!x.p), pg=pag.filter(x=>x.p);
-  let tAP=np.reduce((a,x)=>a+x.v,0), tP=pg.reduce((a,x)=>a+x.v,0);
-  let tPM=pag.reduce((a,x)=>a+x.v,0);
-  let topF=Object.entries(pag.reduce((a,x)=>{a[x.f]=(a[x.f]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  let catD=Object.entries(pag.reduce((a,x)=>{a[x.cat]=(a[x.cat]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  let topDev=Object.entries(venc.reduce((a,x)=>{a[x.c]=(a[x.c]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  let sa=ST;let fc=D.fluxo.map(fl=>{sa+=fl.e-fl.sa;return{...fl,saldo:sa}});
-  let tx=tV/((tAR+tR)||1)*100;
-  // Status fornecedor: pago/aberto/total (item 6 - mostrar detalhado)
-  let fornDetail=Object.entries(pag.reduce((a,x)=>{
-    if(!a[x.f])a[x.f]={total:0,pago:0,aberto:0};
-    a[x.f].total+=x.v; if(x.p)a[x.f].pago+=x.v; else a[x.f].aberto+=x.v;
-    return a;
-  },{})).sort((a,b)=>b[1].total-a[1].total).slice(0,6);
-  return {nr,rc,venc,av,tAR,tR,tV,dc,dcD,np,tAP,tP,tPM,topF,catD,topDev,fc,tx,fornDetail,pg};
-}
-
-function toggle(id){state.dd=state.dd===id?null:id;render();}
-function setPer(p){state.per=p;render();}
-
 function render(){
-  let d=calc();
-  let mx=Math.max(...d.fc.map(x=>Math.max(x.e,x.sa)));
-  let maxCat=d.catD[0]?.[1]||1;
-  let catC=['#58a6ff','#bc8cff','#f0883e','#d29922','#3fb950'];
-  let gap=D.pmr-D.pmp;
-  let perLabels={mes:'Abril',sem1:'Sem 1',sem2:'Sem 2',prox30:'30 dias'};
+  let busca=state.busca.toLowerCase();
+  let ri=busca?D.rec_items.filter(x=>x.c.toLowerCase().includes(busca)):D.rec_items;
+  let pi=busca?D.pag_items.filter(x=>x.f.toLowerCase().includes(busca)):D.pag_items;
+  let tARf=ri.reduce((a,x)=>a+x.v,0);
+  let tAPf=pi.reduce((a,x)=>a+x.v,0);
+  let vencF=ri.filter(x=>x.vc&&new Date(x.vc)<HOJE);
+  let tVf=vencF.reduce((a,x)=>a+x.v,0);
+  let avF=ri.filter(x=>x.vc&&new Date(x.vc)>=HOJE);
+  // Devedores comprando filtrados
+  let ciF=new Set(vencF.map(x=>x.c));
+  let cfF=new Set(avF.map(x=>x.c));
+  let dcF=[...ciF].filter(c=>cfF.has(c));
+  let mx=Math.max(...D.fluxo.map(x=>Math.max(x.e,x.sa)));
+  let maxCat=D.categorias[0]?.v||1;
+  let catC=['#58a6ff','#bc8cff','#f0883e','#d29922','#3fb950','#39d2c0'];
+  let gap=D.pmp-D.pmr;
+  let aT=D.inadimplencia.aging;
+  let aTot=aT['1-15d']+aT['16-30d']+aT['31-90d']+aT['>90d'];
 
   document.getElementById('app').innerHTML=`
   <div class="hdr">
     <h1>BIGTEX — Painel Financeiro</h1>
-    <div class="hdr-r">
-      <div class="pills">${Object.keys(perLabels).map(p=>`<button class="pill ${state.per===p?'on':''}" onclick="setPer('${p}')">${perLabels[p]}</button>`).join('')}</div>
-      <span class="dt">📅 ${D.data_ref}</span>
-    </div>
+    <span class="dt">📅 ${D.data_ref} • ${D.periodo_ref}</span>
   </div>
-
-  <!-- FILTRO ÚNICO: busca clientes e fornecedores -->
   <div class="filters">
-    <div class="srch-w">
-      <span class="srch-i">🔍</span>
-      <input class="srch" id="busca" placeholder="Buscar cliente ou fornecedor..." value="${state.busca}">
-      ${state.busca?'<button class="clr" onclick="state.busca=\'\';render()">✕</button>':''}
-    </div>
-    ${state.busca?`<span class="flt-tag">Filtrando: "${state.busca}"</span>`:''}
-    <span class="flt-tag">Período: ${perLabels[state.per]}</span>
+    <div class="srch-w"><span class="srch-i">🔍</span><input class="srch" id="busca" placeholder="Buscar cliente ou fornecedor..." value="${state.busca}">${state.busca?'<button class="clr" onclick="state.busca=\'\';render()">✕</button>':''}</div>
+    ${state.busca?'<span class="flt-tag">Filtrando: \"'+state.busca+'\"</span>':''}
   </div>
 
-  <!-- KPIs -->
   <div class="grid">
     <div class="card click" onclick="toggle('saldo')">
       <div class="acc" style="background:var(--cya)"></div>
       <div class="lbl">Saldo em Caixa</div>
-      <div class="val" style="color:var(--cya)">R$ ${f(ST)}</div>
-      <div class="sub">consolidado 4 contas • clique para detalhar</div>
-      ${state.dd==='saldo'?`<div class="dd"><div class="bkg">${Object.entries(D.saldos).map(([k,v])=>`<div class="bkp"><span class="bkn">${k}</span><span class="bkv">${f(v)}</span></div>`).join('')}</div></div>`:''}
+      <div class="val" style="color:var(--cya)">R$ ${f(D.saldo_total)}</div>
+      <div class="sub">consolidado ${Object.keys(D.saldos).length} contas</div>
+      ${state.dd==='saldo'?'<div class="dd"><div class="bkg">'+Object.entries(D.saldos).map(function([k,v]){return '<div class="bkp"><span class="bkn">'+k+'</span><span class="bkv">'+f(v)+'</span></div>'}).join('')+'</div></div>':''}
     </div>
 
     <div class="card click" onclick="toggle('receber')">
       <div class="acc" style="background:var(--grn)"></div>
-      <div class="lbl">A Receber</div>
-      <div class="val" style="color:var(--grn)">R$ ${f(d.tAR)}</div>
-      <div class="sub">${d.nr.length} títulos em aberto</div>
-      <span class="bdg" style="color:var(--grn);background:var(--grn-bg)">✓ ${f(d.tR)} já recebido</span>
-      ${state.dd==='receber'?`<div class="dd">${d.nr.sort((a,b)=>new Date(a.vc)-new Date(b.vc)).slice(0,12).map(r=>`<div class="ddr"><span class="n" style="color:${new Date(r.vc)<HOJE?'var(--red)':'var(--dim)'}">${r.c}</span><span class="v">${f(r.v)}</span></div>`).join('')}${d.nr.length>12?`<div style="text-align:center;color:var(--dim);font-size:10px;padding-top:5px">+ ${d.nr.length-12} títulos</div>`:''}</div>`:''}
+      <div class="lbl">A Receber (em aberto)</div>
+      <div class="val" style="color:var(--grn)">R$ ${f(busca?tARf:D.receber.aberto)}</div>
+      <div class="sub">${busca?ri.length:D.receber.n_aberto} títulos • Abril: R$ ${f(D.receber.abr_aberto)}</div>
+      <span class="bdg" style="color:var(--grn);background:var(--grn-bg)">✓ ${f(D.receber.abr_recebido)} recebido em abril</span>
+      ${state.dd==='receber'?'<div class="dd">'+ri.sort(function(a,b){return new Date(a.vc)-new Date(b.vc)}).slice(0,15).map(function(r){return '<div class="ddr"><span class="n" style="color:'+(r.vc&&new Date(r.vc)<HOJE?'var(--red)':'var(--dim)')+'">'+r.c.substring(0,30)+'</span><span class="v">'+f(r.v)+'</span></div>'}).join('')+(ri.length>15?'<div style="text-align:center;color:var(--dim);font-size:10px;padding-top:5px">+ '+(ri.length-15)+' títulos</div>':'')+'</div>':''}
     </div>
 
     <div class="card click" onclick="toggle('pagar')">
       <div class="acc" style="background:var(--red)"></div>
-      <div class="lbl">A Pagar</div>
-      <div class="val" style="color:var(--red)">R$ ${f(d.tAP)}</div>
-      <div class="sub">${d.np.length} títulos em aberto</div>
-      <span class="bdg" style="color:var(--blu);background:var(--blu-bg)">${f(d.tP)} já pago</span>
-      ${state.dd==='pagar'?`<div class="dd">${d.np.sort((a,b)=>b.v-a.v).slice(0,8).map(r=>`<div class="ddr"><span class="n">${r.f}</span><span class="v">${f(r.v)}</span></div>`).join('')}</div>`:''}
+      <div class="lbl">A Pagar (em aberto)</div>
+      <div class="val" style="color:var(--red)">R$ ${f(busca?tAPf:D.pagar.aberto)}</div>
+      <div class="sub">${busca?pi.length:D.pagar.n_aberto} títulos • ${f(D.pagar.vencidas)} vencidas</div>
+      <span class="bdg" style="color:var(--blu);background:var(--blu-bg)">${f(D.pagar.abr_pago)} pago em abril</span>
+      ${state.dd==='pagar'?'<div class="dd">'+pi.sort(function(a,b){return b.v-a.v}).slice(0,12).map(function(r){return '<div class="ddr"><span class="n">'+r.f.substring(0,30)+'</span><span class="v">'+f(r.v)+'</span></div>'}).join('')+'</div>':''}
     </div>
 
     <div class="card">
-      <div class="acc" style="background:var(--grn)"></div>
+      <div class="acc" style="background:${D.fluxo[3].saldo>0?'var(--grn)':'var(--red)'}"></div>
       <div class="lbl">Projeção 30 dias</div>
-      <div class="val" style="color:var(--grn)">R$ ${f(d.fc[3].saldo)}</div>
-      <div class="sub">saldo projetado em 14/mai</div>
-      ${semH('g')}
-      <span class="bdg" style="color:var(--grn);background:var(--grn-bg)">▲ Caixa confortável</span>
+      <div class="val" style="color:${D.fluxo[3].saldo>0?'var(--grn)':'var(--red)'}">R$ ${f(D.fluxo[3].saldo)}</div>
+      <div class="sub">saldo projetado em 17/mai</div>
+      ${semH(D.fluxo[3].saldo>0?'g':D.fluxo[1].saldo<0?'r':'y')}
+      ${D.fluxo[3].saldo<0?'<span class="bdg" style="color:var(--red);background:var(--red-bg)">⚠ ATENÇÃO: saldo negativo</span>':'<span class="bdg" style="color:var(--grn);background:var(--grn-bg)">▲ Caixa confortável</span>'}
     </div>
 
     <div class="card click" onclick="toggle('inad')">
-      <div class="acc" style="background:var(--yel)"></div>
-      <div class="lbl">Inadimplência</div>
-      <div class="val" style="color:var(--yel)">R$ ${f(d.tV)}</div>
-      <div class="sub">${d.venc.length} títulos • taxa ${d.tx.toFixed(1)}%</div>
-      ${semH(d.tx<3?'g':d.tx<5?'y':'r')}
-      ${state.dd==='inad'?`<div class="dd">${d.topDev.map(([c,v])=>{let dias=Math.max(0,Math.floor((HOJE-new Date(d.venc.find(x=>x.c===c)?.vc||HOJE))/864e5));return`<div class="ddr"><span class="n"><span class="dot" style="background:${v>1000?'var(--red)':'var(--yel)'};box-shadow:0 0 5px ${v>1000?'var(--red)':'var(--yel)'}"></span>${c}</span><span class="v" style="color:var(--red)">${f(v)} <small style="color:var(--dim)">${dias}d</small></span></div>`}).join('')}</div>`:''}
+      <div class="acc" style="background:${D.inadimplencia.taxa>5?'var(--red)':'var(--yel)'}"></div>
+      <div class="lbl">Inadimplência Total</div>
+      <div class="val" style="color:${D.inadimplencia.taxa>5?'var(--red)':'var(--yel)'}">R$ ${f(busca?tVf:D.inadimplencia.total)}</div>
+      <div class="sub">${D.inadimplencia.n_titulos} títulos • taxa ${D.inadimplencia.taxa}%</div>
+      ${semH(D.inadimplencia.taxa<3?'g':D.inadimplencia.taxa<5?'y':'r')}
+      <div class="aging-bar" style="margin-top:8px">
+        ${aT['1-15d']>0?'<div style="width:'+(aT['1-15d']/aTot*100)+'%;background:var(--grn)">'+f(aT['1-15d'])+'</div>':''}
+        ${aT['16-30d']>0?'<div style="width:'+(aT['16-30d']/aTot*100)+'%;background:var(--yel)">'+f(aT['16-30d'])+'</div>':''}
+        ${aT['31-90d']>0?'<div style="width:'+(aT['31-90d']/aTot*100)+'%;background:var(--ora)">'+f(aT['31-90d'])+'</div>':''}
+        ${aT['>90d']>0?'<div style="width:'+(aT['>90d']/aTot*100)+'%;background:var(--red)">'+f(aT['>90d'])+'</div>':''}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;font-size:9px;color:var(--dim)"><span>🟢 1-15d</span><span>🟡 16-30d</span><span>🟠 31-90d</span><span>🔴 >90d</span></div>
+      ${state.dd==='inad'?'<div class="dd">'+D.top_devedores.map(function(x){return '<div class="ddr"><span class="n"><span class="dot" style="background:'+(x.d>90?'var(--red)':x.d>30?'var(--ora)':'var(--yel)')+';box-shadow:0 0 5px '+(x.d>90?'var(--red)':x.d>30?'var(--ora)':'var(--yel)')+'"></span>'+x.c+'</span><span class="v" style="color:var(--red)">'+f(x.v)+' <small style="color:var(--dim)">'+x.d+'d</small></span></div>'}).join('')+'</div>':''}
     </div>
 
     <div class="card click" onclick="toggle('devcomp')">
-      <div class="acc" style="background:${d.dc.length?'var(--red)':'var(--grn)'}"></div>
+      <div class="acc" style="background:${D.devedores_comprando.length?'var(--red)':'var(--grn)'}"></div>
       <div class="lbl">Devedores Comprando</div>
-      <div class="val" style="color:${d.dc.length?'var(--red)':'var(--grn)'}">${d.dc.length}</div>
-      <div class="sub">com dívida + vendas novas</div>
-      ${semH(d.dc.length>0?'r':'g')}
-      ${d.dc.length>0?'<span class="bdg" style="color:var(--red);background:var(--red-bg)">⚠ Bloquear crédito</span>':'<span class="bdg" style="color:var(--grn);background:var(--grn-bg)">✓ Nenhum</span>'}
-      ${state.dd==='devcomp'&&d.dcD.length?`<div class="dd">${d.dcD.map(x=>`<div class="dc"><div class="dcn">${x.c}</div><div class="dcd"><span>Deve: <b style="color:var(--red)">${f(x.div)}</b></span><span>Novas: <b style="color:var(--yel)">${f(x.nov)}</b></span><span>Total: <b style="color:var(--red)">${f(x.div+x.nov)}</b></span></div></div>`).join('')}</div>`:''}
+      <div class="val" style="color:var(--red)">${busca?dcF.length:D.devedores_comprando.length}</div>
+      <div class="sub">com dívida vencida + vendas novas</div>
+      ${semH(D.devedores_comprando.length>3?'r':D.devedores_comprando.length>0?'y':'g')}
+      <span class="bdg" style="color:var(--red);background:var(--red-bg)">⚠ Bloquear crédito</span>
+      ${state.dd==='devcomp'?'<div class="dd">'+D.devedores_comprando.map(function(x){return '<div class="dc"><div class="dcn">'+x.c+' <small style="color:var(--dim)">('+x.dias+'d atraso)</small></div><div class="dcd"><span>Deve: <b style="color:var(--red)">'+f(x.div)+'</b></span><span>Novas: <b style="color:var(--yel)">'+f(x.nov)+'</b></span><span>Exposição: <b style="color:var(--red)">'+f(x.div+x.nov)+'</b></span></div></div>'}).join('')+'</div>':''}
     </div>
   </div>
 
-  <!-- FLUXO DE CAIXA - barras agrupadas + linha de saldo -->
   <div class="sec">Fluxo de Caixa Projetado</div>
   <div class="card" style="margin-bottom:14px">
     <div style="display:flex;gap:16px;margin-bottom:8px">
       <span style="font-size:10px;color:var(--dim)"><span style="display:inline-block;width:10px;height:10px;background:var(--grn);border-radius:2px;margin-right:4px"></span>Entradas</span>
       <span style="font-size:10px;color:var(--dim)"><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:2px;margin-right:4px"></span>Saídas</span>
-      <span style="font-size:10px;color:var(--dim)"><span style="display:inline-block;width:10px;height:10px;background:var(--cya);border-radius:50%;margin-right:4px"></span>Saldo acumulado</span>
     </div>
-    <div class="fluxo-chart">
-      ${d.fc.map((fl,i)=>{
-        let maxV=Math.max(...d.fc.map(x=>Math.max(x.e,x.sa)));
-        let hE=Math.max(8,fl.e/maxV*80), hS=Math.max(8,fl.sa/maxV*80);
-        return `<div class="fluxo-row">
-          <div><div style="font-weight:600;font-size:12px">${fl.s}</div><div style="font-size:9px;color:var(--mut)">${fl.pr}</div></div>
-          <div>
-            <div style="display:flex;align-items:flex-end;gap:3px;height:80px">
-              <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-                <div class="fluxo-bar e" style="height:${hE}px;width:100%">${f(fl.e)}</div>
-                <div class="fluxo-lbl">Entra</div>
-              </div>
-              <div style="display:flex;flex-direction:column;align-items:center;flex:1">
-                <div class="fluxo-bar s" style="height:${hS}px;width:100%">${f(fl.sa)}</div>
-                <div class="fluxo-lbl">Sai</div>
-              </div>
-            </div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:${fl.saldo>0?'var(--grn)':'var(--red)'}">${f(fl.saldo)}</div>
-            <div style="font-size:9px;color:var(--dim)">saldo</div>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>
-    <!-- Linha de saldo acumulado -->
-    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--brd)">
-      <div style="font-size:10px;color:var(--dim);margin-bottom:6px;font-weight:600">EVOLUÇÃO DO SALDO ACUMULADO</div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:10px;color:var(--dim);width:50px">Hoje</span>
-        <div style="flex:1;position:relative;height:20px">
-          ${d.fc.map((fl,i)=>{
-            let minS=Math.min(ST,...d.fc.map(x=>x.saldo));
-            let maxS=Math.max(ST,...d.fc.map(x=>x.saldo));
-            let range=maxS-minS||1;
-            let left=i/(d.fc.length)*100;
-            let w=100/d.fc.length;
-            return `<div style="position:absolute;left:${left}%;width:${w}%;height:100%;display:flex;align-items:center">
-              <div style="width:100%;height:8px;background:linear-gradient(90deg,${i===0?'var(--cya)':'var(--grn)'},var(--grn));border-radius:4px;opacity:${0.4+0.6*(fl.saldo-minS)/range}"></div>
-            </div>`;
-          }).join('')}
-        </div>
-        <span style="font-size:10px;color:var(--grn);font-weight:700;width:70px;text-align:right">${f(d.fc[3].saldo)}</span>
-      </div>
-    </div>
+    ${D.fluxo.map(function(fl){
+      let hE=Math.max(8,fl.e/mx*70),hS=Math.max(8,fl.sa/mx*70);
+      return '<div class="fluxo-row"><div><div style="font-weight:600;font-size:12px">'+fl.s+'</div><div style="font-size:9px;color:var(--mut)">'+fl.pr+'</div></div><div><div style="display:flex;align-items:flex-end;gap:3px;height:70px"><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="fluxo-bar e" style="height:'+hE+'px;width:100%">'+f(fl.e)+'</div><div style="font-size:8px;color:var(--dim);margin-top:2px">Entra</div></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="fluxo-bar s" style="height:'+hS+'px;width:100%">'+f(fl.sa)+'</div><div style="font-size:8px;color:var(--dim);margin-top:2px">Sai</div></div></div></div><div style="text-align:right"><div style="font-family:\'JetBrains Mono\',monospace;font-weight:700;font-size:14px;color:'+(fl.saldo>0?'var(--grn)':'var(--red)')+'">'+f(fl.saldo)+'</div><div style="font-size:9px;color:var(--dim)">saldo</div></div></div>';
+    }).join('')}
+    ${D.fluxo.some(function(fl){return fl.saldo<0})?'<div class="al cr" style="margin-top:10px"><span style="font-size:16px">🔴</span><div><b>ALERTA: Saldo negativo projetado</b><span class="ad">As saídas superam as entradas a partir da semana 2. Ação necessária: antecipar recebíveis ou renegociar pagamentos.</span></div></div>':''}
   </div>
 
-  <!-- OBRIGAÇÕES -->
-  <div class="sec">Obrigações</div>
+  <div class="sec">Obrigações — Abril/2026</div>
   <div class="grid">
     <div class="card">
       <div class="lbl">Top Fornecedores — Valor Total no Mês</div>
-      <div style="font-size:10px;color:var(--mut);margin-bottom:8px">Total (pago + em aberto) no período</div>
-      ${d.fornDetail.map(([fn,dt])=>{
-        let pct=dt.total/(d.tPM||1)*100;
-        return`<div class="fr2">
-          <span style="flex:1">${fn}</span>
-          <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-size:9px;color:var(--grn)">${dt.pago>0?'✓'+f(dt.pago):''}</span>
-            <span style="font-size:9px;color:var(--red)">${dt.aberto>0?'⏳'+f(dt.aberto):''}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px">${f(dt.total)}</span>
-            <span class="fp" style="color:${pct>30?'var(--ora)':'var(--dim)'}">${pct.toFixed(0)}%</span>
-          </div>
-        </div>`;
+      <div style="font-size:10px;color:var(--mut);margin-bottom:8px">✓ pago | ⏳ em aberto</div>
+      ${D.fornecedores.map(function(x){
+        let pct=x.total/(D.pagar.abr_total||1)*100;
+        return '<div class="fr2"><span style="flex:1">'+x.f+'</span><div style="display:flex;align-items:center;gap:6px">'+(x.pago>0?'<span style="font-size:9px;color:var(--grn)">✓'+f(x.pago)+'</span>':'')+(x.aberto>0?'<span style="font-size:9px;color:var(--red)">⏳'+f(x.aberto)+'</span>':'')+'<span style="font-family:\'JetBrains Mono\',monospace;font-weight:700;font-size:12px">'+f(x.total)+'</span><span class="fp" style="color:var(--dim)">'+pct.toFixed(0)+'%</span></div></div>';
       }).join('')}
     </div>
     <div class="card">
       <div class="lbl">Despesas por Categoria</div>
       <div style="margin-top:8px">
-        ${d.catD.map(([cat,v],i)=>`<div class="prog"><div class="progh"><span>${cat}</span><span class="progv">${f(v)}</span></div><div class="progb"><div class="progf" style="width:${v/maxCat*100}%;background:${catC[i%5]}"></div></div></div>`).join('')}
+        ${D.categorias.map(function(x,i){return '<div class="prog"><div class="progh"><span>'+x.cat+'</span><span class="progv">'+f(x.v)+'</span></div><div class="progb"><div class="progf" style="width:'+(x.v/maxCat*100)+'%;background:'+catC[i%6]+'"></div></div></div>'}).join('')}
       </div>
     </div>
   </div>
 
-  <!-- INDICADORES - nomes explicativos (item 7) -->
   <div class="sec">Indicadores de Prazo</div>
   <div class="ig">
-    <div class="card ic">
-      <div class="lbl">Prazo Médio de Recebimento</div>
-      <div class="iv" style="color:var(--yel)">${D.pmr}<span class="iu"> dias</span></div>
-      <div style="font-size:10px;color:var(--dim);margin-top:4px">tempo médio que o cliente leva para pagar</div>
-    </div>
-    <div class="card ic">
-      <div class="lbl">Prazo Médio de Pagamento</div>
-      <div class="iv" style="color:var(--cya)">${D.pmp}<span class="iu"> dias</span></div>
-      <div style="font-size:10px;color:var(--dim);margin-top:4px">tempo médio que você leva para pagar fornecedores</div>
-    </div>
-    <div class="card ic">
-      <div class="lbl">Diferença entre Receber e Pagar</div>
-      <div class="iv" style="color:var(--red)">${-gap}<span class="iu"> dias</span></div>
-      <div style="font-size:10px;color:var(--dim);margin-top:4px">você paga ${gap} dias antes de receber dos clientes</div>
-      <span class="bdg" style="color:var(--yel);background:var(--yel-bg);margin-top:6px">Negociar prazos maiores</span>
-    </div>
+    <div class="card ic"><div class="lbl">Prazo Médio de Recebimento</div><div class="iv" style="color:var(--yel)">${D.pmr}<span class="iu"> dias</span></div><div style="font-size:10px;color:var(--dim);margin-top:4px">tempo que o cliente leva para pagar</div></div>
+    <div class="card ic"><div class="lbl">Prazo Médio de Pagamento</div><div class="iv" style="color:var(--cya)">${D.pmp}<span class="iu"> dias</span></div><div style="font-size:10px;color:var(--dim);margin-top:4px">tempo que você leva para pagar fornecedores</div></div>
+    <div class="card ic"><div class="lbl">Diferença Receber vs Pagar</div><div class="iv" style="color:var(--grn)">+${gap}<span class="iu"> dias</span></div><div style="font-size:10px;color:var(--dim);margin-top:4px">você paga ${gap} dias depois de receber ✅</div></div>
   </div>
 
-  <!-- ALERTAS -->
   <div class="sec">Alertas e Recomendações</div>
   <div class="card" style="margin-bottom:14px">
-    <div class="al ok"><span style="font-size:16px;flex-shrink:0">✅</span><div><b>Caixa saudável</b><span class="ad">Saldo positivo em todas as 4 semanas. Projeção: R$ ${f(d.fc[3].saldo)}</span></div></div>
-    <div class="al ${d.tx<3?'ok':'wa'}"><span style="font-size:16px;flex-shrink:0">${d.tx<3?'✅':'🟡'}</span><div><b>Inadimplência ${d.tx<3?'controlada':'em atenção'}</b><span class="ad">Taxa de ${d.tx.toFixed(1)}%</span></div></div>
-    ${d.dc.length?`<div class="al cr"><span style="font-size:16px;flex-shrink:0">🔴</span><div><b>${d.dc.length} cliente(s) devendo e comprando</b><span class="ad">Bloquear vendas a prazo até quitação</span></div></div>`:''}
-    <div class="al wa"><span style="font-size:16px;flex-shrink:0">🟡</span><div><b>Você paga antes de receber (${gap} dias de diferença)</b><span class="ad">Negociar prazos mais longos com fornecedores chave</span></div></div>
+    ${D.fluxo.some(function(fl){return fl.saldo<0})?'<div class="al cr"><span style="font-size:16px">🔴</span><div><b>Saldo negativo projetado nas próximas semanas</b><span class="ad">Saídas de R$ '+f(D.fluxo[1].sa)+' na Sem 2 superam entradas de R$ '+f(D.fluxo[1].e)+'. Antecipar recebíveis ou postergar pagamentos.</span></div></div>':'<div class="al ok"><span style="font-size:16px">✅</span><div><b>Caixa saudável</b><span class="ad">Saldo positivo projetado</span></div></div>'}
+    <div class="al cr"><span style="font-size:16px">🔴</span><div><b>Inadimplência alta: R$ ${f(D.inadimplencia.total)} (${D.inadimplencia.taxa}%)</b><span class="ad">${f(D.inadimplencia.aging['>90d'])} com mais de 90 dias de atraso. Acionar cobrança jurídica para casos antigos.</span></div></div>
+    <div class="al cr"><span style="font-size:16px">🔴</span><div><b>${D.devedores_comprando.length} clientes devendo e comprando — exposição de R$ ${f(D.devedores_comprando.reduce(function(a,x){return a+x.div+x.nov},0))}</b><span class="ad">Bloquear vendas a prazo até quitação das pendências.</span></div></div>
+    <div class="al wa"><span style="font-size:16px">🟡</span><div><b>R$ ${f(D.pagar.vencidas)} em contas a pagar vencidas (${D.pagar.n_vencidas} títulos)</b><span class="ad">Regularizar para evitar juros e protesto.</span></div></div>
+    <div class="al ok"><span style="font-size:16px">✅</span><div><b>Prazo de pagamento favorável (PMP ${D.pmp}d > PMR ${D.pmr}d)</b><span class="ad">Você recebe dos clientes antes de pagar fornecedores. Gap de +${gap} dias.</span></div></div>
   </div>
 
-  <div class="ftr">BIGTEX • Painel Financeiro Interativo • ${D.data_ref} • ${D.periodo_ref} • Clique nos cards para expandir</div>`;
+  <div class="ftr">BIGTEX • Painel Financeiro • Dados reais: jan/2025 a abr/2026 • ${D.data_ref} • Clique nos cards para expandir</div>`;
 
-  // Fix item 1: manter cursor no campo de busca
   let el=document.getElementById('busca');
-  if(el){
-    el.addEventListener('input',function(e){
-      state.busca=this.value;
-      let pos=this.selectionStart;
-      render();
-      let nel=document.getElementById('busca');
-      if(nel){nel.focus();nel.setSelectionRange(pos,pos);}
-    });
-  }
+  if(el){el.addEventListener('input',function(e){state.busca=this.value;let p=this.selectionStart;render();let n=document.getElementById('busca');if(n){n.focus();n.setSelectionRange(p,p);}});}
 }
 
+function toggle(id){state.dd=state.dd===id?null:id;render();}
 render();
 </script>
 </body>

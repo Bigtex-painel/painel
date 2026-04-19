@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bigtex — Painel Financeiro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>📊</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--card:#161b22;--card-h:#1c2333;--brd:#21262d;--txt:#e6edf3;--dim:#8b949e;--mut:#484f58;--grn:#3fb950;--grn-bg:rgba(63,185,80,.12);--red:#f85149;--red-bg:rgba(248,81,73,.12);--yel:#d29922;--yel-bg:rgba(210,153,34,.12);--blu:#58a6ff;--blu-bg:rgba(88,166,255,.12);--cya:#39d2c0;--pur:#bc8cff;--ora:#f0883e}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-serif;padding:14px;-webkit-font-smoothing:antialiased;min-height:100vh}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.hdr h1{font-size:20px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,var(--blu),var(--cya));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dt{color:var(--dim);font-size:12px;font-weight:500;background:var(--card);padding:5px 12px;border-radius:16px;border:1px solid var(--brd)}
+.pills{display:flex;gap:4px;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:600;padding:4px 10px;border-radius:12px;border:1px solid var(--brd);background:var(--card);color:var(--dim);cursor:pointer;transition:all .15s;font-family:inherit}
+.pill:hover{border-color:var(--blu)}
+.pill.on{border-color:var(--blu);background:var(--blu-bg);color:var(--blu)}
+.srch-w{margin-bottom:12px;position:relative}
+.srch{width:100%;max-width:360px;padding:8px 12px 8px 32px;border-radius:8px;border:1px solid var(--brd);background:var(--card);color:var(--txt);font-size:12px;font-family:inherit;outline:none;transition:border .15s}
+.srch:focus{border-color:var(--blu)}
+.srch-i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none}
+.clr{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--dim);cursor:pointer;font-size:16px;display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;transition:all .15s}
+.card.click{cursor:pointer}
+.card.click:hover{background:var(--card-h);transform:translateY(-1px)}
+.acc{position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0}
+.lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.1px;color:var(--dim);margin-bottom:5px}
+.val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-1px;line-height:1.1}
+.sub{font-size:11px;color:var(--dim);margin-top:4px;font-weight:500}
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;margin-top:6px}
+.sem{display:flex;gap:4px;margin-top:6px}
+.sd{width:9px;height:9px;border-radius:50%;opacity:.15;transition:all .2s}
+.sd.on{opacity:1}
+.sg{background:var(--grn)}.sy{background:var(--yel)}.sr{background:var(--red)}
+.sd.on.sg{box-shadow:0 0 7px var(--grn)}.sd.on.sy{box-shadow:0 0 7px var(--yel)}.sd.on.sr{box-shadow:0 0 7px var(--red)}
+.dd{margin-top:10px;overflow:hidden;animation:si .25s ease}
+@keyframes si{from{opacity:0;max-height:0}to{opacity:1;max-height:600px}}
+.ddr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11px;gap:8px}
+.ddr:last-child{border-bottom:none}
+.ddr .n{color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.ddr .v{font-family:'JetBrains Mono',monospace;font-weight:600;flex-shrink:0}
+.bkg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}
+.bkp{display:flex;justify-content:space-between;background:rgba(255,255,255,.02);border:1px solid var(--brd);border-radius:6px;padding:7px 10px}
+.bkn{font-size:10px;color:var(--dim);font-weight:600}.bkv{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
+.sec{font-size:13px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1.3px;margin:20px 0 10px 4px;display:flex;align-items:center;gap:7px}
+.sec::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--blu)}
+.fh{display:grid;grid-template-columns:70px 1fr 1fr 95px;gap:6px;font-size:10px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.7px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.fr{display:grid;grid-template-columns:70px 1fr 1fr 95px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--brd)}
+.fr:last-child{border-bottom:none}
+.bc{height:20px;background:var(--brd);border-radius:3px;overflow:hidden}
+.bar{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:9px;font-weight:700;color:#fff;min-width:40px;transition:width .5s ease}
+.bg{background:linear-gradient(90deg,#238636,var(--grn))}.br{background:linear-gradient(90deg,#da3633,var(--red))}
+.fs{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px}
+.prog{margin-bottom:8px}
+.progh{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.progv{font-family:'JetBrains Mono',monospace;font-weight:600}
+.progb{background:var(--brd);border-radius:3px;height:6px;overflow:hidden}
+.progf{height:100%;border-radius:3px;transition:width .5s ease}
+.al{display:flex;gap:10px;padding:10px 12px;border-radius:7px;margin-bottom:6px;font-size:12px;line-height:1.35}
+.al.ok{background:var(--grn-bg);border-left:3px solid var(--grn)}
+.al.cr{background:var(--red-bg);border-left:3px solid var(--red)}
+.al.wa{background:var(--yel-bg);border-left:3px solid var(--yel)}
+.al b{display:block;margin-bottom:1px}
+.al .ad{color:var(--dim)}
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.ic{text-align:center}
+.iv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700}
+.iu{font-size:13px;color:var(--dim)}
+.dc{background:rgba(248,81,73,.06);border-radius:7px;padding:9px 11px;margin-bottom:5px;border-left:3px solid var(--red)}
+.dcn{font-size:11px;font-weight:700;margin-bottom:3px}
+.dcd{display:flex;gap:12px;font-size:10px;flex-wrap:wrap}
+.fr2{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--brd);font-size:11px}
+.fr2:last-child{border-bottom:none}
+.fp{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:10px;margin-left:8px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.ftr{text-align:center;color:var(--mut);font-size:10px;padding:16px 0 6px;letter-spacing:.4px}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fu .35s ease both}
+.a1{animation-delay:0s}.a2{animation-delay:.04s}.a3{animation-delay:.08s}.a4{animation-delay:.12s}.a5{animation-delay:.16s}.a6{animation-delay:.2s}
+@media(max-width:600px){.fh,.fr{grid-template-columns:55px 1fr 1fr 70px}.val{font-size:22px}.hdr h1{font-size:17px}}
+.tab{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.tab th{text-align:left;color:var(--mut);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;padding:6px 8px;border-bottom:1px solid var(--brd)}
+.tab th.r{text-align:right}
+.tab td{padding:8px;border-bottom:1px solid var(--brd);vertical-align:middle}
+.tab tr:last-child td{border-bottom:none}
+.tab tr:hover{background:rgba(255,255,255,.02)}
+.mono{font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ==================== DADOS (atualizar semanalmente) ====================
+const DADOS = {
+  data_ref: "16/04/2026",
+  periodo_ref: "Abril/2026",
+  saldos: { "Itaú": 56351.76, "Inter": 29007.23, "Stone": 26751.83, "Caixa": 1011.46 },
+  receber: [
+    {c:"ANNA FLAVIA CAIRO PRIMO",v:2520,vc:"2026-04-08",p:0},
+    {c:"EDNALDO CARLOS PINTO",v:1386,vc:"2026-04-08",p:0},
+    {c:"AGUINALDO MESSIAS DE ANDRADE",v:637.5,vc:"2026-04-15",p:0},
+    {c:"IGOR GABRIEL FERREIRA NAZARE",v:636,vc:"2026-04-15",p:0},
+    {c:"PAULO ROGERIO DA SILVA",v:577.5,vc:"2026-04-15",p:0},
+    {c:"FRANSOA TELES PAULUTE",v:1245,vc:"2026-04-21",p:0},
+    {c:"ALQ LISBOA E-COMMERCE",v:3816,vc:"2026-04-08",p:1},
+    {c:"KEDOLL CALÇADOS LTDA.",v:1204,vc:"2026-04-15",p:1},
+    {c:"WALLAS MURILO VILELA ALVIN",v:6077.5,vc:"2026-04-01",p:1},
+    {c:"HARDY INDUSTRIA E COMERCIO",v:4620,vc:"2026-04-01",p:1},
+    {c:"IGOR GABRIEL FERREIRA NAZARE",v:5380,vc:"2026-04-22",p:0},
+    {c:"IGOR GABRIEL FERREIRA NAZARE",v:7200,vc:"2026-04-28",p:0},
+    {c:"IGOR GABRIEL FERREIRA NAZARE",v:10799.08,vc:"2026-05-05",p:0},
+    {c:"ANNA FLAVIA CAIRO PRIMO",v:1647,vc:"2026-04-25",p:0},
+    {c:"SCHUHSTORE CALÇADOS",v:18410,vc:"2026-04-22",p:0},
+    {c:"LUCAS MATEUS ROSA",v:13950,vc:"2026-04-22",p:0},
+    {c:"WALLAS MURILO VILELA ALVIN",v:14850,vc:"2026-04-25",p:0},
+    {c:"RALF SILVA LOURENCO",v:3875.5,vc:"2026-04-28",p:0},
+    {c:"MARCOS DONIZETI SILVA",v:3114.3,vc:"2026-04-28",p:0},
+    {c:"R. M. DE OLIVEIRA",v:1981.75,vc:"2026-04-21",p:0},
+    {c:"BORGES SOUZA COM.",v:3600,vc:"2026-04-28",p:0},
+    {c:"JANE MARIA DE ALMEIDA",v:8232,vc:"2026-04-30",p:0},
+    {c:"M V SANTANA CONFECÇAO",v:12500,vc:"2026-05-01",p:0},
+    {c:"MILENA APARECIDA",v:8600,vc:"2026-05-02",p:0},
+    {c:"PEDRO HENRIQUE",v:6500,vc:"2026-05-05",p:0},
+    {c:"CLAYTON RICHARD",v:11200,vc:"2026-05-07",p:0},
+    {c:"DK KIDS LTDA",v:5400,vc:"2026-04-30",p:0},
+    {c:"WILLIBAGS COMERCIO",v:4250,vc:"2026-05-03",p:0},
+    {c:"STARCOM ARTIGOS",v:3072,vc:"2026-04-28",p:0},
+    {c:"BRUNO FERNANDO",v:6766.9,vc:"2026-04-22",p:0},
+    {c:"L C DE SOUZA FONSECA",v:4980,vc:"2026-04-22",p:0},
+    {c:"CARLOS MURILO",v:2812,vc:"2026-04-25",p:0},
+    {c:"IVO MANHANI",v:550.8,vc:"2026-04-30",p:0},
+    {c:"GIOLO CALÇADOS",v:2626.8,vc:"2026-04-28",p:0},
+    {c:"TROPEIRO INDUSTRIA",v:1750,vc:"2026-04-28",p:0},
+    {c:"ANA LAURA DE S",v:5100,vc:"2026-05-01",p:0},
+    {c:"ESPACO LETICIA SOUZA",v:3318,vc:"2026-04-25",p:0},
+    {c:"LIDIANE KARLA",v:750,vc:"2026-04-07",p:1},
+    {c:"MILENA APARECIDA",v:1014,vc:"2026-04-02",p:1},
+    {c:"ANA PAULA OLIVEIRA",v:2872.8,vc:"2026-04-02",p:1},
+    {c:"LUIS CARLOS DO CARMO",v:3180,vc:"2026-04-07",p:1},
+    {c:"STREET WALKER",v:1582.57,vc:"2026-04-07",p:1},
+    {c:"SERGIO HENRIQUE",v:1411.58,vc:"2026-04-10",p:1},
+    {c:"MILENA LEANDRO DUARTE",v:7749.45,vc:"2026-04-08",p:1},
+    {c:"C SCHIARELLI",v:2794,vc:"2026-04-06",p:1},
+    {c:"ARTIGOS DA MODA",v:2900,vc:"2026-04-07",p:1},
+    {c:"LIGIA MARIA AMARAL",v:588.5,vc:"2026-04-14",p:1},
+    {c:"GRANTEX COMPONENTES",v:470,vc:"2026-04-06",p:1},
+    {c:"SÓ SINTETICOS",v:525,vc:"2026-04-09",p:1}
+  ],
+  pagar: [
+    {f:"ICAC",v:92324.56,cat:"MATÉRIA-PRIMA",p:0},
+    {f:"GLAUCO CICERO BARBOSA",v:71687.58,cat:"COMISSÕES",p:1},
+    {f:"ADINA INDUSTRIA",v:22222.22,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"ZAHONERO BRASIL",v:16167.68,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"KICOLLA ADESIVOS",v:9425,cat:"MATÉRIA-PRIMA",p:0},
+    {f:"POLLIBOXSUL",v:8490,cat:"MATÉRIA-PRIMA",p:0},
+    {f:"ATHAYDE & CARNEIRO",v:6307,cat:"MATÉRIA-PRIMA",p:0},
+    {f:"J S ESPUMAS",v:5200,cat:"MATÉRIA-PRIMA",p:0},
+    {f:"AGNELLO IMÓVEIS",v:7157.23,cat:"ALUGUEL",p:1},
+    {f:"RECEITA FEDERAL",v:951.62,cat:"IMPOSTOS",p:0},
+    {f:"HAPVIDA",v:1058.99,cat:"SAÚDE",p:1},
+    {f:"RACE TRANSPORTE",v:4831,cat:"FRETES",p:1},
+    {f:"HERVAL INDUSTRIA",v:8289.88,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"TEXTIL EVEREST",v:4050.28,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"BIATEX IMPREGNADORA",v:5794.29,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"DUBLATEX",v:475,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"RHEMA COMPONENTES",v:2141.6,cat:"MATÉRIA-PRIMA",p:1},
+    {f:"AZUL CONTABILIDADE",v:831.93,cat:"CONTABILIDADE",p:1}
+  ],
+  fluxo: [
+    {s:"Sem 1",pr:"16-23/abr",e:20358,sa:8400},
+    {s:"Sem 2",pr:"23-30/abr",e:34593,sa:14852},
+    {s:"Sem 3",pr:"30/abr-7/mai",e:54581,sa:18946},
+    {s:"Sem 4",pr:"7-14/mai",e:52481,sa:39327}
+  ],
+  pmr: 17,
+  pmp: 5
+};
+// ==================== FIM DOS DADOS ====================
+
+const HOJE = new Date('2026-04-16');
+const f = v => Math.round(v).toLocaleString('pt-BR');
+const ST = Object.values(DADOS.saldos).reduce((a,b)=>a+b,0);
+let per = 'mes', flt = '', dd = null;
+
+function calc() {
+  let r = flt ? DADOS.receber.filter(x=>x.c.toLowerCase().includes(flt.toLowerCase())) : DADOS.receber;
+  let nr=r.filter(x=>!x.p), rc=r.filter(x=>x.p);
+  let venc=nr.filter(x=>new Date(x.vc)<HOJE), av=nr.filter(x=>new Date(x.vc)>=HOJE);
+  let tAR=nr.reduce((a,x)=>a+x.v,0), tR=rc.reduce((a,x)=>a+x.v,0), tV=venc.reduce((a,x)=>a+x.v,0);
+  let ci=[...new Set(venc.map(x=>x.c))], cf=[...new Set(av.map(x=>x.c))];
+  let dc=ci.filter(c=>cf.includes(c));
+  let dcD=dc.map(c=>({c,div:venc.filter(x=>x.c===c).reduce((a,x)=>a+x.v,0),nov:av.filter(x=>x.c===c).reduce((a,x)=>a+x.v,0)}));
+  let np=DADOS.pagar.filter(x=>!x.p), tAP=np.reduce((a,x)=>a+x.v,0), tP=DADOS.pagar.filter(x=>x.p).reduce((a,x)=>a+x.v,0);
+  let tPM=DADOS.pagar.reduce((a,x)=>a+x.v,0);
+  let topF=Object.entries(DADOS.pagar.reduce((a,x)=>{a[x.f]=(a[x.f]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  let catD=Object.entries(DADOS.pagar.reduce((a,x)=>{a[x.cat]=(a[x.cat]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  let topDev=Object.entries(venc.reduce((a,x)=>{a[x.c]=(a[x.c]||0)+x.v;return a},{})).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  let sa=ST; let fc=DADOS.fluxo.map(fl=>{sa+=fl.e-fl.sa;return{...fl,saldo:sa}});
+  let tx=tV/((tAR+tR)||1)*100;
+  return {nr,rc,venc,av,tAR,tR,tV,dc,dcD,np,tAP,tP,tPM,topF,catD,topDev,fc,tx};
+}
+
+function toggle(id) { dd = dd===id ? null : id; render(); }
+function setPer(p) { per=p; render(); }
+function setFlt(v) { flt=v; document.querySelector('.clr').style.display=v?'block':'none'; render(); }
+
+function sem(lv) {
+  return '<div class="sem">'+['sg','sy','sr'].map(l=>'<div class="sd '+l+(l==='s'+lv?' on':'')+'"></div>').join('')+'</div>';
+}
+
+function render() {
+  let d = calc();
+  let mx = Math.max(...d.fc.map(x=>Math.max(x.e,x.sa)));
+  let maxCat = d.catD[0]?.[1]||1;
+  let catC = ['#58a6ff','#bc8cff','#f0883e','#d29922','#3fb950'];
+  let gap = DADOS.pmr - DADOS.pmp;
+
+  document.getElementById('app').innerHTML = `
+  <div class="hdr">
+    <h1>BIGTEX — Painel Financeiro</h1>
+    <div class="hdr-r">
+      <div class="pills">
+        ${['mes','sem1','sem2','prox30'].map(p=>`<button class="pill ${per===p?'on':''}" onclick="setPer('${p}')">${{mes:'Abril',sem1:'Sem 1',sem2:'Sem 2',prox30:'30 dias'}[p]}</button>`).join('')}
+      </div>
+      <span class="dt">📅 ${DADOS.data_ref}</span>
+    </div>
+  </div>
+
+  <div class="srch-w">
+    <span class="srch-i">🔍</span>
+    <input class="srch" value="${flt}" oninput="setFlt(this.value)" placeholder="Filtrar por cliente...">
+    <button class="clr" onclick="setFlt('');document.querySelector('.srch').value=''" style="display:${flt?'block':'none'}">✕</button>
+  </div>
+
+  <div class="grid">
+    <!-- Saldo -->
+    <div class="card click anim a1" onclick="toggle('saldo')">
+      <div class="acc" style="background:var(--cya)"></div>
+      <div class="lbl">Saldo em Caixa</div>
+      <div class="val" style="color:var(--cya)">R$ ${f(ST)}</div>
+      <div class="sub">consolidado 4 contas • clique para detalhar</div>
+      ${dd==='saldo'?`<div class="bkg">${Object.entries(DADOS.saldos).map(([k,v])=>`<div class="bkp"><span class="bkn">${k}</span><span class="bkv">${f(v)}</span></div>`).join('')}</div>`:''}
+    </div>
+
+    <!-- A Receber -->
+    <div class="card click anim a2" onclick="toggle('receber')">
+      <div class="acc" style="background:var(--grn)"></div>
+      <div class="lbl">A Receber</div>
+      <div class="val" style="color:var(--grn)">R$ ${f(d.tAR)}</div>
+      <div class="sub">${d.nr.length} títulos em aberto</div>
+      <span class="bdg" style="color:var(--grn);background:var(--grn-bg)">✓ ${f(d.tR)} já recebido</span>
+      ${dd==='receber'?`<div class="dd">${d.nr.sort((a,b)=>new Date(a.vc)-new Date(b.vc)).slice(0,12).map(r=>`<div class="ddr"><span class="n" style="color:${new Date(r.vc)<HOJE?'var(--red)':'var(--dim)'}">${r.c}</span><span class="v">${f(r.v)}</span></div>`).join('')}${d.nr.length>12?`<div style="text-align:center;color:var(--dim);font-size:10px;padding-top:6px">+ ${d.nr.length-12} títulos</div>`:''}</div>`:''}
+    </div>
+
+    <!-- A Pagar -->
+    <div class="card click anim a3" onclick="toggle('pagar')">
+      <div class="acc" style="background:var(--red)"></div>
+      <div class="lbl">A Pagar</div>
+      <div class="val" style="color:var(--red)">R$ ${f(d.tAP)}</div>
+      <div class="sub">${d.np.length} títulos em aberto</div>
+      <span class="bdg" style="color:var(--blu);background:var(--blu-bg)">${f(d.tP)} já pago</span>
+      ${dd==='pagar'?`<div class="dd">${d.np.sort((a,b)=>b.v-a.v).slice(0,8).map(r=>`<div class="ddr"><span class="n">${r.f}</span><span class="v">${f(r.v)}</span></div>`).join('')}</div>`:''}
+    </div>
+
+    <!-- Projeção -->
+    <div class="card anim a4">
+      <div class="acc" style="background:var(--grn)"></div>
+      <div class="lbl">Projeção 30 dias</div>
+      <div class="val" style="color:var(--grn)">R$ ${f(d.fc[3].saldo)}</div>
+      <div class="sub">saldo projetado em 14/mai</div>
+      ${sem('g')}
+      <span class="bdg" style="color:var(--grn);background:var(--grn-bg)">▲ Caixa confortável</span>
+    </div>
+
+    <!-- Inadimplência -->
+    <div class="card click anim a5" onclick="toggle('inad')">
+      <div class="acc" style="background:var(--yel)"></div>
+      <div class="lbl">Inadimplência</div>
+      <div class="val" style="color:var(--yel)">R$ ${f(d.tV)}</div>
+      <div class="sub">${d.venc.length} títulos • taxa ${d.tx.toFixed(1)}%</div>
+      ${sem(d.tx<3?'g':d.tx<5?'y':'r')}
+      ${dd==='inad'?`<div class="dd">${d.topDev.map(([c,v])=>{let dias=Math.floor((HOJE-new Date(d.venc.find(x=>x.c===c).vc))/864e5);return`<div class="ddr"><span class="n"><span class="dot" style="background:${v>1000?'var(--red)':'var(--yel)'};box-shadow:0 0 5px ${v>1000?'var(--red)':'var(--yel)'}"></span>${c}</span><span class="v" style="color:var(--red)">${f(v)} <small style="color:var(--dim)">${dias}d</small></span></div>`}).join('')}</div>`:''}
+    </div>
+
+    <!-- Devedores comprando -->
+    <div class="card click anim a6" onclick="toggle('devcomp')">
+      <div class="acc" style="background:var(--red)"></div>
+      <div class="lbl">Devedores Comprando</div>
+      <div class="val" style="color:var(--red)">${d.dc.length}</div>
+      <div class="sub">com dívida + vendas novas</div>
+      ${sem(d.dc.length>0?'r':'g')}
+      ${d.dc.length>0?'<span class="bdg" style="color:var(--red);background:var(--red-bg)">⚠ Bloquear crédito</span>':'<span class="bdg" style="color:var(--grn);background:var(--grn-bg)">✓ Nenhum</span>'}
+      ${dd==='devcomp'&&d.dcD.length?`<div class="dd">${d.dcD.map(x=>`<div class="dc"><div class="dcn">${x.c}</div><div class="dcd"><span>Deve: <b style="color:var(--red)">${f(x.div)}</b></span><span>Novas: <b style="color:var(--yel)">${f(x.nov)}</b></span><span>Total: <b style="color:var(--red)">${f(x.div+x.nov)}</b></span></div></div>`).join('')}</div>`:''}
+    </div>
+  </div>
+
+  <!-- Fluxo -->
+  <div class="sec">Fluxo de Caixa Projetado</div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="fh"><span>Semana</span><span>Entradas</span><span>Saídas</span><span style="text-align:right">Saldo</span></div>
+    ${d.fc.map((fl,i)=>`<div class="fr">
+      <div><div style="font-weight:600;font-size:12px">${fl.s}</div><div style="font-size:9px;color:var(--mut)">${fl.pr}</div></div>
+      <div class="bc"><div class="bar bg" style="width:${(fl.e/mx*100)}%">${f(fl.e)}</div></div>
+      <div class="bc"><div class="bar br" style="width:${(fl.sa/mx*100)}%">${f(fl.sa)}</div></div>
+      <div class="fs" style="color:${fl.saldo>0?'var(--grn)':'var(--red)'}">${f(fl.saldo)}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Obrigações -->
+  <div class="sec">Obrigações</div>
+  <div class="grid">
+    <div class="card">
+      <div class="lbl">Top Fornecedores</div>
+      ${d.topF.map(([fn,v])=>{let pct=v/d.tPM*100;return`<div class="fr2"><span style="flex:1">${fn}</span><div style="display:flex;align-items:center"><span class="mono" style="font-size:12px">${f(v)}</span><span class="fp" style="color:${pct>30?'var(--red)':pct>20?'var(--yel)':'var(--dim)'}">${pct.toFixed(0)}%</span></div></div>`}).join('')}
+    </div>
+    <div class="card">
+      <div class="lbl">Despesas por Categoria</div>
+      <div style="margin-top:8px">
+        ${d.catD.map(([cat,v],i)=>`<div class="prog"><div class="progh"><span>${cat}</span><span class="progv">${f(v)}</span></div><div class="progb"><div class="progf" style="width:${v/maxCat*100}%;background:${catC[i%5]}"></div></div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicadores -->
+  <div class="sec">Indicadores</div>
+  <div class="ig">
+    <div class="card ic"><div class="lbl">PMR</div><div class="iv" style="color:var(--yel)">${DADOS.pmr}<span class="iu"> dias</span></div></div>
+    <div class="card ic"><div class="lbl">PMP</div><div class="iv" style="color:var(--cya)">${DADOS.pmp}<span class="iu"> dias</span></div></div>
+    <div class="card ic"><div class="lbl">Gap PMR-PMP</div><div class="iv" style="color:var(--red)">${-gap}<span class="iu"> dias</span></div><span class="bdg" style="color:var(--yel);background:var(--yel-bg);margin-top:4px">Você paga antes de receber</span></div>
+  </div>
+
+  <!-- Alertas -->
+  <div class="sec">Alertas e Recomendações</div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="al ok"><span style="font-size:16px;flex-shrink:0">✅</span><div><b>Caixa saudável</b><span class="ad">Saldo positivo em todas as 4 semanas. Projeção: R$ ${f(d.fc[3].saldo)}</span></div></div>
+    <div class="al ${d.tx<3?'ok':'wa'}"><span style="font-size:16px;flex-shrink:0">${d.tx<3?'✅':'🟡'}</span><div><b>Inadimplência ${d.tx<3?'controlada':'em atenção'}</b><span class="ad">Taxa de ${d.tx.toFixed(1)}% — ${d.tx<3?'abaixo':'próxima'} do limite</span></div></div>
+    ${d.dc.length?`<div class="al cr"><span style="font-size:16px;flex-shrink:0">🔴</span><div><b>${d.dc.length} cliente(s) devendo e comprando</b><span class="ad">Bloquear vendas a prazo até quitação</span></div></div>`:''}
+    <div class="al wa"><span style="font-size:16px;flex-shrink:0">🟡</span><div><b>Concentração de fornecedor</b><span class="ad">${d.topF[0]?.[0]||''} = ${(d.topF[0]?.[1]/d.tPM*100||0).toFixed(0)}% das obrigações</span></div></div>
+    <div class="al wa"><span style="font-size:16px;flex-shrink:0">🟡</span><div><b>PMR > PMP (gap ${-gap} dias)</b><span class="ad">Negociar prazos maiores com fornecedores</span></div></div>
+  </div>
+
+  <div class="ftr">BIGTEX • Painel Financeiro Interativo • ${DADOS.data_ref} • ${DADOS.periodo_ref} • Clique nos cards para expandir</div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>

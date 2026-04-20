@@ -178,8 +178,8 @@ function calcFluxo(){
 
 // SVG FLUXO DE CAIXA — DUAS PARTES: BARRAS (esq) + LINHA DO SALDO (dir)
 function renderFluxoBarsSVG(fluxo){
-  var w=760,hSvg=240;
-  var padL=42,padR=12,padT=22,padB=42;
+  var w=760,hSvg=260;
+  var padL=42,padR=12,padT=22,padB=60;
   var innerW=w-padL-padR, innerH=hSvg-padT-padB;
   var n=fluxo.length;
   var barGroupW=innerW/n;
@@ -204,7 +204,7 @@ function renderFluxoBarsSVG(fluxo){
     svg+='<rect x="'+xS+'" y="'+yS+'" width="'+barW+'" height="'+hS+'" fill="url(#grS)" rx="2"/>';
     // Labels das semanas
     svg+='<text x="'+cx+'" y="'+(padT+innerH+15)+'" text-anchor="middle" fill="#e6edf3" font-family="Plus Jakarta Sans" font-weight="700" font-size="11">'+fl.s+'</text>';
-    svg+='<text x="'+cx+'" y="'+(padT+innerH+28)+'" text-anchor="middle" fill="#484f58" font-family="JetBrains Mono" font-size="8">'+fl.pr+'</text>';
+    svg+='<text x="'+cx+'" y="'+(padT+innerH+28)+'" text-anchor="end" fill="#6e7681" font-family="JetBrains Mono" font-size="8" transform="rotate(-45 '+cx+' '+(padT+innerH+28)+')">'+fl.pr+'</text>';
     // Valores em cima das barras
     svg+='<text x="'+(xE+barW/2)+'" y="'+(yE-3)+'" text-anchor="middle" fill="#3fb950" font-family="JetBrains Mono" font-weight="700" font-size="8">'+(fl.e>=1000?(fl.e/1000).toFixed(0)+'k':f(fl.e))+'</text>';
     svg+='<text x="'+(xS+barW/2)+'" y="'+(yS-3)+'" text-anchor="middle" fill="#f85149" font-family="JetBrains Mono" font-weight="700" font-size="8">'+(fl.sa>=1000?(fl.sa/1000).toFixed(0)+'k':f(fl.sa))+'</text>';
@@ -213,7 +213,7 @@ function renderFluxoBarsSVG(fluxo){
   for(var g=0;g<=3;g++){
     var gy=padT+(innerH/3)*g;
     var v=maxBar*(1-g/3);
-    svg+='<text x="'+(padL-4)+'" y="'+(gy+3)+'" text-anchor="end" fill="#484f58" font-family="JetBrains Mono" font-size="8">'+Math.round(v/1000)+'k</text>';
+    svg+='<text x="'+(padL-4)+'" y="'+(gy+3)+'" text-anchor="end" fill="#6e7681" font-family="JetBrains Mono" font-size="8">'+Math.round(v/1000)+'k</text>';
   }
   svg+='<defs>';
   svg+='<linearGradient id="grE" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3fb950"/><stop offset="100%" stop-color="#238636"/></linearGradient>';
@@ -223,8 +223,8 @@ function renderFluxoBarsSVG(fluxo){
 }
 
 function renderFluxoSaldoSVG(fluxo){
-  var w=420,hSvg=180;
-  var padL=38,padR=15,padT=22,padB=38;
+  var w=420,hSvg=210;
+  var padL=38,padR=15,padT=22,padB=58;
   var innerW=w-padL-padR, innerH=hSvg-padT-padB;
   var n=fluxo.length;
   var colW=innerW/n;
@@ -246,7 +246,7 @@ function renderFluxoSaldoSVG(fluxo){
     var gy=padT+(innerH/3)*g;
     svg+='<line x1="'+padL+'" y1="'+gy+'" x2="'+(w-padR)+'" y2="'+gy+'" stroke="#21262d" stroke-dasharray="2,2"/>';
     var v=yMax-(range/3)*g;
-    svg+='<text x="'+(padL-4)+'" y="'+(gy+3)+'" text-anchor="end" fill="#484f58" font-family="JetBrains Mono" font-size="8">'+Math.round(v/1000)+'k</text>';
+    svg+='<text x="'+(padL-4)+'" y="'+(gy+3)+'" text-anchor="end" fill="#6e7681" font-family="JetBrains Mono" font-size="8">'+Math.round(v/1000)+'k</text>';
   }
 
   // Zero line (se zero cruzar o gráfico)
@@ -281,7 +281,7 @@ function renderFluxoSaldoSVG(fluxo){
     svg+='<text x="'+p.x+'" y="'+(p.y+offset)+'" text-anchor="middle" fill="'+cor+'" font-family="JetBrains Mono" font-weight="700" font-size="10">'+vlbl+'</text>';
     // Label da semana no eixo X
     svg+='<text x="'+p.x+'" y="'+(padT+innerH+14)+'" text-anchor="middle" fill="#e6edf3" font-family="Plus Jakarta Sans" font-weight="700" font-size="10">'+p.s+'</text>';
-    svg+='<text x="'+p.x+'" y="'+(padT+innerH+25)+'" text-anchor="middle" fill="#484f58" font-family="JetBrains Mono" font-size="7">'+p.pr+'</text>';
+    svg+='<text x="'+p.x+'" y="'+(padT+innerH+25)+'" text-anchor="end" fill="#6e7681" font-family="JetBrains Mono" font-size="7" transform="rotate(-45 '+p.x+' '+(padT+innerH+25)+')">'+p.pr+'</text>';
   });
 
   svg+='<defs>';
@@ -566,10 +566,16 @@ function render(){
   h+='</div>';
 
   // PROJEÇÃO 8 Semanas — snapshot do fluxo futuro (clicável, abre gráfico de saldo acumulado)
-  h+='<div class="card fx ck" onclick="toggle(\'proj\')"><div class="ac" style="background:'+(minSaldo>0?'var(--grn)':'var(--red)')+'"></div>';
+  // Métrica principal: gap de 60 dias (soma de entradas - soma de saídas nas 8 semanas)
+  var gap60=fluxo.reduce(function(a,x){return a+(x.e-x.sa);},0);
+  var gapCor=gap60>=0?'var(--grn)':'var(--red)';
+  var gapSeta=gap60>=0?'▲':'▼';
+  var gapSinal=gap60>=0?'+':'−';
+  var acCor=gap60>=0?'var(--grn)':'var(--red)';
+  h+='<div class="card fx ck" onclick="toggle(\'proj\')"><div class="ac" style="background:'+acCor+'"></div>';
   h+='<div class="lb"><span>Projeção 8 Semanas</span><span class="lbfx">hoje+8sem</span></div>';
-  h+='<div class="vl" style="color:'+(lastSaldo>0?'var(--grn)':'var(--red)')+'">R$ '+f(lastSaldo)+'</div>';
-  h+='<div class="sb">saldo mínimo: R$ '+f(minSaldo)+'</div>';
+  h+='<div class="vl" style="color:'+gapCor+'">R$ '+gapSinal+f(Math.abs(gap60))+'<span style="font-size:18px;margin-left:10px">'+gapSeta+'</span></div>';
+  h+='<div class="sb">variação prevista no caixa (60d) • saldo mínimo: <b style="color:'+(minSaldo>0?'var(--grn)':'var(--red)')+'">R$ '+f(minSaldo)+'</b></div>';
   h+=sem(minSaldo>20000?'g':minSaldo>0?'y':'r');
   h+=(minSaldo>0?'<span class="bg" style="color:var(--grn);background:var(--grn-bg)">▲ Todas positivas</span>':'<span class="bg" style="color:var(--red);background:var(--red-bg)">⚠ Saldo negativo projetado</span>');
   if(S.dd==='proj'){h+='<div class="dd" style="max-height:none">'+renderFluxoSaldoSVG(fluxo)+'</div>';}
@@ -577,13 +583,82 @@ function render(){
 
   h+='</div>';
 
-  // ALERTAS (podem continuar embaixo, derivam dos números mas não são KPIs de fato)
+  // ALERTAS (derivam dos números mas não são KPIs de fato)
+
+  // Calcula cobertura de caixa (meses e dias) com base na média dos 3 últimos meses completos pagos
+  var pagosMes={};
+  D.pag_qt.forEach(function(x){var ym=x.vc.substring(0,7);pagosMes[ym]=(pagosMes[ym]||0)+x.v;});
+  var mesesOrd=Object.keys(pagosMes).sort();
+  // Exclui o mês corrente (incompleto) e pega os 3 anteriores
+  var ymHoje=D.hoje.substring(0,7);
+  var mesesCompletos=mesesOrd.filter(function(m){return m<ymHoje;}).slice(-3);
+  var medMes=mesesCompletos.length>0?mesesCompletos.reduce(function(a,m){return a+pagosMes[m];},0)/mesesCompletos.length:0;
+  var covMeses=medMes>0?D.saldo_total/medMes:0;
+  var covDias=Math.round(covMeses*30);
+
+  // Top 3 de cada categoria (para enriquecer alertas)
+  var top3Inad=topDev.slice(0,3);
+  var top3Dev=D.dev_comprando.slice(0,3);
+  var pagVencAgrup={};
+  pagVencPS.forEach(function(x){if(!pagVencAgrup[x.f])pagVencAgrup[x.f]=0;pagVencAgrup[x.f]+=x.v;});
+  var top3PagVenc=Object.keys(pagVencAgrup).map(function(k){return{f:k,v:pagVencAgrup[k]};}).sort(function(a,b){return b.v-a.v;}).slice(0,3);
+
   h+='<div class="sc">Alertas e Recomendações</div><div class="card" style="margin-bottom:14px">';
-  if(minSaldo>0){h+='<div class="al ok"><span style="font-size:14px">✅</span><div><b>Caixa saudável</b><span class="ad">Saldo positivo nas 6 semanas projetadas. Mínimo: R$ '+f(minSaldo)+'</span></div></div>';}
-  else{h+='<div class="al cr"><span style="font-size:14px">🔴</span><div><b>Atenção ao caixa</b><span class="ad">Saldo mínimo projetado: R$ '+f(minSaldo)+'. Antecipar recebíveis ou postergar pagamentos.</span></div></div>';}
-  if(tInad>0){h+='<div class="al cr"><span style="font-size:14px">🔴</span><div><b>Inadimplência '+(isProx?'total':'no período')+': R$ '+f(tInad)+' ('+nInad+' títulos)</b><span class="ad">'+(aging['>365d']>0?'R$ '+f(aging['>365d'])+' com mais de 1 ano. Acionar cobrança jurídica.':'Aging disponível no card acima.')+'</span></div></div>';}
-  if(dcLen>0){h+='<div class="al cr"><span style="font-size:14px">🔴</span><div><b>'+dcLen+' clientes devendo e comprando</b><span class="ad">Exposição total: R$ '+f(dcExp)+'. Bloquear crédito.</span></div></div>';}
-  if(tPagVenc>0){h+='<div class="al wa"><span style="font-size:14px">🟡</span><div><b>R$ '+f(tPagVenc)+' em contas a pagar vencidas no período</b><span class="ad">'+pagVencPS.length+' títulos. Regularizar para evitar juros.</span></div></div>';}
+
+  // ALERTA 1: Cobertura de caixa (prática de mercado: 3-6 meses)
+  var covClasse, covIcon, covTitulo, covDetalhe;
+  if(covMeses>=3){
+    covClasse='ok'; covIcon='✅';
+    covTitulo='Caixa saudável — cobertura de '+covMeses.toFixed(1)+' meses';
+    covDetalhe='Saldo atual cobre mais de 3 meses de despesas (prática de mercado). Saldo R$ '+f(D.saldo_total)+' / despesa média mensal R$ '+f(medMes)+'.';
+  }else if(covMeses>=1){
+    covClasse='wa'; covIcon='🟡';
+    covTitulo='Caixa apertado — cobertura de '+covDias+' dias ('+covMeses.toFixed(1)+' meses)';
+    covDetalhe='Saldo R$ '+f(D.saldo_total)+' vs despesa média mensal R$ '+f(medMes)+'. Prática de mercado recomenda 3-6 meses. Considerar construir reserva.';
+  }else if(covMeses>=0.5){
+    covClasse='cr'; covIcon='🔴';
+    covTitulo='Caixa baixo — cobertura de apenas '+covDias+' dias';
+    covDetalhe='Saldo R$ '+f(D.saldo_total)+' cobre '+covDias+'d contra despesa mensal de R$ '+f(medMes)+'. Dependência total do ciclo de recebíveis. Qualquer atraso relevante vira problema.';
+  }else{
+    covClasse='cr'; covIcon='🔴';
+    covTitulo='Caixa crítico — cobertura de '+covDias+' dias';
+    covDetalhe='Saldo R$ '+f(D.saldo_total)+' cobre apenas '+covDias+'d de operação (despesa média R$ '+f(medMes)+'/mês). Empresa opera em regime just-in-time de caixa. Urgente: construir reserva mínima de 30 dias.';
+  }
+  h+='<div class="al '+covClasse+'"><span style="font-size:14px">'+covIcon+'</span><div><b>'+covTitulo+'</b><span class="ad">'+covDetalhe+' Projeção 8 sem: saldo mínimo R$ '+f(minSaldo)+'.</span></div></div>';
+
+  // ALERTA 2: Inadimplência com top 3
+  if(tInad>0){
+    var inadDet='';
+    if(top3Inad.length>0){
+      inadDet='Top 3: ';
+      top3Inad.forEach(function(x,i){inadDet+=(i>0?' • ':'')+x.c.trim()+' <b style="color:var(--red)">R$ '+f(x.v)+'</b>';});
+    }
+    if(aging['>365d']>0)inadDet+=' • R$ '+f(aging['>365d'])+' com +1 ano (cobrança jurídica).';
+    h+='<div class="al cr"><span style="font-size:14px">🔴</span><div><b>Inadimplência '+(isProx?'total':'no período')+': R$ '+f(tInad)+' ('+nInad+' títulos)</b><span class="ad">'+inadDet+'</span></div></div>';
+  }
+
+  // ALERTA 3: Devedores comprando com top 3
+  if(dcLen>0){
+    var devDet='';
+    if(top3Dev.length>0){
+      devDet='Top 3 por exposição: ';
+      top3Dev.forEach(function(x,i){devDet+=(i>0?' • ':'')+x.c.trim()+' <b style="color:var(--red)">R$ '+f(x.div+x.nov)+'</b>';});
+    }
+    devDet+=' • Exposição total R$ '+f(dcExp)+'. Bloquear crédito.';
+    h+='<div class="al cr"><span style="font-size:14px">🔴</span><div><b>'+dcLen+' clientes devendo e comprando</b><span class="ad">'+devDet+'</span></div></div>';
+  }
+
+  // ALERTA 4: Pagar vencidas com top 3
+  if(tPagVenc>0){
+    var pagDet='';
+    if(top3PagVenc.length>0){
+      pagDet='Top 3: ';
+      top3PagVenc.forEach(function(x,i){pagDet+=(i>0?' • ':'')+x.f.trim()+' <b style="color:var(--yel)">R$ '+f(x.v)+'</b>';});
+    }
+    pagDet+=' • '+pagVencPS.length+' títulos no total. Regularizar para evitar juros.';
+    h+='<div class="al wa"><span style="font-size:14px">🟡</span><div><b>R$ '+f(tPagVenc)+' em contas a pagar vencidas no período</b><span class="ad">'+pagDet+'</span></div></div>';
+  }
+
   h+='</div>';
 
   h+='<div class="ftr">BIGTEX • Painel Semanal • Dados validados contra ERP • '+D.data_ref+' • Clique nos cards para expandir</div>';

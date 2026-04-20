@@ -9,6 +9,9 @@
 body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-serif;padding:14px;-webkit-font-smoothing:antialiased}
 .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .hdr h1{font-size:20px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,var(--blu),var(--cya));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav{display:flex;gap:3px;background:var(--card);border-radius:10px;padding:3px;border:1px solid var(--brd)}
+.nav a{font-size:11px;font-weight:600;padding:6px 14px;border-radius:8px;background:transparent;color:var(--dim);text-decoration:none;transition:all .15s}
+.nav a.on{background:var(--blu);color:#fff}.nav a:hover:not(.on){color:var(--txt)}
 .dt{color:var(--dim);font-size:11px;font-weight:500;background:var(--card);padding:4px 10px;border-radius:14px;border:1px solid var(--brd)}
 .prow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
 .tabs{display:flex;gap:3px;background:var(--card);border-radius:10px;padding:3px;border:1px solid var(--brd)}
@@ -402,7 +405,7 @@ function render(){
 
   var h='';
   // HEADER
-  h+='<div class="hdr"><h1>BIGTEX — Painel Semanal</h1><span class="dt">📅 '+D.data_ref+'</span></div>';
+  h+='<div class="hdr"><h1>BIGTEX — Painel Semanal</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="nav"><a href="index.html" class="on">Semanal</a><a href="mensal.html">Mensal</a><a href="anual.html">Anual</a></div><span class="dt">📅 '+D.data_ref+'</span></div></div>';
 
   // PERÍODO
   h+='<div class="prow">';

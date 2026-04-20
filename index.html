@@ -65,7 +65,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 
 /* FLUXO DE CAIXA — NOVO LAYOUT COMPACTO HORIZONTAL */
 .fcwrap{padding:6px 10px 10px}
-.fcsvg{width:100%;height:240px;display:block}
+.fcsvg{width:100%;height:280px;display:block;max-width:100%}
+.fcsaldo{width:100%;height:auto;display:block;max-width:100%;margin-top:6px}
 .fcsplit{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .fcsplit > div{position:relative}
 .fctitle{text-align:center;font-size:10px;color:var(--dim);font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 0 0}
@@ -95,6 +96,15 @@ function toggle(id){S.dd=S.dd===id?null:id;render();}
 function clearSearch(){S.busca='';render();}
 function pDate(s){return new Date(s+'T00:00:00');}
 function fmtDM(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');}
+function isoWeek(d){
+  var target=new Date(d.valueOf());
+  var dayNr=(d.getDay()+6)%7;
+  target.setDate(target.getDate()-dayNr+3);
+  var firstThursday=target.valueOf();
+  target.setMonth(0,1);
+  if(target.getDay()!==4){target.setMonth(0,1+((4-target.getDay())+7)%7);}
+  return 1+Math.ceil((firstThursday-target)/604800000);
+}
 
 function getPeriodo(){
   var y=HOJE.getFullYear(),m=HOJE.getMonth();
@@ -108,7 +118,7 @@ function getPeriodo(){
     var idx=S.week||0;
     if(idx>=semanas.length)idx=semanas.length-1;
     var w=semanas[idx];
-    return {ini:w.ini,fim:w.fim,label:'S'+(idx+1)+' ('+fmtDM(w.ini)+'-'+fmtDM(w.fim)+')'};
+    return {ini:w.ini,fim:w.fim,label:'S'+isoWeek(w.ini)+' ('+fmtDM(w.ini)+'-'+fmtDM(w.fim)+')'};
   }
   if(S.view==='prox'){
     var ini=new Date(HOJE);
@@ -154,13 +164,13 @@ function calcFluxo(){
   var rec=D.rec_ab.filter(function(x){return pDate(x.vc)>=HOJE;});
   var pag=D.pag_ab.filter(function(x){return pDate(x.vc)>=HOJE;});
   var cur=new Date(HOJE);
-  for(var i=0;i<6;i++){
+  for(var i=0;i<8;i++){
     var ini=new Date(cur);
     var fim=new Date(cur);fim.setDate(fim.getDate()+7);
     var e=rec.filter(function(x){var t=pDate(x.vc);return t>=ini && t<fim;}).reduce(function(a,x){return a+x.v;},0);
     var sa=pag.filter(function(x){var t=pDate(x.vc);return t>=ini && t<fim;}).reduce(function(a,x){return a+x.v;},0);
     saldo+=(e-sa);
-    fluxo.push({s:'S'+(i+1),pr:fmtDM(ini)+'-'+fmtDM(fim),e:e,sa:sa,saldo:saldo});
+    fluxo.push({s:'S'+isoWeek(ini),pr:fmtDM(ini)+'-'+fmtDM(fim),e:e,sa:sa,saldo:saldo});
     cur=fim;
   }
   return fluxo;
@@ -168,8 +178,8 @@ function calcFluxo(){
 
 // SVG FLUXO DE CAIXA — DUAS PARTES: BARRAS (esq) + LINHA DO SALDO (dir)
 function renderFluxoBarsSVG(fluxo){
-  var w=400,hSvg=240;
-  var padL=38,padR=8,padT=18,padB=42;
+  var w=760,hSvg=240;
+  var padL=42,padR=12,padT=22,padB=42;
   var innerW=w-padL-padR, innerH=hSvg-padT-padB;
   var n=fluxo.length;
   var barGroupW=innerW/n;
@@ -213,8 +223,8 @@ function renderFluxoBarsSVG(fluxo){
 }
 
 function renderFluxoSaldoSVG(fluxo){
-  var w=400,hSvg=240;
-  var padL=40,padR=15,padT=24,padB=42;
+  var w=420,hSvg=180;
+  var padL=38,padR=15,padT=22,padB=38;
   var innerW=w-padL-padR, innerH=hSvg-padT-padB;
   var n=fluxo.length;
   var colW=innerW/n;
@@ -229,7 +239,7 @@ function renderFluxoSaldoSVG(fluxo){
 
   function yOf(v){return padT+innerH-((v-yMin)/range)*innerH;}
 
-  var svg='<svg class="fcsvg" viewBox="0 0 '+w+' '+hSvg+'" preserveAspectRatio="xMidYMid meet">';
+  var svg='<svg class="fcsaldo" viewBox="0 0 '+w+' '+hSvg+'" preserveAspectRatio="xMidYMid meet">';
 
   // Grid e labels do eixo Y (4 linhas)
   for(var g=0;g<=3;g++){
@@ -267,10 +277,11 @@ function renderFluxoSaldoSVG(fluxo){
     // Label — alternar posição (acima/abaixo) se ponto anterior estiver perto verticalmente
     var offset=-10;
     if(i>0 && Math.abs(p.y-pts[i-1].y)<14) offset=14;
-    svg+='<text x="'+p.x+'" y="'+(p.y+offset)+'" text-anchor="middle" fill="'+cor+'" font-family="JetBrains Mono" font-weight="700" font-size="10">'+f(p.v)+'</text>';
+    var vlbl=Math.abs(p.v)>=1000?(p.v/1000).toFixed(0)+'K':f(p.v);
+    svg+='<text x="'+p.x+'" y="'+(p.y+offset)+'" text-anchor="middle" fill="'+cor+'" font-family="JetBrains Mono" font-weight="700" font-size="10">'+vlbl+'</text>';
     // Label da semana no eixo X
-    svg+='<text x="'+p.x+'" y="'+(padT+innerH+15)+'" text-anchor="middle" fill="#e6edf3" font-family="Plus Jakarta Sans" font-weight="700" font-size="11">'+p.s+'</text>';
-    svg+='<text x="'+p.x+'" y="'+(padT+innerH+28)+'" text-anchor="middle" fill="#484f58" font-family="JetBrains Mono" font-size="8">'+p.pr+'</text>';
+    svg+='<text x="'+p.x+'" y="'+(padT+innerH+14)+'" text-anchor="middle" fill="#e6edf3" font-family="Plus Jakarta Sans" font-weight="700" font-size="10">'+p.s+'</text>';
+    svg+='<text x="'+p.x+'" y="'+(padT+innerH+25)+'" text-anchor="middle" fill="#484f58" font-family="JetBrains Mono" font-size="7">'+p.pr+'</text>';
   });
 
   svg+='<defs>';
@@ -406,7 +417,7 @@ function render(){
     var semanas=getWeeksOfMonth(y,m);
     h+='<div class="wkpill">';
     semanas.forEach(function(w,i){
-      h+='<button class="wk '+(S.week===i?'on':'')+'" onclick="setWeek('+i+')" title="'+fmtDM(w.ini)+' - '+fmtDM(w.fim)+'">S'+(i+1)+'</button>';
+      h+='<button class="wk '+(S.week===i?'on':'')+'" onclick="setWeek('+i+')" title="'+fmtDM(w.ini)+' - '+fmtDM(w.fim)+'">S'+isoWeek(w.ini)+'</button>';
     });
     h+='</div>';
     var wsel=semanas[S.week||0];
@@ -534,9 +545,9 @@ function render(){
   h+='</div></div>';
 
   // FLUXO DE CAIXA (compacto, ainda no bloco filtrado)
-  h+='<div class="sc">Fluxo de Caixa Projetado — 6 semanas à frente</div>';
-  h+='<div class="card" style="margin-bottom:14px"><div class="fcwrap"><div class="fcsplit"><div><div class="fctitle">Entradas vs Saídas</div>'+renderFluxoBarsSVG(fluxo)+'</div><div><div class="fctitle">Saldo Acumulado</div>'+renderFluxoSaldoSVG(fluxo)+'</div></div></div>';
-  h+='<div class="fcleg"><span><span class="sw" style="background:#3fb950"></span>Entradas</span><span><span class="sw" style="background:#f85149"></span>Saídas</span><span><span class="sw" style="background:#58a6ff;border-radius:50%;height:8px;width:8px;margin-top:1px"></span>Saldo acumulado</span></div>';
+  h+='<div class="sc">Fluxo de Caixa Projetado — 8 semanas (60 dias)</div>';
+  h+='<div class="card" style="margin-bottom:14px"><div class="fcwrap">'+renderFluxoBarsSVG(fluxo)+'</div>';
+  h+='<div class="fcleg"><span><span class="sw" style="background:#3fb950"></span>Entradas</span><span><span class="sw" style="background:#f85149"></span>Saídas</span></div>';
   h+='</div>';
 
   // =========================================================
@@ -554,13 +565,14 @@ function render(){
   if(S.dd==='saldo'){h+='<div class="dd">'+renderDonutSaldo()+'</div>';}
   h+='</div>';
 
-  // PROJEÇÃO 6 Semanas — snapshot do fluxo futuro
-  h+='<div class="card fx"><div class="ac" style="background:'+(minSaldo>0?'var(--grn)':'var(--red)')+'"></div>';
-  h+='<div class="lb"><span>Projeção 6 Semanas</span><span class="lbfx">hoje+6sem</span></div>';
+  // PROJEÇÃO 8 Semanas — snapshot do fluxo futuro (clicável, abre gráfico de saldo acumulado)
+  h+='<div class="card fx ck" onclick="toggle(\'proj\')"><div class="ac" style="background:'+(minSaldo>0?'var(--grn)':'var(--red)')+'"></div>';
+  h+='<div class="lb"><span>Projeção 8 Semanas</span><span class="lbfx">hoje+8sem</span></div>';
   h+='<div class="vl" style="color:'+(lastSaldo>0?'var(--grn)':'var(--red)')+'">R$ '+f(lastSaldo)+'</div>';
   h+='<div class="sb">saldo mínimo: R$ '+f(minSaldo)+'</div>';
   h+=sem(minSaldo>20000?'g':minSaldo>0?'y':'r');
   h+=(minSaldo>0?'<span class="bg" style="color:var(--grn);background:var(--grn-bg)">▲ Todas positivas</span>':'<span class="bg" style="color:var(--red);background:var(--red-bg)">⚠ Saldo negativo projetado</span>');
+  if(S.dd==='proj'){h+='<div class="dd" style="max-height:none">'+renderFluxoSaldoSVG(fluxo)+'</div>';}
   h+='</div>';
 
   h+='</div>';

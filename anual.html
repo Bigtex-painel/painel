@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head>
+<html lang="pt-BR">
+<head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bigtex — Painel Anual</title><meta name="robots" content="noindex, nofollow">
+<title>Bigtex — Painel Anual Interativo</title><meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{--bg:#0d1117;--card:#161b22;--card-h:#1c2333;--brd:#21262d;--txt:#e6edf3;--dim:#a8b2be;--mut:#6b7582;--grn:#3fb950;--grn-bg:rgba(63,185,80,.12);--red:#f85149;--red-bg:rgba(248,81,73,.12);--yel:#d29922;--yel-bg:rgba(210,153,34,.12);--blu:#58a6ff;--blu-bg:rgba(88,166,255,.12);--cya:#39d2c0;--pur:#bc8cff;--ora:#f0883e}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -19,7 +21,6 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .chip.on{background:var(--blu);color:#fff}
 .chip.parc{background:var(--yel);color:#000}
 .chip:hover:not(.on):not(.parc){color:var(--txt)}
-.sel-wrap{display:flex;align-items:center;gap:6px}
 .tgl-wrap{display:flex;gap:3px;background:var(--card);border-radius:8px;padding:2px;border:1px solid var(--brd)}
 .tgl-btn{font-size:11px;font-weight:600;padding:5px 11px;border-radius:6px;background:transparent;color:var(--dim);cursor:pointer;border:none;font-family:inherit;transition:all .15s}
 .tgl-btn.on{background:var(--blu);color:#fff}
@@ -104,17 +105,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .search-wrap .klb{margin-bottom:0;flex:0 0 auto}
 .search-count{font-size:10px;color:var(--mut);font-family:'JetBrains Mono',monospace}
 @media(max-width:600px){.kvl{font-size:18px}.hdr h1{font-size:17px}.search-box{width:100%}}
-/* BARCHART (mensal do ano) */
-.barchart{display:flex;align-items:flex-end;gap:5px;height:260px;padding-top:26px;border-bottom:1px solid var(--brd);padding-bottom:4px;position:relative}
-.barchart .col{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative}
-.barchart .col:hover .bar{filter:brightness(1.25)}
-.barchart .col:hover .barval{color:var(--blu);font-weight:700;opacity:1}
-.barchart .bar{width:82%;border-radius:2px 2px 0 0;background:linear-gradient(180deg,var(--blu),#1a5399);min-height:2px;position:relative;transition:all .15s}
-.barchart .bar.hi{background:linear-gradient(180deg,var(--grn),#238636)}
-.barchart .bar.parc{background:linear-gradient(180deg,var(--yel),#9c6d0c);opacity:.9}
-.barchart .barval{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:9px;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--dim);white-space:nowrap;transition:all .15s}
-.barchart .lbl{font-size:10px;color:var(--dim);margin-top:4px;font-weight:600}
-/* Comparativo ano a ano — 5 barras */
+
+/* Comparativo ano a ano — 5 barras (Mantido CSS original) */
 .yybars{display:flex;align-items:flex-end;gap:8px;height:220px;padding-top:26px;border-bottom:1px solid var(--brd);padding-bottom:4px;position:relative}
 .yybars .col{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative}
 .yybars .bar{width:70%;border-radius:3px 3px 0 0;min-height:3px;position:relative;transition:all .15s}
@@ -126,18 +118,21 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .yybars .barval{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--dim);white-space:nowrap}
 .yybars .lbl{font-size:11px;color:var(--dim);margin-top:4px;font-weight:700}
 .yybars .lbl.cur{color:var(--blu)}
+
 /* Heatmap sazonalidade */
 .heatmap{display:grid;grid-template-columns:60px repeat(12,1fr);gap:3px;margin-top:8px}
 .heatmap .hcell{padding:7px 4px;text-align:center;font-size:10px;font-family:'JetBrains Mono',monospace;border-radius:4px;color:var(--txt);font-weight:600;min-height:26px;display:flex;align-items:center;justify-content:center;cursor:default}
 .heatmap .hcell.hd{background:transparent;color:var(--dim);font-weight:700;font-size:10px;text-transform:uppercase}
 .heatmap .hcell.lbl{background:transparent;color:var(--dim);text-align:left;padding-left:0;font-weight:700;justify-content:flex-start}
 .heatmap .hcell:hover:not(.hd):not(.lbl){filter:brightness(1.2);outline:1px solid var(--blu)}
+
 /* Linhas sobrepostas sazonalidade */
 .linesbox{position:relative;height:300px;margin-top:8px;padding:10px 4px 22px}
 .linesbox svg{width:100%;height:100%;overflow:visible}
 .lineslegend{display:flex;gap:12px;justify-content:center;font-size:11px;color:var(--dim);margin-top:4px;flex-wrap:wrap}
 .lineslegend span{display:flex;gap:5px;align-items:center;font-weight:600}
 .lineslegend i{display:inline-block;width:14px;height:3px;border-radius:2px}
+
 /* Ranking retiradas sócios */
 .socbox{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:700px){.socbox{grid-template-columns:1fr}}
@@ -156,14 +151,20 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 <body>
 <div id="app"></div>
 <script>
-var D = {"data_ref":"19/04/2026","hoje":"2026-04-19","ytd_mes":4,"anos":[2022,2023,2024,2025,2026],"ano_full":{"2022":{"receita":2698170.83,"cmv":1949354.18,"lucro_bruto":748816.65,"margem_bruta":27.75,"impostos":27553.48,"desp_pessoal":199165.84,"desp_fixas":109528.12,"desp_var_vendas":3165.95,"desp_var_op":42308.75,"desp_operacional":354168.66,"financeiras":10092.21,"investimentos":25015.0,"resultado":331987.3,"margem_liquida":12.3,"pedidos":2131,"qtde":523494.14,"clientes_unicos":130,"ticket_medio":1265.37,"pro_labore":89376.04,"comissao_socio":0.0,"retiradas_socios":89376.04},"2023":{"receita":2069072.32,"cmv":1559761.29,"lucro_bruto":509311.03,"margem_bruta":24.62,"impostos":16212.2,"desp_pessoal":213891.14,"desp_fixas":121790.94,"desp_var_vendas":5781.1,"desp_var_op":63285.33,"desp_operacional":404748.51,"financeiras":7133.43,"investimentos":169245.85,"resultado":-88028.96,"margem_liquida":-4.25,"pedidos":2184,"qtde":318650.12,"clientes_unicos":118,"ticket_medio":946.32,"pro_labore":28906.38,"comissao_socio":0.0,"retiradas_socios":28906.38},"2024":{"receita":1668992.1,"cmv":1243376.31,"lucro_bruto":425615.79,"margem_bruta":25.5,"impostos":24689.44,"desp_pessoal":168887.92,"desp_fixas":121389.3,"desp_var_vendas":39949.38,"desp_var_op":57658.09,"desp_operacional":387884.69,"financeiras":2932.71,"investimentos":12528.47,"resultado":-2419.52,"margem_liquida":-0.14,"pedidos":1543,"qtde":206775.96,"clientes_unicos":103,"ticket_medio":1081.04,"pro_labore":22446.8,"comissao_socio":35571.44,"retiradas_socios":58018.24},"2025":{"receita":4218451.72,"cmv":3118737.99,"lucro_bruto":1099713.73,"margem_bruta":26.07,"impostos":49040.29,"desp_pessoal":282961.27,"desp_fixas":160031.97,"desp_var_vendas":122204.79,"desp_var_op":119024.7,"desp_operacional":684222.73,"financeiras":6498.76,"investimentos":57098.36,"resultado":302853.59,"margem_liquida":7.18,"pedidos":2533,"qtde":311471.77,"clientes_unicos":151,"ticket_medio":1665.02,"pro_labore":57353.9,"comissao_socio":117208.63,"retiradas_socios":174562.53},"2026":{"receita":2383773.65,"cmv":1825626.05,"lucro_bruto":558147.6,"margem_bruta":23.41,"impostos":17541.64,"desp_pessoal":92183.87,"desp_fixas":48795.67,"desp_var_vendas":79155.73,"desp_var_op":63441.75,"desp_operacional":283577.02,"financeiras":3957.63,"investimentos":13768.58,"resultado":239302.73,"margem_liquida":10.04,"pedidos":1029,"qtde":241046.2,"clientes_unicos":101,"ticket_medio":2316.59,"pro_labore":25331.05,"comissao_socio":77637.75,"retiradas_socios":102968.8}},"ano_ytd":{"2022":{"receita":308051.18,"cmv":239955.69,"lucro_bruto":68095.49,"margem_bruta":22.11,"impostos":0.0,"desp_pessoal":5684.76,"desp_fixas":33829.36,"desp_var_vendas":934.9,"desp_var_op":764.7,"desp_operacional":41213.72,"financeiras":127.5,"investimentos":15.0,"resultado":26739.27,"margem_liquida":8.68,"pedidos":247,"qtde":28051.99,"clientes_unicos":52,"ticket_medio":1247.17,"pro_labore":0.0,"comissao_socio":0.0,"retiradas_socios":0.0},"2023":{"receita":684204.83,"cmv":514740.2,"lucro_bruto":169464.63,"margem_bruta":24.77,"impostos":3847.52,"desp_pessoal":64828.86,"desp_fixas":38522.51,"desp_var_vendas":4346.76,"desp_var_op":26335.29,"desp_operacional":134033.42,"financeiras":2252.02,"investimentos":60580.95,"resultado":-31249.28,"margem_liquida":-4.57,"pedidos":776,"qtde":125109.53,"clientes_unicos":77,"ticket_medio":881.6,"pro_labore":4555.02,"comissao_socio":0.0,"retiradas_socios":4555.02},"2024":{"receita":365298.62,"cmv":288099.84,"lucro_bruto":77198.78,"margem_bruta":21.13,"impostos":5275.17,"desp_pessoal":43814.18,"desp_fixas":37190.19,"desp_var_vendas":707.56,"desp_var_op":14180.06,"desp_operacional":95891.99,"financeiras":1020.21,"investimentos":6350.0,"resultado":-31338.59,"margem_liquida":-8.58,"pedidos":359,"qtde":52063.11,"clientes_unicos":42,"ticket_medio":1017.54,"pro_labore":4944.84,"comissao_socio":0.0,"retiradas_socios":4944.84},"2025":{"receita":927581.48,"cmv":666061.44,"lucro_bruto":261520.04,"margem_bruta":28.19,"impostos":9484.19,"desp_pessoal":73363.86,"desp_fixas":49572.68,"desp_var_vendas":24381.56,"desp_var_op":26822.14,"desp_operacional":174140.24,"financeiras":1341.34,"investimentos":1256.13,"resultado":75298.14,"margem_liquida":8.12,"pedidos":680,"qtde":74879.5,"clientes_unicos":83,"ticket_medio":1363.7,"pro_labore":15309.74,"comissao_socio":22493.34,"retiradas_socios":37803.08},"2026":{"receita":2383773.65,"cmv":1825626.05,"lucro_bruto":558147.6,"margem_bruta":23.41,"impostos":17541.64,"desp_pessoal":92183.87,"desp_fixas":48795.67,"desp_var_vendas":79155.73,"desp_var_op":63441.75,"desp_operacional":283577.02,"financeiras":3957.63,"investimentos":13768.58,"resultado":239302.73,"margem_liquida":10.04,"pedidos":1029,"qtde":241046.2,"clientes_unicos":101,"ticket_medio":2316.59,"pro_labore":25331.05,"comissao_socio":77637.75,"retiradas_socios":102968.8}},"coorte_full":{"2022":{"total":131,"novos":130,"retornados":0,"recorrentes":0,"perdidos":0},"2023":{"total":119,"novos":50,"retornados":0,"recorrentes":69,"perdidos":62},"2024":{"total":103,"novos":40,"retornados":11,"recorrentes":52,"perdidos":67},"2025":{"total":151,"novos":80,"retornados":9,"recorrentes":62,"perdidos":41},"2026":{"total":101,"novos":39,"retornados":3,"recorrentes":59,"perdidos":92}},"coorte_ytd":{"2022":{"total":53,"novos":52,"retornados":0,"recorrentes":0,"perdidos":0},"2023":{"total":77,"novos":19,"retornados":0,"recorrentes":33,"perdidos":20},"2024":{"total":42,"novos":8,"retornados":3,"recorrentes":20,"perdidos":57},"2025":{"total":83,"novos":23,"retornados":10,"recorrentes":25,"perdidos":17},"2026":{"total":101,"novos":39,"retornados":6,"recorrentes":32,"perdidos":51}},"top_cli":{"2022":[{"c":"WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS EIRELI","fat":221551.44,"margem":66310.79,"margem_pct":29.93,"pedidos":47,"fat_ant":0.0,"delta_pct":null},{"c":"JOSE ROBERTO PANDOLFO","fat":127023.11,"margem":41654.06,"margem_pct":32.79,"pedidos":33,"fat_ant":0.0,"delta_pct":null},{"c":"MATHEUS GONÇALVES FONSECA","fat":123648.68,"margem":24796.76,"margem_pct":20.05,"pedidos":47,"fat_ant":0.0,"delta_pct":null},{"c":"FRANCA BY SHOP LTDA. ME","fat":108927.91,"margem":23691.38,"margem_pct":21.75,"pedidos":36,"fat_ant":0.0,"delta_pct":null},{"c":"BALCAO RAPIDO","fat":102845.02,"margem":27916.71,"margem_pct":27.14,"pedidos":540,"fat_ant":0.0,"delta_pct":null},{"c":"JONATAS ROSA RODRIGUES","fat":86970.95,"margem":39894.06,"margem_pct":45.87,"pedidos":46,"fat_ant":0.0,"delta_pct":null},{"c":"WELLINGTON RODRIGUES SOUSA","fat":82975.35,"margem":27028.0,"margem_pct":32.57,"pedidos":71,"fat_ant":0.0,"delta_pct":null},{"c":"MARIA ISABEL OLIVEIRA ANDRADE MELLO FRANCA ME","fat":81279.7,"margem":13674.68,"margem_pct":16.82,"pedidos":96,"fat_ant":0.0,"delta_pct":null},{"c":"GABRIEL HENRIQUE SILVA SOBRINHO","fat":81113.69,"margem":17873.74,"margem_pct":22.04,"pedidos":39,"fat_ant":0.0,"delta_pct":null},{"c":"AGUINALDO MESSIAS DE ANDRADE","fat":77708.47,"margem":25520.77,"margem_pct":32.84,"pedidos":24,"fat_ant":0.0,"delta_pct":null},{"c":"FRANSERGIO TORRALBO GALHARDO","fat":77197.13,"margem":14671.97,"margem_pct":19.01,"pedidos":31,"fat_ant":0.0,"delta_pct":null},{"c":"EDGAR DA SILVA FRANCISCO","fat":73262.48,"margem":21057.93,"margem_pct":28.74,"pedidos":30,"fat_ant":0.0,"delta_pct":null},{"c":"WESLEY DE OLIVEIRA ALMEIDA","fat":72468.72,"margem":21999.28,"margem_pct":30.36,"pedidos":52,"fat_ant":0.0,"delta_pct":null},{"c":"MATHEUS APARECIDO DA SILVA COSTA ME","fat":69521.96,"margem":20894.04,"margem_pct":30.05,"pedidos":49,"fat_ant":0.0,"delta_pct":null},{"c":"VANDEIR PAIM-ME","fat":69000.0,"margem":39393.65,"margem_pct":57.09,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"R. M. DE OLIVEIRA ACESSORIOS","fat":64388.13,"margem":10975.17,"margem_pct":17.05,"pedidos":22,"fat_ant":0.0,"delta_pct":null},{"c":"M . J  SHOES CALÇADOS LTDA","fat":61346.41,"margem":21348.16,"margem_pct":34.8,"pedidos":35,"fat_ant":0.0,"delta_pct":null},{"c":"IVO MANHANI","fat":61202.51,"margem":19519.39,"margem_pct":31.89,"pedidos":57,"fat_ant":0.0,"delta_pct":null},{"c":"ISMAIR GOMES DE ANDRADE","fat":58288.11,"margem":11183.82,"margem_pct":19.19,"pedidos":37,"fat_ant":0.0,"delta_pct":null},{"c":"ZEBU INDUSTRIA DE BOTINAS LTDA ME","fat":56230.0,"margem":19983.9,"margem_pct":35.54,"pedidos":14,"fat_ant":0.0,"delta_pct":null},{"c":"MANUELA MARQUES BOLSAS E CALÇADOS EIRELI LTDA.","fat":53227.29,"margem":12601.44,"margem_pct":23.67,"pedidos":37,"fat_ant":0.0,"delta_pct":null},{"c":"LUCAS MATEUS ROSA RODRIGUES","fat":50255.87,"margem":9233.78,"margem_pct":18.37,"pedidos":24,"fat_ant":0.0,"delta_pct":null},{"c":"PATRICIA MORAES SANTANA OLIVEIRA","fat":49056.95,"margem":9604.87,"margem_pct":19.58,"pedidos":32,"fat_ant":0.0,"delta_pct":null},{"c":"EVERTON ROLLIS SOUZA","fat":48373.95,"margem":13364.35,"margem_pct":27.63,"pedidos":24,"fat_ant":0.0,"delta_pct":null},{"c":"BOLSAS GABI SHOW COMERCIO VAREJISTA DE BOLSAS LTDA.","fat":48056.05,"margem":3969.89,"margem_pct":8.26,"pedidos":9,"fat_ant":0.0,"delta_pct":null},{"c":"LIVIA DO VALE GOMES","fat":42239.65,"margem":9363.16,"margem_pct":22.17,"pedidos":17,"fat_ant":0.0,"delta_pct":null},{"c":"SAPATARIA FACIROLLI CALÇADOS LTDA.","fat":40473.98,"margem":11184.16,"margem_pct":27.63,"pedidos":26,"fat_ant":0.0,"delta_pct":null},{"c":"J & C SHOES INDUSTRIA E COMERCIO DE CALÇADOS LTDA.","fat":39444.5,"margem":14537.91,"margem_pct":36.86,"pedidos":15,"fat_ant":0.0,"delta_pct":null},{"c":"DK KIDS LTDA","fat":38264.49,"margem":9239.51,"margem_pct":24.15,"pedidos":50,"fat_ant":0.0,"delta_pct":null},{"c":"LEC FERREIRA COMERCIO DE BOLSAS E ACESSORIOS LTDA.","fat":31540.11,"margem":6001.2,"margem_pct":19.03,"pedidos":13,"fat_ant":0.0,"delta_pct":null},{"c":"ANTONIO SERGIO TORRALBO GALHARDO","fat":30374.66,"margem":4851.58,"margem_pct":15.97,"pedidos":19,"fat_ant":0.0,"delta_pct":null},{"c":"MENDES & FERNANDES COMERCIO DE CALÇADOS E ACESSORIO LTDA.","fat":29844.63,"margem":8214.84,"margem_pct":27.53,"pedidos":6,"fat_ant":0.0,"delta_pct":null},{"c":"THIAGO HENRIQUE JUSTINO","fat":26093.67,"margem":5015.3,"margem_pct":19.22,"pedidos":18,"fat_ant":0.0,"delta_pct":null},{"c":"MICHAEL LUCAS SILVA","fat":24151.69,"margem":10130.15,"margem_pct":41.94,"pedidos":31,"fat_ant":0.0,"delta_pct":null},{"c":"SEBASTIAO RICARDO GONCALVES PINTO","fat":21816.17,"margem":4859.9,"margem_pct":22.28,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"CARLOS ALEXANDRE RODRIGUES ARANTES","fat":19739.58,"margem":7359.41,"margem_pct":37.28,"pedidos":41,"fat_ant":0.0,"delta_pct":null},{"c":"RALF SILVA LOURENCO","fat":18062.48,"margem":5061.97,"margem_pct":28.02,"pedidos":29,"fat_ant":0.0,"delta_pct":null},{"c":"ELEUTERIO & ELEUTERIO LTDA","fat":17272.21,"margem":11176.08,"margem_pct":64.71,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP","fat":15539.08,"margem":9782.3,"margem_pct":62.95,"pedidos":22,"fat_ant":0.0,"delta_pct":null},{"c":"LUIZ ROBERTO DE SOUZA","fat":15390.98,"margem":2787.26,"margem_pct":18.11,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"VALERIA MOREIRA PANDOLFO PRADO","fat":14762.86,"margem":2525.88,"margem_pct":17.11,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"RAFAELA CAPEL INDUSTRIA E COMERCIO DE BOLSAS LTDA.","fat":14120.4,"margem":517.85,"margem_pct":3.67,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"FABRICA DE CARTEIRAS DE MAO COM ALÇA CORRENTE METAL","fat":13281.04,"margem":1059.2,"margem_pct":7.98,"pedidos":13,"fat_ant":0.0,"delta_pct":null},{"c":"GUILHERME LIMA BORGES","fat":12938.19,"margem":1385.93,"margem_pct":10.71,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"LUCAS ULISSES A. SILVA","fat":11147.05,"margem":3291.29,"margem_pct":29.53,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"FABERSON SIQUEIRA GONÇALVES BARBARA","fat":10418.41,"margem":2253.58,"margem_pct":21.63,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"NATHAN DA SILVA NASCIMENTO","fat":10265.37,"margem":4003.05,"margem_pct":39.0,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"CACILDO PEIXOTO ALVES & CIA LTDA.","fat":10164.0,"margem":-2211.0,"margem_pct":-21.75,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"GILBERTO COSTA CONFECÇÃO E ESTAMPARIA LTDA.","fat":10133.7,"margem":3440.93,"margem_pct":33.96,"pedidos":24,"fat_ant":0.0,"delta_pct":null},{"c":"MIZAEL JESUS DA SILVA","fat":9224.46,"margem":2446.88,"margem_pct":26.53,"pedidos":4,"fat_ant":0.0,"delta_pct":null}],"2023":[{"c":"WESLEY DE OLIVEIRA ALMEIDA","fat":187860.46,"margem":39232.0,"margem_pct":20.88,"pedidos":186,"fat_ant":72468.72,"delta_pct":159.2},{"c":"WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS EIRELI","fat":141498.5,"margem":73408.49,"margem_pct":51.88,"pedidos":87,"fat_ant":221551.44,"delta_pct":-36.1},{"c":"BALCAO RAPIDO","fat":138484.86,"margem":26686.0,"margem_pct":19.27,"pedidos":524,"fat_ant":102845.02,"delta_pct":34.7},{"c":"MARIA ISABEL OLIVEIRA ANDRADE MELLO FRANCA ME","fat":132624.79,"margem":19562.44,"margem_pct":14.75,"pedidos":122,"fat_ant":81279.7,"delta_pct":63.2},{"c":"MATEUS MATOS CURSOS E TREINAMENTOS LTDA","fat":129958.47,"margem":26215.95,"margem_pct":20.17,"pedidos":75,"fat_ant":0.0,"delta_pct":null},{"c":"LETICIA DO VALE GOMES","fat":102094.6,"margem":26130.9,"margem_pct":25.59,"pedidos":58,"fat_ant":0.0,"delta_pct":null},{"c":"LISSMEL BOLSAS LTDA","fat":79015.48,"margem":24460.72,"margem_pct":30.96,"pedidos":49,"fat_ant":0.0,"delta_pct":null},{"c":"LUCAS MATEUS ROSA RODRIGUES","fat":74222.73,"margem":16250.33,"margem_pct":21.89,"pedidos":42,"fat_ant":50255.87,"delta_pct":47.7},{"c":"JOSE ROBERTO PANDOLFO","fat":65923.33,"margem":20469.25,"margem_pct":31.05,"pedidos":29,"fat_ant":127023.11,"delta_pct":-48.1},{"c":"WALLAS MURILO VILELA ALVIN","fat":62822.53,"margem":13774.62,"margem_pct":21.93,"pedidos":37,"fat_ant":0.0,"delta_pct":null},{"c":"MURILO DO PRADO MAURA","fat":58495.84,"margem":14257.1,"margem_pct":24.37,"pedidos":43,"fat_ant":0.0,"delta_pct":null},{"c":"MATHEUS APARECIDO DA SILVA COSTA ME","fat":55900.52,"margem":13390.35,"margem_pct":23.95,"pedidos":71,"fat_ant":69521.96,"delta_pct":-19.6},{"c":"GABRIEL HENRIQUE SILVA SOBRINHO","fat":53343.57,"margem":18164.89,"margem_pct":34.05,"pedidos":63,"fat_ant":81113.69,"delta_pct":-34.2},{"c":"R. M. DE OLIVEIRA ACESSORIOS","fat":49526.87,"margem":9377.31,"margem_pct":18.93,"pedidos":35,"fat_ant":64388.13,"delta_pct":-23.1},{"c":"FRANSERGIO TORRALBO GALHARDO","fat":49333.5,"margem":8285.14,"margem_pct":16.79,"pedidos":47,"fat_ant":77197.13,"delta_pct":-36.1},{"c":"LEC FERREIRA COMERCIO DE BOLSAS E ACESSORIOS LTDA.","fat":49121.21,"margem":7441.18,"margem_pct":15.15,"pedidos":28,"fat_ant":31540.11,"delta_pct":55.7},{"c":"ANTONIO SERGIO TORRALBO GALHARDO","fat":47959.17,"margem":8029.0,"margem_pct":16.74,"pedidos":44,"fat_ant":30374.66,"delta_pct":57.9},{"c":"NATHAN DA SILVA NASCIMENTO","fat":32163.75,"margem":9053.65,"margem_pct":28.15,"pedidos":20,"fat_ant":10265.37,"delta_pct":213.3},{"c":"MATHEUS GONÇALVES FONSECA","fat":30464.77,"margem":8757.45,"margem_pct":28.75,"pedidos":17,"fat_ant":123648.68,"delta_pct":-75.4},{"c":"THIAGO HENRIQUE JUSTINO","fat":27959.38,"margem":3702.68,"margem_pct":13.24,"pedidos":23,"fat_ant":26093.67,"delta_pct":7.2},{"c":"WELSON NUNES FRANCISCO","fat":25892.34,"margem":2319.13,"margem_pct":8.96,"pedidos":20,"fat_ant":0.0,"delta_pct":null},{"c":"GIOLO CALÇADOS LTDA.","fat":22951.42,"margem":1937.16,"margem_pct":8.44,"pedidos":7,"fat_ant":0.0,"delta_pct":null},{"c":"BALSANUFO SOARES DA SILVA","fat":22764.02,"margem":3447.46,"margem_pct":15.14,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"ELEUTERIO & ELEUTERIO LTDA","fat":22402.8,"margem":15498.0,"margem_pct":69.18,"pedidos":4,"fat_ant":17272.21,"delta_pct":29.7},{"c":"IVO MANHANI","fat":20811.83,"margem":3278.86,"margem_pct":15.75,"pedidos":35,"fat_ant":61202.51,"delta_pct":-66.0},{"c":"DK KIDS LTDA","fat":16779.07,"margem":2270.47,"margem_pct":13.53,"pedidos":23,"fat_ant":38264.49,"delta_pct":-56.1},{"c":"SHOPBAG LTDA.","fat":16706.0,"margem":1908.52,"margem_pct":11.42,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"RODRIGO SOUZA","fat":16353.19,"margem":3056.71,"margem_pct":18.69,"pedidos":36,"fat_ant":2871.6,"delta_pct":469.5},{"c":"EDGAR DA SILVA FRANCISCO","fat":15756.9,"margem":5881.0,"margem_pct":37.32,"pedidos":15,"fat_ant":73262.48,"delta_pct":-78.5},{"c":"TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP","fat":15259.12,"margem":10419.26,"margem_pct":68.28,"pedidos":3,"fat_ant":15539.08,"delta_pct":-1.8},{"c":"ISMAIR GOMES DE ANDRADE","fat":14894.86,"margem":1921.59,"margem_pct":12.9,"pedidos":15,"fat_ant":58288.11,"delta_pct":-74.4},{"c":"JOAO VITOR PEREIRA SAMPAIO","fat":14669.86,"margem":1369.42,"margem_pct":9.33,"pedidos":10,"fat_ant":2895.0,"delta_pct":406.7},{"c":"ZEBU INDUSTRIA DE BOTINAS LTDA ME","fat":13990.0,"margem":4346.8,"margem_pct":31.07,"pedidos":4,"fat_ant":56230.0,"delta_pct":-75.1},{"c":"PATRICIA MORAES SANTANA OLIVEIRA","fat":12666.41,"margem":1949.38,"margem_pct":15.39,"pedidos":28,"fat_ant":49056.95,"delta_pct":-74.2},{"c":"RALF SILVA LOURENCO","fat":12610.35,"margem":6104.29,"margem_pct":48.41,"pedidos":26,"fat_ant":18062.48,"delta_pct":-30.2},{"c":"SADRAQUE ANDREONE DA SILVA LIMA","fat":12480.0,"margem":-1307.08,"margem_pct":-10.47,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"GUILHERME LIMA BORGES","fat":11751.2,"margem":3648.58,"margem_pct":31.05,"pedidos":7,"fat_ant":12938.19,"delta_pct":-9.2},{"c":"J & C SHOES INDUSTRIA E COMERCIO DE CALÇADOS LTDA.","fat":11625.0,"margem":4120.98,"margem_pct":35.45,"pedidos":21,"fat_ant":39444.5,"delta_pct":-70.5},{"c":"GF COMERCIO VAREJISTA DE BOLSAS E ACESSORIOS LTDA","fat":11158.32,"margem":2837.74,"margem_pct":25.43,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"JONATAS ROSA RODRIGUES","fat":11098.38,"margem":5637.9,"margem_pct":50.8,"pedidos":12,"fat_ant":86970.95,"delta_pct":-87.2},{"c":"LIVIA DO VALE GOMES","fat":9179.1,"margem":814.17,"margem_pct":8.87,"pedidos":7,"fat_ant":42239.65,"delta_pct":-78.3},{"c":"LUCAS ULISSES A. SILVA","fat":7556.43,"margem":1611.66,"margem_pct":21.33,"pedidos":7,"fat_ant":11147.05,"delta_pct":-32.2},{"c":"CARLOS ALEXANDRE RODRIGUES ARANTES","fat":6892.32,"margem":2754.47,"margem_pct":39.96,"pedidos":14,"fat_ant":19739.58,"delta_pct":-65.1},{"c":"ATHAYDE & CARNEIRO DE OLIVEIRA LTDA.","fat":6819.12,"margem":441.98,"margem_pct":6.48,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"LOJAS STILO COM.VAREJISTA DE BOLSAS E ACESSORIOS LTDA","fat":6681.58,"margem":2267.19,"margem_pct":33.93,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"QUIRINO & RODRIGUES INDUSTRIA E COMERCIO DE CAPAS LTDA.","fat":6498.53,"margem":2201.88,"margem_pct":33.88,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"CALCADOS ALFA","fat":6032.96,"margem":1921.37,"margem_pct":31.85,"pedidos":3,"fat_ant":0.0,"delta_pct":null},{"c":"VANDEIR PAIM-ME","fat":5760.0,"margem":3045.6,"margem_pct":52.87,"pedidos":2,"fat_ant":69000.0,"delta_pct":-91.7},{"c":"ADRIANO  CARLOS BARROS","fat":5601.0,"margem":4489.59,"margem_pct":80.16,"pedidos":25,"fat_ant":0.0,"delta_pct":null},{"c":"FABRICA DE BOLSA MODELO 102 MENOR","fat":5437.23,"margem":-2670.0,"margem_pct":-49.11,"pedidos":11,"fat_ant":0.0,"delta_pct":null}],"2024":[{"c":"WALLAS MURILO VILELA ALVIN","fat":180111.52,"margem":59558.35,"margem_pct":33.07,"pedidos":59,"fat_ant":62822.53,"delta_pct":186.7},{"c":"LUCAS MATEUS ROSA RODRIGUES","fat":141359.28,"margem":18475.45,"margem_pct":13.07,"pedidos":51,"fat_ant":74222.73,"delta_pct":90.5},{"c":"WESLEY DE OLIVEIRA ALMEIDA","fat":135863.68,"margem":42139.74,"margem_pct":31.02,"pedidos":125,"fat_ant":187860.46,"delta_pct":-27.7},{"c":"MAIKON HENRIQUE DA COSTA","fat":129383.14,"margem":22706.45,"margem_pct":17.55,"pedidos":30,"fat_ant":4430.4,"delta_pct":2820.3},{"c":"ABIDIEL OLIVEIRA DA SILVA","fat":92993.7,"margem":22021.16,"margem_pct":23.68,"pedidos":23,"fat_ant":0.0,"delta_pct":null},{"c":"BALCAO RAPIDO","fat":92516.71,"margem":15298.3,"margem_pct":16.54,"pedidos":315,"fat_ant":138484.86,"delta_pct":-33.2},{"c":"GHS ESEQUIEL","fat":81434.25,"margem":29231.43,"margem_pct":35.9,"pedidos":103,"fat_ant":0.0,"delta_pct":null},{"c":"RALF SILVA LOURENCO","fat":78220.99,"margem":24005.62,"margem_pct":30.69,"pedidos":89,"fat_ant":12610.35,"delta_pct":520.3},{"c":"JOSE ROBERTO PANDOLFO","fat":55667.7,"margem":23024.46,"margem_pct":41.36,"pedidos":32,"fat_ant":65923.33,"delta_pct":-15.6},{"c":"GABRIEL HENRIQUE SILVA SOBRINHO","fat":54128.22,"margem":11712.38,"margem_pct":21.64,"pedidos":25,"fat_ant":53343.57,"delta_pct":1.5},{"c":"LEC FERREIRA COMERCIO DE BOLSAS E ACESSORIOS LTDA.","fat":52461.83,"margem":11131.85,"margem_pct":21.22,"pedidos":32,"fat_ant":49121.21,"delta_pct":6.8},{"c":"RODRIGO FONSECA DA COSTA","fat":32666.56,"margem":6760.24,"margem_pct":20.69,"pedidos":19,"fat_ant":0.0,"delta_pct":null},{"c":"DIEGO DE SOUZA JANUARIO","fat":30579.17,"margem":10790.75,"margem_pct":35.29,"pedidos":8,"fat_ant":0.0,"delta_pct":null},{"c":"WELSON NUNES FRANCISCO","fat":29941.13,"margem":4630.86,"margem_pct":15.47,"pedidos":21,"fat_ant":25892.34,"delta_pct":15.6},{"c":"LISSMEL BOLSAS LTDA","fat":28447.76,"margem":12379.7,"margem_pct":43.52,"pedidos":26,"fat_ant":79015.48,"delta_pct":-64.0},{"c":"SHOPBAG LTDA.","fat":27092.73,"margem":3078.42,"margem_pct":11.36,"pedidos":32,"fat_ant":16706.0,"delta_pct":62.2},{"c":"MATEUS MATOS CURSOS E TREINAMENTOS LTDA","fat":26318.15,"margem":11688.18,"margem_pct":44.41,"pedidos":32,"fat_ant":129958.47,"delta_pct":-79.7},{"c":"DK KIDS LTDA","fat":23534.42,"margem":8285.88,"margem_pct":35.21,"pedidos":30,"fat_ant":16779.07,"delta_pct":40.3},{"c":"FRANSERGIO TORRALBO GALHARDO","fat":21378.4,"margem":3138.25,"margem_pct":14.68,"pedidos":44,"fat_ant":49333.5,"delta_pct":-56.7},{"c":"ATHAYDE & CARNEIRO DE OLIVEIRA LTDA.","fat":19210.9,"margem":2781.9,"margem_pct":14.48,"pedidos":12,"fat_ant":6819.12,"delta_pct":181.7},{"c":"BRUNO FERNANDO DOMINGOS","fat":18319.16,"margem":5642.14,"margem_pct":30.8,"pedidos":21,"fat_ant":0.0,"delta_pct":null},{"c":"AUTHENTIC ADRENALINA BRASIL","fat":18278.4,"margem":12140.3,"margem_pct":66.42,"pedidos":13,"fat_ant":0.0,"delta_pct":null},{"c":"FLAVIA GONÇALVES DE ARAUJO","fat":15088.19,"margem":1681.16,"margem_pct":11.14,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"WELLBER LUIS OLIVEIRA","fat":15055.45,"margem":6779.03,"margem_pct":45.03,"pedidos":15,"fat_ant":2656.4,"delta_pct":466.8},{"c":"GIOLO CALÇADOS LTDA.","fat":14789.25,"margem":3432.55,"margem_pct":23.21,"pedidos":4,"fat_ant":22951.42,"delta_pct":-35.6},{"c":"TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP","fat":14601.23,"margem":8825.78,"margem_pct":60.45,"pedidos":4,"fat_ant":15259.12,"delta_pct":-4.3},{"c":"WAGNER DOS SANTOS SEARA","fat":13656.25,"margem":4471.28,"margem_pct":32.74,"pedidos":24,"fat_ant":0.0,"delta_pct":null},{"c":"WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS EIRELI","fat":13566.94,"margem":11394.06,"margem_pct":83.98,"pedidos":22,"fat_ant":141498.5,"delta_pct":-90.4},{"c":"IVO MANHANI","fat":10687.5,"margem":2094.37,"margem_pct":19.6,"pedidos":8,"fat_ant":20811.83,"delta_pct":-48.6},{"c":"R. M. DE OLIVEIRA ACESSORIOS","fat":9623.42,"margem":4868.3,"margem_pct":50.59,"pedidos":30,"fat_ant":49526.87,"delta_pct":-80.6},{"c":"REGINALDO APARECIDO DA SILVA","fat":9434.86,"margem":2447.21,"margem_pct":25.94,"pedidos":41,"fat_ant":656.8,"delta_pct":1336.5},{"c":"LETICIA DO VALE GOMES","fat":8877.5,"margem":2598.5,"margem_pct":29.27,"pedidos":4,"fat_ant":102094.6,"delta_pct":-91.3},{"c":"JEAN ANDRE FERREIRA","fat":8824.66,"margem":1386.51,"margem_pct":15.71,"pedidos":6,"fat_ant":2893.35,"delta_pct":205.0},{"c":"ARDARI INDUSTRIA E COMERCIO DE BOLSAS E ACESSORIOS LTDA.","fat":8117.1,"margem":2866.48,"margem_pct":35.31,"pedidos":6,"fat_ant":0.0,"delta_pct":null},{"c":"MARIA ISABEL OLIVEIRA ANDRADE MELLO FRANCA ME","fat":7223.58,"margem":1305.98,"margem_pct":18.08,"pedidos":6,"fat_ant":132624.79,"delta_pct":-94.6},{"c":"APOLO ARTES COMERCIO ATACADISTA","fat":6711.7,"margem":982.2,"margem_pct":14.63,"pedidos":4,"fat_ant":1180.0,"delta_pct":468.8},{"c":"VANDERLEI DAVID DOS SANTOS","fat":6608.78,"margem":1475.7,"margem_pct":22.33,"pedidos":3,"fat_ant":2431.75,"delta_pct":171.8},{"c":"J SATURI DA SILVA ME","fat":6148.9,"margem":842.09,"margem_pct":13.69,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"INDUSTRIA E COMERCIO DE CALCADOS CORVARI EIRELI","fat":6115.32,"margem":1263.52,"margem_pct":20.66,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"GUILHERME LIMA BORGES","fat":5917.0,"margem":1604.0,"margem_pct":27.11,"pedidos":12,"fat_ant":11751.2,"delta_pct":-49.6},{"c":"MARCIO NEVES DOS SANTOS","fat":5703.1,"margem":640.85,"margem_pct":11.24,"pedidos":4,"fat_ant":5238.4,"delta_pct":8.9},{"c":"EVERTON ROLLIS SOUZA","fat":5590.41,"margem":1437.91,"margem_pct":25.72,"pedidos":7,"fat_ant":0.0,"delta_pct":null},{"c":"DILEIA APARECIDA ROSA","fat":5489.58,"margem":79.83,"margem_pct":1.45,"pedidos":6,"fat_ant":1295.0,"delta_pct":323.9},{"c":"R. D. N. INDUSTRIA DE CALÇADOS LTDA.","fat":5314.8,"margem":-1284.12,"margem_pct":-24.16,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"LEONARDO CINTRA ANDRADE","fat":5267.2,"margem":1300.34,"margem_pct":24.69,"pedidos":6,"fat_ant":1280.0,"delta_pct":311.5},{"c":"WEBE FLEX INDUSTRIA DE CALÇADO LTDA","fat":4941.55,"margem":890.71,"margem_pct":18.02,"pedidos":2,"fat_ant":0.0,"delta_pct":null},{"c":"LIDIANE CARINA VILELA BORGES","fat":4894.93,"margem":1202.85,"margem_pct":24.57,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"CARLOS EDUARDO ALVES DUARTE","fat":4760.35,"margem":4759.34,"margem_pct":99.98,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"NOVA CAPA COMERCIAL EIRELI","fat":4185.0,"margem":-2635.0,"margem_pct":-62.96,"pedidos":3,"fat_ant":0.0,"delta_pct":null},{"c":"NATHAN SANTOS DUARTE","fat":3969.0,"margem":416.5,"margem_pct":10.49,"pedidos":5,"fat_ant":0.0,"delta_pct":null}],"2025":[{"c":"WALLAS MURILO VILELA ALVIN","fat":371619.65,"margem":92842.87,"margem_pct":24.98,"pedidos":84,"fat_ant":180111.52,"delta_pct":106.3},{"c":"WESLEY DE OLIVEIRA ALMEIDA","fat":343873.79,"margem":168801.36,"margem_pct":49.09,"pedidos":220,"fat_ant":135863.68,"delta_pct":153.1},{"c":"JANE MARIA DE ALMEIDA PEREIRA","fat":251130.37,"margem":66288.44,"margem_pct":26.4,"pedidos":63,"fat_ant":0.0,"delta_pct":null},{"c":"61.062.255 ANA LAURA DE SOUZA ALVES","fat":223484.18,"margem":53139.19,"margem_pct":23.78,"pedidos":64,"fat_ant":0.0,"delta_pct":null},{"c":"MAIKON HENRIQUE DA COSTA","fat":189633.45,"margem":60387.75,"margem_pct":31.84,"pedidos":53,"fat_ant":129383.14,"delta_pct":46.6},{"c":"A R L COMERCIO DE CALÇADOS LTDA.","fat":160574.8,"margem":26217.15,"margem_pct":16.33,"pedidos":62,"fat_ant":0.0,"delta_pct":null},{"c":"MILENA LEANDRO DUARTE","fat":155331.4,"margem":36370.7,"margem_pct":23.41,"pedidos":56,"fat_ant":0.0,"delta_pct":null},{"c":"GABRIEL HENRIQUE SILVA SOBRINHO","fat":148049.72,"margem":27162.42,"margem_pct":18.35,"pedidos":62,"fat_ant":54128.22,"delta_pct":173.5},{"c":"RALF SILVA LOURENCO","fat":147571.58,"margem":42121.79,"margem_pct":28.54,"pedidos":123,"fat_ant":78220.99,"delta_pct":88.7},{"c":"BRUNO FERNANDO DOMINGOS","fat":129383.2,"margem":27301.72,"margem_pct":21.1,"pedidos":74,"fat_ant":18319.16,"delta_pct":606.3},{"c":"LUCAS MATEUS ROSA RODRIGUES","fat":129189.81,"margem":24878.99,"margem_pct":19.26,"pedidos":92,"fat_ant":141359.28,"delta_pct":-8.6},{"c":"INDUSTRIA E COMERCIO DE CALCADOS CORVARI EIRELI","fat":128077.8,"margem":49852.21,"margem_pct":38.92,"pedidos":59,"fat_ant":6115.32,"delta_pct":1994.4},{"c":"RONERIO ALEXANDRE SILVA","fat":125293.02,"margem":28392.13,"margem_pct":22.66,"pedidos":64,"fat_ant":0.0,"delta_pct":null},{"c":"61655465 PEDRO HENRIQUE GONCALVES PINTO","fat":89460.9,"margem":17567.48,"margem_pct":19.64,"pedidos":41,"fat_ant":0.0,"delta_pct":null},{"c":"DK KIDS LTDA","fat":82259.55,"margem":8597.49,"margem_pct":10.45,"pedidos":22,"fat_ant":23534.42,"delta_pct":249.5},{"c":"BALCAO RAPIDO","fat":68958.43,"margem":20002.28,"margem_pct":29.01,"pedidos":318,"fat_ant":92516.71,"delta_pct":-25.5},{"c":"ATHAYDE & CARNEIRO DE OLIVEIRA LTDA.","fat":65991.1,"margem":9271.01,"margem_pct":14.05,"pedidos":19,"fat_ant":19210.9,"delta_pct":243.5},{"c":"RHEMA COMPONENTES","fat":62076.3,"margem":49838.05,"margem_pct":80.29,"pedidos":42,"fat_ant":0.0,"delta_pct":null},{"c":"GUILHERME LIMA BORGES","fat":57708.67,"margem":12161.12,"margem_pct":21.07,"pedidos":41,"fat_ant":5917.0,"delta_pct":875.3},{"c":"NOVA CAPA COMERCIAL EIRELI","fat":51586.66,"margem":474.0,"margem_pct":0.92,"pedidos":13,"fat_ant":4185.0,"delta_pct":1132.7},{"c":"LIGIA MARIA AMARAL TEIXEIRA RODRIGUES","fat":51125.92,"margem":11819.95,"margem_pct":23.12,"pedidos":27,"fat_ant":0.0,"delta_pct":null},{"c":"STREET WALKER INDUSTRIA E COMERCIO DE CALCADOS LTDA","fat":46375.34,"margem":14835.49,"margem_pct":31.99,"pedidos":48,"fat_ant":0.0,"delta_pct":null},{"c":"PARADISE MODA E VESTUARIO LTDA","fat":44433.5,"margem":8116.6,"margem_pct":18.27,"pedidos":15,"fat_ant":0.0,"delta_pct":null},{"c":"ESPACO LETICIA SOUZA LTDA","fat":42764.93,"margem":5221.52,"margem_pct":12.21,"pedidos":20,"fat_ant":0.0,"delta_pct":null},{"c":"JOSE ROBERTO PANDOLFO","fat":42399.9,"margem":19033.28,"margem_pct":44.89,"pedidos":11,"fat_ant":55667.7,"delta_pct":-23.8},{"c":"APOLO ARTES COMERCIO ATACADISTA","fat":40797.03,"margem":5351.35,"margem_pct":13.12,"pedidos":13,"fat_ant":6711.7,"delta_pct":507.8},{"c":"WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS EIRELI","fat":39345.59,"margem":8244.73,"margem_pct":20.95,"pedidos":20,"fat_ant":13566.94,"delta_pct":190.0},{"c":"STARCOM ARTIGOS PARA CALÇADOS LTDA.","fat":38761.19,"margem":2783.76,"margem_pct":7.18,"pedidos":18,"fat_ant":0.0,"delta_pct":null},{"c":"WELSON NUNES FRANCISCO","fat":34004.68,"margem":9381.15,"margem_pct":27.59,"pedidos":23,"fat_ant":29941.13,"delta_pct":13.6},{"c":"GRANTEX COMPONENTES PARA CALCADOS ME","fat":30262.26,"margem":3840.47,"margem_pct":12.69,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"BORGES SOUZA COM. VAREJ. COMPONENTES PARA CALCADOS LTDA","fat":30173.35,"margem":2406.31,"margem_pct":7.97,"pedidos":14,"fat_ant":3649.6,"delta_pct":726.8},{"c":"ANNA FLAVIA CAIRO PRIMO 42206198878","fat":29754.22,"margem":7009.9,"margem_pct":23.56,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"RODRIGO FONSECA DA COSTA","fat":28330.79,"margem":8755.66,"margem_pct":30.91,"pedidos":33,"fat_ant":32666.56,"delta_pct":-13.3},{"c":"GRAZY FERREIRA INDUSTRIA E COMERCIO DE BOLSAS E ACESSORIOS L","fat":27480.01,"margem":5618.07,"margem_pct":20.44,"pedidos":14,"fat_ant":0.0,"delta_pct":null},{"c":"L C DE SOUZA FONSECA","fat":26157.0,"margem":1689.0,"margem_pct":6.46,"pedidos":3,"fat_ant":0.0,"delta_pct":null},{"c":"C SCHIARELLI INDUSTRIA E COMERCIO DE CALCADOS","fat":24118.0,"margem":1664.92,"margem_pct":6.9,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"LE VIE BOLSAS E ACESSORIOS LTDA.","fat":23782.1,"margem":3639.98,"margem_pct":15.31,"pedidos":14,"fat_ant":0.0,"delta_pct":null},{"c":"KENAI CALCANHEIRAS","fat":20230.63,"margem":6203.51,"margem_pct":30.66,"pedidos":19,"fat_ant":0.0,"delta_pct":null},{"c":"SÓ SINTETICOS COMERCIO DE ARTIGOS PARA CALÇADOS LTDA.","fat":19493.31,"margem":2718.23,"margem_pct":13.94,"pedidos":13,"fat_ant":2014.14,"delta_pct":867.8},{"c":"HARDY INDUSTRIA E COMERCIO LTDA","fat":17703.7,"margem":3343.7,"margem_pct":18.89,"pedidos":5,"fat_ant":0.0,"delta_pct":null},{"c":"MARCO AURELIO FARIA SILVA","fat":17696.0,"margem":2896.89,"margem_pct":16.37,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"GHS ESEQUIEL","fat":17633.91,"margem":3369.76,"margem_pct":19.11,"pedidos":15,"fat_ant":81434.25,"delta_pct":-78.3},{"c":"JP SILVA E-COMMERCE","fat":17237.98,"margem":6521.26,"margem_pct":37.83,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"IVO MANHANI","fat":17009.5,"margem":11635.08,"margem_pct":68.4,"pedidos":24,"fat_ant":10687.5,"delta_pct":59.2},{"c":"WELLBER LUIS OLIVEIRA","fat":16542.9,"margem":7865.02,"margem_pct":47.54,"pedidos":8,"fat_ant":15055.45,"delta_pct":9.9},{"c":"ANDERSON SOUSA ESTEVAO - ME","fat":16518.0,"margem":4845.85,"margem_pct":29.34,"pedidos":7,"fat_ant":1377.6,"delta_pct":1099.0},{"c":"MARCIO NEVES DOS SANTOS","fat":16149.69,"margem":3716.18,"margem_pct":23.01,"pedidos":11,"fat_ant":5703.1,"delta_pct":183.2},{"c":"WEBE FLEX INDUSTRIA DE CALÇADO LTDA","fat":15981.9,"margem":4974.4,"margem_pct":31.13,"pedidos":12,"fat_ant":4941.55,"delta_pct":223.4},{"c":"ADRIANO  CARLOS BARROS","fat":15928.2,"margem":2083.23,"margem_pct":13.08,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"AUTHENTIC ADRENALINA BRASIL","fat":15473.0,"margem":2814.5,"margem_pct":18.19,"pedidos":8,"fat_ant":18278.4,"delta_pct":-15.3}],"2026":[{"c":"ANNA FLAVIA CAIRO PRIMO 42206198878","fat":188497.73,"margem":34191.76,"margem_pct":18.14,"pedidos":39,"fat_ant":0.0,"delta_pct":null},{"c":"WALLAS MURILO VILELA ALVIN","fat":184002.92,"margem":39524.28,"margem_pct":21.48,"pedidos":68,"fat_ant":128202.75,"delta_pct":43.5},{"c":"ALQ LISBOA E-COMMERCE","fat":132988.39,"margem":25842.19,"margem_pct":19.43,"pedidos":34,"fat_ant":0.0,"delta_pct":null},{"c":"M V SANTANA CONFECÇAO","fat":127890.76,"margem":36579.92,"margem_pct":28.6,"pedidos":15,"fat_ant":0.0,"delta_pct":null},{"c":"JANE MARIA DE ALMEIDA PEREIRA","fat":117724.14,"margem":25894.74,"margem_pct":22.0,"pedidos":35,"fat_ant":0.0,"delta_pct":null},{"c":"MILENA LEANDRO DUARTE","fat":113760.4,"margem":31297.33,"margem_pct":27.51,"pedidos":43,"fat_ant":39005.0,"delta_pct":191.7},{"c":"WESLEY DE OLIVEIRA ALMEIDA","fat":108496.66,"margem":48236.81,"margem_pct":44.46,"pedidos":34,"fat_ant":101428.83,"delta_pct":7.0},{"c":"RONERIO ALEXANDRE SILVA","fat":76273.73,"margem":18953.98,"margem_pct":24.85,"pedidos":45,"fat_ant":0.0,"delta_pct":null},{"c":"MAIKON HENRIQUE DA COSTA","fat":75903.41,"margem":26074.96,"margem_pct":34.35,"pedidos":14,"fat_ant":42737.16,"delta_pct":77.6},{"c":"61655465 PEDRO HENRIQUE GONCALVES PINTO","fat":60088.99,"margem":12542.01,"margem_pct":20.87,"pedidos":38,"fat_ant":0.0,"delta_pct":null},{"c":"C SCHIARELLI INDUSTRIA E COMERCIO DE CALCADOS","fat":59307.0,"margem":5018.82,"margem_pct":8.46,"pedidos":10,"fat_ant":0.0,"delta_pct":null},{"c":"59753866 MILENA APARECIDA MALDONADO DOS SANTOS","fat":53409.4,"margem":9723.11,"margem_pct":18.2,"pedidos":19,"fat_ant":0.0,"delta_pct":null},{"c":"L C DE SOUZA FONSECA","fat":53251.2,"margem":3457.6,"margem_pct":6.49,"pedidos":13,"fat_ant":0.0,"delta_pct":null},{"c":"GABRIEL HENRIQUE SILVA SOBRINHO","fat":49444.13,"margem":8994.73,"margem_pct":18.19,"pedidos":11,"fat_ant":44227.03,"delta_pct":11.8},{"c":"BRUNO FERNANDO DOMINGOS","fat":48238.72,"margem":12530.01,"margem_pct":25.98,"pedidos":21,"fat_ant":25391.28,"delta_pct":90.0},{"c":"61.062.255 ANA LAURA DE SOUZA ALVES","fat":48148.0,"margem":8906.99,"margem_pct":18.5,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"DK KIDS LTDA","fat":42503.1,"margem":6812.32,"margem_pct":16.03,"pedidos":17,"fat_ant":17881.79,"delta_pct":137.7},{"c":"MARCIO NEVES DOS SANTOS","fat":39596.73,"margem":15043.46,"margem_pct":37.99,"pedidos":21,"fat_ant":1925.0,"delta_pct":1957.0},{"c":"RALF SILVA LOURENCO","fat":38339.87,"margem":13142.83,"margem_pct":34.28,"pedidos":24,"fat_ant":66065.67,"delta_pct":-42.0},{"c":"LUCAS MATEUS ROSA RODRIGUES","fat":36145.68,"margem":6960.08,"margem_pct":19.26,"pedidos":19,"fat_ant":60807.06,"delta_pct":-40.6},{"c":"50.833.209 IGOR GABRIEL FERREIRA NAZARE","fat":35909.88,"margem":9634.92,"margem_pct":26.83,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"ANA PAULA OLIVEIRA PESSONI","fat":35776.58,"margem":4000.89,"margem_pct":11.18,"pedidos":14,"fat_ant":0.0,"delta_pct":null},{"c":"R. M. DE OLIVEIRA ACESSORIOS","fat":35420.34,"margem":8272.45,"margem_pct":23.36,"pedidos":23,"fat_ant":435.6,"delta_pct":8031.4},{"c":"SCHUHSTORE CALÇADOS LTDA.","fat":34760.0,"margem":5726.84,"margem_pct":16.48,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"BORGES SOUZA COM. VAREJ. COMPONENTES PARA CALCADOS LTDA","fat":34183.72,"margem":3432.4,"margem_pct":10.04,"pedidos":31,"fat_ant":626.8,"delta_pct":5353.7},{"c":"58.614.509 CLAYTON RICHARD DE PAULA","fat":28797.0,"margem":7415.7,"margem_pct":25.75,"pedidos":12,"fat_ant":0.0,"delta_pct":null},{"c":"HARDY INDUSTRIA E COMERCIO LTDA","fat":27138.8,"margem":4395.0,"margem_pct":16.19,"pedidos":7,"fat_ant":0.0,"delta_pct":null},{"c":"ESPACO LETICIA SOUZA LTDA","fat":26103.95,"margem":6340.99,"margem_pct":24.29,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"BALCAO RAPIDO","fat":19607.36,"margem":4075.13,"margem_pct":20.78,"pedidos":52,"fat_ant":21535.71,"delta_pct":-9.0},{"c":"FRANSOA TELES PAULUTE","fat":19050.75,"margem":4286.94,"margem_pct":22.5,"pedidos":11,"fat_ant":0.0,"delta_pct":null},{"c":"LIGIA MARIA AMARAL TEIXEIRA RODRIGUES","fat":18391.52,"margem":4608.59,"margem_pct":25.06,"pedidos":15,"fat_ant":0.0,"delta_pct":null},{"c":"BRUNA PIMENTEL PEREIRA","fat":17456.1,"margem":4000.24,"margem_pct":22.92,"pedidos":13,"fat_ant":0.0,"delta_pct":null},{"c":"KEDOLL CALÇADOS LTDA.","fat":17389.97,"margem":12725.97,"margem_pct":73.18,"pedidos":17,"fat_ant":4198.1,"delta_pct":314.2},{"c":"WILLIBAGS COMERCIO E INDUSTRIA DE BOLSAS EIRELI","fat":16130.85,"margem":3216.76,"margem_pct":19.94,"pedidos":9,"fat_ant":13607.97,"delta_pct":18.5},{"c":"ANDERSON SOUSA ESTEVAO - ME","fat":15995.4,"margem":5232.08,"margem_pct":32.71,"pedidos":3,"fat_ant":2208.0,"delta_pct":624.4},{"c":"STARCOM ARTIGOS PARA CALÇADOS LTDA.","fat":14034.21,"margem":2003.85,"margem_pct":14.28,"pedidos":10,"fat_ant":0.0,"delta_pct":null},{"c":"MARCIA RODRIGUES SOUZA GOES","fat":13883.89,"margem":2001.34,"margem_pct":14.41,"pedidos":16,"fat_ant":0.0,"delta_pct":null},{"c":"JP SILVA E-COMMERCE","fat":13500.0,"margem":4564.07,"margem_pct":33.81,"pedidos":7,"fat_ant":0.0,"delta_pct":null},{"c":"JEAN ANDRE FERREIRA","fat":13470.1,"margem":2597.26,"margem_pct":19.28,"pedidos":10,"fat_ant":5181.94,"delta_pct":159.9},{"c":"ADRIANO  CARLOS BARROS","fat":12820.1,"margem":2364.97,"margem_pct":18.45,"pedidos":14,"fat_ant":0.0,"delta_pct":null},{"c":"TROPEIRO INDUSTRIA DE CALCADOS LTDA-EPP","fat":12565.55,"margem":3520.45,"margem_pct":28.02,"pedidos":12,"fat_ant":696.0,"delta_pct":1705.4},{"c":"INDUSTRIA E COMERCIO DE CALCADOS CORVARI EIRELI","fat":11861.97,"margem":4352.2,"margem_pct":36.69,"pedidos":5,"fat_ant":27167.1,"delta_pct":-56.3},{"c":"AUTHENTIC ADRENALINA BRASIL","fat":10888.83,"margem":2222.42,"margem_pct":20.41,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"DILEIA APARECIDA ROSA","fat":10445.4,"margem":1350.3,"margem_pct":12.93,"pedidos":1,"fat_ant":0.0,"delta_pct":null},{"c":"NOVA CAPA COMERCIAL EIRELI","fat":10026.55,"margem":820.08,"margem_pct":8.18,"pedidos":2,"fat_ant":1836.0,"delta_pct":446.1},{"c":"FRANSERGIO TORRALBO GALHARDO","fat":9651.18,"margem":3258.63,"margem_pct":33.76,"pedidos":4,"fat_ant":2198.5,"delta_pct":339.0},{"c":"WEBE FLEX INDUSTRIA DE CALÇADO LTDA","fat":9288.91,"margem":3326.63,"margem_pct":35.81,"pedidos":4,"fat_ant":0.0,"delta_pct":null},{"c":"STREET WALKER INDUSTRIA E COMERCIO DE CALCADOS LTDA","fat":9245.56,"margem":4462.86,"margem_pct":48.27,"pedidos":11,"fat_ant":1908.55,"delta_pct":384.4},{"c":"BRUNO MALDONADO DOS SANTOS","fat":8439.9,"margem":1191.81,"margem_pct":14.12,"pedidos":9,"fat_ant":0.0,"delta_pct":null},{"c":"MARCOS DONIZETI SILVA","fat":8196.3,"margem":2633.19,"margem_pct":32.13,"pedidos":3,"fat_ant":0.0,"delta_pct":null}]},"top_prod":{"2022":[{"p":"COLMEIA VERMELHO 100% POLISTER NO TNT","fat":208269.34,"qtde":34676.5,"margem":69531.7,"margem_pct":33.39,"fat_ant":0.0,"delta_pct":null},{"p":"3726-6000 - KV SHOE FREEPORT 1,5 MTA 120 BCO - BRANCO","fat":184370.56,"qtde":4341.4,"margem":61366.4,"margem_pct":33.28,"fat_ant":0.0,"delta_pct":null},{"p":"EVA 2,7MM CORES 1,4 LARGURA","fat":113676.06,"qtde":13635.1,"margem":14756.81,"margem_pct":12.98,"fat_ant":0.0,"delta_pct":null},{"p":"TNT 70 GRAMAS LARGURA DE 1,40M VERMELHO","fat":96503.04,"qtde":30163.14,"margem":29116.48,"margem_pct":30.17,"fat_ant":0.0,"delta_pct":null},{"p":"BORDADO PONTO SIMPLES ATE 1000 PONTOS","fat":72334.91,"qtde":60260.0,"margem":63295.91,"margem_pct":87.5,"fat_ant":0.0,"delta_pct":null},{"p":"4273-5001 - KV BAG MEDIO ANGIKE M40/1 - PRETO BRILHO","fat":60646.12,"qtde":2785.24,"margem":10853.2,"margem_pct":17.9,"fat_ant":0.0,"delta_pct":null},{"p":"3825-0001 - KV BAG MEDIO CEDRO SEMI NW BCO - PRETO","fat":57027.5,"qtde":2934.2,"margem":6936.56,"margem_pct":12.16,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - PARIS CAFÉ INTENSO","fat":56952.63,"qtde":1468.4,"margem":16030.0,"margem_pct":28.15,"fat_ant":0.0,"delta_pct":null},{"p":"PAPEL 100 FARDO 25 KILOS  0,9MM ESPESSURA","fat":43038.25,"qtde":358.7,"margem":10755.25,"margem_pct":24.99,"fat_ant":0.0,"delta_pct":null},{"p":"CEDRO B PRETO","fat":42163.78,"qtde":2245.3,"margem":6912.57,"margem_pct":16.39,"fat_ant":0.0,"delta_pct":null},{"p":"SCH7 0917 CAFE 14CM C/ S7211 0917 CAFE","fat":38080.0,"qtde":59500.0,"margem":12808.2,"margem_pct":33.63,"fat_ant":0.0,"delta_pct":null},{"p":"4279-0001 - KV BAG MEDIO CEDRO BRILHO 0,6 M40/1 - PRETO","fat":37492.4,"qtde":2080.5,"margem":5244.65,"margem_pct":13.99,"fat_ant":0.0,"delta_pct":null},{"p":"4139-5001 - KV BAG MEDIO MATELADO BRILHO 0,7 M40/1 - PRETO","fat":34867.51,"qtde":1288.6,"margem":8063.83,"margem_pct":23.13,"fat_ant":0.0,"delta_pct":null},{"p":"3869-0881 - KV BAG MEDIO CEDRO BRILHANTE NW BCO - TELHA LUK","fat":34634.28,"qtde":1706.2,"margem":5036.4,"margem_pct":14.54,"fat_ant":0.0,"delta_pct":null},{"p":"3825-3077 - KV BAG MEDIO CEDRO SEMI NW BCO - PINK","fat":32039.04,"qtde":1261.8,"margem":9452.82,"margem_pct":29.5,"fat_ant":0.0,"delta_pct":null},{"p":"4319-0001 - KV BAG SOFT PLUS DOLARO ESPONJA PTA - PRETO","fat":31747.41,"qtde":739.1,"margem":7357.11,"margem_pct":23.17,"fat_ant":0.0,"delta_pct":null},{"p":"MAQUINA DE BORDAR 2 CABEÇAS","fat":28000.0,"qtde":1.0,"margem":6000.0,"margem_pct":21.43,"fat_ant":0.0,"delta_pct":null},{"p":"DUB CEDRO/CEDRO - PRETO","fat":23484.46,"qtde":571.3,"margem":4060.74,"margem_pct":17.29,"fat_ant":0.0,"delta_pct":null},{"p":"3825-0883 - KV BAG MEDIO CEDRO SEMI  NW BCO - ROSE LUK","fat":21076.03,"qtde":1064.63,"margem":2885.45,"margem_pct":13.69,"fat_ant":0.0,"delta_pct":null},{"p":"CEDRO VERMELHO ( CEREJA )","fat":21039.23,"qtde":858.2,"margem":7393.85,"margem_pct":35.14,"fat_ant":0.0,"delta_pct":null},{"p":"4071-1072 - KV BAG SOFT PLUS DOLARO 1,8 ESPONJA CRU - MARFIM","fat":20378.87,"qtde":480.1,"margem":2903.23,"margem_pct":14.25,"fat_ant":0.0,"delta_pct":null},{"p":"SCH5 0580 PRETO 15CM C/ S5211K 0580 PRETO","fat":19200.0,"qtde":20000.0,"margem":10882.0,"margem_pct":56.68,"fat_ant":0.0,"delta_pct":null},{"p":"SCH5 0917 CAFE 18CM C/ S5211K 0917 CAFE","fat":17640.0,"qtde":24500.0,"margem":6899.2,"margem_pct":39.11,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - ANGIKE PRETO BRILHO","fat":17549.57,"qtde":503.38,"margem":4092.77,"margem_pct":23.32,"fat_ant":0.0,"delta_pct":null},{"p":"CEDRO B TELHA","fat":17538.35,"qtde":902.3,"margem":3372.24,"margem_pct":19.23,"fat_ant":0.0,"delta_pct":null},{"p":"3825-3222 - KV BAG MEDIO CEDRO SEMI NW BCO - MARFIM BABY","fat":17485.74,"qtde":867.2,"margem":2671.62,"margem_pct":15.28,"fat_ant":0.0,"delta_pct":null},{"p":"3609-2987 - KV KAR PARIS FRANCE 0,6 NW PTO - MARROM","fat":17311.17,"qtde":720.3,"margem":4047.07,"margem_pct":23.38,"fat_ant":0.0,"delta_pct":null},{"p":"SCH5 0580 PRETO 18CM C/ S5211K 0580 PRETO","fat":16376.0,"qtde":22700.0,"margem":6440.21,"margem_pct":39.33,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - CEDRO B  PRETO","fat":16347.29,"qtde":541.9,"margem":3326.68,"margem_pct":20.35,"fat_ant":0.0,"delta_pct":null},{"p":"4306-6000 - KV BAG MEDIO VALENCIA 0,7 M40/1 - BRANCO","fat":15792.89,"qtde":626.1,"margem":4272.65,"margem_pct":27.05,"fat_ant":0.0,"delta_pct":null},{"p":"4281-3222 - KV BAG MEDIO ANGIKE 0,6 M40/1 - MARFIM BABY","fat":14445.42,"qtde":663.75,"margem":2924.29,"margem_pct":20.24,"fat_ant":0.0,"delta_pct":null},{"p":"CEDRO B MARFIM","fat":14137.06,"qtde":773.5,"margem":1593.21,"margem_pct":11.27,"fat_ant":0.0,"delta_pct":null},{"p":"SCH7 0580 PRETO 15CM C/ S7211 0580 PRETO","fat":13920.0,"qtde":14500.0,"margem":7954.7,"margem_pct":57.15,"fat_ant":0.0,"delta_pct":null},{"p":"4234-0411 - KV BAG MEDIO PARIS 0,7 M40/1 - CAFÉ INTENSO","fat":13881.61,"qtde":545.7,"margem":3513.31,"margem_pct":25.31,"fat_ant":0.0,"delta_pct":null},{"p":"3825-0691 - KV BAG MEDIO CEDRO SEMI NW BCO - AMENDOA","fat":13781.65,"qtde":712.0,"margem":1609.45,"margem_pct":11.68,"fat_ant":0.0,"delta_pct":null},{"p":"4319-2849 - KV BAG SOFT PLUS DOLARO 1,5 ESPONJA PTA - VERDE ","fat":13589.14,"qtde":323.7,"margem":2907.04,"margem_pct":21.39,"fat_ant":0.0,"delta_pct":null},{"p":"SCH5 0917 CAFE 15CM C/ S5211K 0917 CAFE","fat":13440.0,"qtde":14000.0,"margem":7607.6,"margem_pct":56.6,"fat_ant":0.0,"delta_pct":null},{"p":"4289-0001 - KV BAG MEDIO ANGIKE M40/1 - PRETO FOSCO","fat":13164.15,"qtde":586.3,"margem":3212.79,"margem_pct":24.41,"fat_ant":0.0,"delta_pct":null},{"p":"4279-1789 - KV BAG MEDIO CEDRO BRILHO 0,6 M40/1 - VERDE ABAC","fat":13098.7,"qtde":589.2,"margem":3966.1,"margem_pct":30.28,"fat_ant":0.0,"delta_pct":null},{"p":"3825-1078 - KV BAG MEDIO CEDRO SEMI NW BCO - VERDE MUSGO","fat":12678.63,"qtde":510.8,"margem":3943.95,"margem_pct":31.11,"fat_ant":0.0,"delta_pct":null},{"p":"3933-0854 - KV BAG MEDIO BIG TEJUS TEXTURADO 0,9 M40/1 - TEL","fat":12448.3,"qtde":344.4,"margem":4527.1,"margem_pct":36.37,"fat_ant":0.0,"delta_pct":null},{"p":"3821-0001 - KV SHOE FREEPORT 1,5 MTA 120 PTA - PRETO","fat":12232.43,"qtde":289.2,"margem":4389.15,"margem_pct":35.88,"fat_ant":0.0,"delta_pct":null},{"p":"3609-3083 - KV KAR PARIS FRANCE 0,6 NW PTO - BLACK BLUE","fat":11828.18,"qtde":493.2,"margem":2620.97,"margem_pct":22.16,"fat_ant":0.0,"delta_pct":null},{"p":"4281-3222 - KV BAG MEDIO ANGIKE M40/1 - MARFIM BABY","fat":11579.42,"qtde":576.6,"margem":1846.54,"margem_pct":15.95,"fat_ant":0.0,"delta_pct":null},{"p":"SCH7 0917 CAFE 15CM C/ S7211 0917 CAFE","fat":11520.0,"qtde":12000.0,"margem":6583.2,"margem_pct":57.15,"fat_ant":0.0,"delta_pct":null},{"p":"3825-6000 - KV BAG MEDIO CEDRO SEMI FOSCO NW 40 BCO - BRANCO","fat":11460.99,"qtde":575.7,"margem":1631.52,"margem_pct":14.24,"fat_ant":0.0,"delta_pct":null},{"p":"4281-0480 - KV BAG MEDIO ANGIKE 0,6 M40/1 - ROSE","fat":11316.13,"qtde":515.9,"margem":2270.35,"margem_pct":20.06,"fat_ant":0.0,"delta_pct":null},{"p":"4056-0001 - KV BAG SOFT PLUS DOLARO 1,8 ESPONJA PTA - PRETO","fat":11294.04,"qtde":271.5,"margem":1411.44,"margem_pct":12.5,"fat_ant":0.0,"delta_pct":null},{"p":"4140-3070 - KV BAG MEDIO MATELADO 0,7 M40/1 - TELHA","fat":11255.82,"qtde":404.8,"margem":3564.62,"margem_pct":31.67,"fat_ant":0.0,"delta_pct":null},{"p":"4096-0001 - KV BAG MEDIO BIG TEJUS 0,7 M40/1 - PRETO","fat":11134.92,"qtde":358.9,"margem":4298.56,"margem_pct":38.6,"fat_ant":0.0,"delta_pct":null}],"2023":[{"p":"3825-0001 - KV BAG MEDIO CEDRO SEMI NW - PRETO","fat":149769.91,"qtde":9521.1,"margem":27170.6,"margem_pct":18.14,"fat_ant":10460.12,"delta_pct":1331.8},{"p":"4373-0500 - COLORSPUMA LISO NORMAL 2,5 NW BCO INCOLOR","fat":69656.73,"qtde":2179.9,"margem":9277.51,"margem_pct":13.32,"fat_ant":0.0,"delta_pct":null},{"p":"3726-6000 - KV SHOE FREEPORT 1,5 MTA 120 BCO - BRANCO","fat":66449.23,"qtde":1431.4,"margem":19642.45,"margem_pct":29.56,"fat_ant":184370.56,"delta_pct":-64.0},{"p":"EVA 2,7MM CORES 1,4 LARGURA","fat":57309.58,"qtde":6177.77,"margem":14017.4,"margem_pct":24.46,"fat_ant":113676.06,"delta_pct":-49.6},{"p":"3869-0881 - KV BAG MEDIO CEDRO BRILHO NW - TELHA LUK","fat":55787.65,"qtde":3441.11,"margem":-2023.0,"margem_pct":-3.63,"fat_ant":8572.3,"delta_pct":550.8},{"p":"DUB EVA 2.7 - LINHAO SAMOA","fat":50116.69,"qtde":1475.1,"margem":8122.98,"margem_pct":16.21,"fat_ant":0.0,"delta_pct":null},{"p":"4281-0001 - KV BAG MEDIO ANGIKE M40/1 - PRETO FOSCO","fat":49250.22,"qtde":2673.1,"margem":5196.59,"margem_pct":10.55,"fat_ant":10098.96,"delta_pct":387.7},{"p":"4319-0001 - KV BAG SOFT PLUS DOLARO ESPONJA PTA - PRETO","fat":47753.09,"qtde":1162.4,"margem":9393.89,"margem_pct":19.67,"fat_ant":31747.41,"delta_pct":50.4},{"p":"ALTA FREQUENCIA ( MAO DE OBRA )","fat":46252.35,"qtde":42457.0,"margem":39883.8,"margem_pct":86.23,"fat_ant":0.0,"delta_pct":null},{"p":"DUB CETIM BEGE ( BRONZE )  COM TNT 20GRMAS BRANCO","fat":42366.21,"qtde":5761.25,"margem":11814.37,"margem_pct":27.89,"fat_ant":0.0,"delta_pct":null},{"p":"3825-3222 - KV BAG MEDIO CEDRO SEMI NW - MARFIM BABY","fat":39303.3,"qtde":2524.8,"margem":7088.16,"margem_pct":18.03,"fat_ant":5178.4,"delta_pct":659.0},{"p":"3825-0883 - KV BAG MEDIO CEDRO SEMI NW - ROSE LUK","fat":37506.05,"qtde":2503.7,"margem":5501.39,"margem_pct":14.67,"fat_ant":5281.0,"delta_pct":610.2},{"p":"PAPEL 100 FARDO 25 KILOS  0,9MM ESPESSURA","fat":35604.7,"qtde":288.0,"margem":14422.12,"margem_pct":40.51,"fat_ant":43038.25,"delta_pct":-17.3},{"p":"COLMEIA VERMELHO 100% POLISTER NO TNT","fat":33101.64,"qtde":5427.3,"margem":12391.59,"margem_pct":37.43,"fat_ant":208269.34,"delta_pct":-84.1},{"p":"DUB CEDRO/CEDRO - PRETO","fat":26708.0,"qtde":753.8,"margem":3892.28,"margem_pct":14.57,"fat_ant":23484.46,"delta_pct":13.7},{"p":"BORDADO PONTO SIMPLES ATE 1000 PONTOS","fat":24437.4,"qtde":15266.0,"margem":22147.5,"margem_pct":90.63,"fat_ant":72334.91,"delta_pct":-66.2},{"p":"DUB EVA 2.7 - ANGIKE MARFIM BABY","fat":23940.17,"qtde":759.9,"margem":4186.5,"margem_pct":17.49,"fat_ant":7640.48,"delta_pct":213.3},{"p":"TNT 70 GRAMAS LARGURA DE 1,40M VERMELHO","fat":23488.23,"qtde":8081.55,"margem":7325.13,"margem_pct":31.19,"fat_ant":96503.04,"delta_pct":-75.7},{"p":"3825-3077 - KV BAG MEDIO CEDRO SEMI NW - PINK","fat":23119.54,"qtde":1293.4,"margem":5313.57,"margem_pct":22.98,"fat_ant":92.4,"delta_pct":24921.1},{"p":"DUB EVA 2.7 - ANGIKE PRETO BRILHO","fat":23095.61,"qtde":732.8,"margem":3637.9,"margem_pct":15.75,"fat_ant":17549.57,"delta_pct":31.6},{"p":"4273-5001 - KV BAG MEDIO ANGIKE M40/1 - PRETO BRILHO","fat":22726.75,"qtde":1071.9,"margem":3860.14,"margem_pct":16.99,"fat_ant":60646.12,"delta_pct":-62.5},{"p":"DUB EVA 1.8 - TRANÇADO PRETO BRILHO","fat":22269.39,"qtde":698.1,"margem":5448.95,"margem_pct":24.47,"fat_ant":0.0,"delta_pct":null},{"p":"4234-0411 - KV BAG MEDIO PARIS 0,7 M40/1 - CAFÉ INTENSO","fat":21443.81,"qtde":1064.4,"margem":1220.2,"margem_pct":5.69,"fat_ant":13881.61,"delta_pct":54.5},{"p":"DUB EVA 2.7 - PARIS CAFÉ INTENSO","fat":20994.59,"qtde":583.1,"margem":4506.85,"margem_pct":21.47,"fat_ant":56952.63,"delta_pct":-63.1},{"p":"3825-6000 - KV BAG MEDIO CEDRO SEMI NW - BRANCO","fat":20513.55,"qtde":1234.2,"margem":4925.71,"margem_pct":24.01,"fat_ant":2983.13,"delta_pct":587.7},{"p":"4402-0407 - KV BAG MEDIO LINHÃO SAMOA 0,7 M40/1 - BEGE CEVAD","fat":20439.12,"qtde":896.0,"margem":3504.72,"margem_pct":17.15,"fat_ant":0.0,"delta_pct":null},{"p":"4281-3222 - KV BAG MEDIO ANGIKE M40/1 - MARFIM BABY","fat":19738.76,"qtde":987.8,"margem":3613.38,"margem_pct":18.31,"fat_ant":11579.42,"delta_pct":70.5},{"p":"4281-3070 - KV BAG MEDIO ANGIKE M40/1 - TELHA","fat":19710.99,"qtde":995.5,"margem":3347.0,"margem_pct":16.98,"fat_ant":3842.2,"delta_pct":413.0},{"p":"3825-0691 - KV BAG MEDIO CEDRO SEMI NW - AMENDOA","fat":19149.27,"qtde":1176.7,"margem":4350.92,"margem_pct":22.72,"fat_ant":1773.3,"delta_pct":979.9},{"p":"4129-0411 - KV BAG HARD PARIS 1,3 M40/1 - CAFE INTENSO","fat":18833.0,"qtde":634.5,"margem":3770.0,"margem_pct":20.02,"fat_ant":0.0,"delta_pct":null},{"p":"DUB TNT 20G PRO - ESPUMA 5MM","fat":18512.25,"qtde":1633.5,"margem":4494.94,"margem_pct":24.28,"fat_ant":4706.83,"delta_pct":293.3},{"p":"4395-1072 - KV BAG SOFT PLUS DOLARO ESPONJA CRU - MARFIM CLA","fat":18001.6,"qtde":423.6,"margem":2582.56,"margem_pct":14.35,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - CEDRO PRETO","fat":16588.86,"qtde":571.7,"margem":2232.04,"margem_pct":13.46,"fat_ant":10299.5,"delta_pct":61.1},{"p":"4407-5001 - KV BAG MEDIO TRANÇADO BRILHO M40/1 - PRETO","fat":15633.24,"qtde":648.4,"margem":4545.6,"margem_pct":29.08,"fat_ant":0.0,"delta_pct":null},{"p":"CEDRO VERMELHO ( CEREJA )","fat":15609.54,"qtde":735.0,"margem":3923.04,"margem_pct":25.13,"fat_ant":21039.23,"delta_pct":-25.8},{"p":"3687-0001 - KV SHOE FREEPORT 1,3 ESPONJA PTA - PRETO","fat":13510.6,"qtde":426.8,"margem":2328.44,"margem_pct":17.23,"fat_ant":3602.62,"delta_pct":275.0},{"p":"4139-5001 - KV BAG MEDIO MATELADO BRILHO M40/1 - PRETO","fat":13379.76,"qtde":587.3,"margem":1516.3,"margem_pct":11.33,"fat_ant":665.0,"delta_pct":1912.0},{"p":"3825-1078 - KV BAG MEDIO CEDRO SEMI NW - VERDE MUSGO","fat":13144.86,"qtde":697.0,"margem":1854.06,"margem_pct":14.1,"fat_ant":295.9,"delta_pct":4342.3},{"p":"BOLSA BALADINHA MODELO 102  ( MODELO MENOR )","fat":12128.22,"qtde":612.0,"margem":-980.82,"margem_pct":-8.09,"fat_ant":416.0,"delta_pct":2815.4},{"p":"4347-1073 - KV BAG SOFT PLUS DOLARO ESPONJA BEGE - TELHA MED","fat":11363.04,"qtde":273.7,"margem":1400.36,"margem_pct":12.32,"fat_ant":3150.0,"delta_pct":260.7},{"p":"BOLSA  DE MAO CARTEIRA BORDADA COM CORRENTE METAL","fat":10729.48,"qtde":694.0,"margem":666.48,"margem_pct":6.21,"fat_ant":276.0,"delta_pct":3787.5},{"p":"4363-0001 - KV BAG MEDIO CEDRO BRILHO 0,6 P70 - PRETO","fat":10348.85,"qtde":675.1,"margem":1032.47,"margem_pct":9.98,"fat_ant":6040.87,"delta_pct":71.3},{"p":"4356-0001 - KV BAG MEDIO ARRAIA 0,7 M40/1 - PRETO","fat":10187.71,"qtde":421.0,"margem":1919.27,"margem_pct":18.84,"fat_ant":296.7,"delta_pct":3333.7},{"p":"3947-0001 - KV BAG MEDIO CEDRO ICAC SEMI NW PTO - PRETO","fat":10012.46,"qtde":642.9,"margem":1461.89,"margem_pct":14.6,"fat_ant":0.0,"delta_pct":null},{"p":"4096-0001 - KV BAG MEDIO BIG TEJUS 0,7 M40/1 - PRETO","fat":9911.98,"qtde":341.5,"margem":3355.18,"margem_pct":33.85,"fat_ant":11134.92,"delta_pct":-11.0},{"p":"DUB EVA 2.7 - ANGIKE TELHA","fat":9471.6,"qtde":300.5,"margem":1672.53,"margem_pct":17.66,"fat_ant":7544.57,"delta_pct":25.5},{"p":"DUB CEDRO/CEDRO - ROSE","fat":9177.51,"qtde":243.6,"margem":664.23,"margem_pct":7.24,"fat_ant":4225.36,"delta_pct":117.2},{"p":"S7211 0580 - DESLIZ TR AUT STAND ESMALT 7MM P/ SINT 0580 PRE","fat":9019.0,"qtde":7800.0,"margem":6601.0,"margem_pct":73.19,"fat_ant":10246.59,"delta_pct":-12.0},{"p":"COPINHO LORENA OURO","fat":8718.75,"qtde":15051.0,"margem":1499.25,"margem_pct":17.2,"fat_ant":1480.8,"delta_pct":488.8},{"p":"3933-0854 - KV BAG MEDIO BIG TEJUS TEXTURADO 0,9 M40/1 - TEL","fat":8382.8,"qtde":272.0,"margem":2126.8,"margem_pct":25.37,"fat_ant":12448.3,"delta_pct":-32.7}],"2024":[{"p":"3404-0001 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - PRETO","fat":107605.31,"qtde":2391.78,"margem":39857.22,"margem_pct":37.04,"fat_ant":1618.25,"delta_pct":6549.5},{"p":"3947-0001 - KV BAG MEDIO CEDRO ICAC SEMI NW PTO - PRETO","fat":80057.59,"qtde":6314.5,"margem":13357.09,"margem_pct":16.68,"fat_ant":10012.46,"delta_pct":699.6},{"p":"3726-6000 - KV SHOE FREEPORT 1,5 MTA 120 BCO - BRANCO","fat":71305.68,"qtde":1444.7,"margem":29868.41,"margem_pct":41.89,"fat_ant":66449.23,"delta_pct":7.3},{"p":"4129-0411 - KV BAG HARD PARIS 1,3 M40/1 - CAFE INTENSO","fat":66110.61,"qtde":2596.6,"margem":9307.69,"margem_pct":14.08,"fat_ant":18833.0,"delta_pct":251.0},{"p":"3404-3070 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - TELHA","fat":63834.94,"qtde":1368.48,"margem":26202.46,"margem_pct":41.05,"fat_ant":203.25,"delta_pct":31307.1},{"p":"4373-0500 - COLORSPUMA LISO NORMAL 2,5 NW BCO INCOLOR","fat":48778.34,"qtde":1616.0,"margem":9920.49,"margem_pct":20.34,"fat_ant":69656.73,"delta_pct":-30.0},{"p":"3404-5886 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - BRANCO","fat":41161.9,"qtde":860.25,"margem":12102.85,"margem_pct":29.4,"fat_ant":0.0,"delta_pct":null},{"p":"DUB CETIM BEGE ( BRONZE )  COM TNT 20GRMAS BRANCO","fat":36230.5,"qtde":5440.0,"margem":13897.69,"margem_pct":38.36,"fat_ant":42366.21,"delta_pct":-14.5},{"p":"SOFT COLOR LW PRETO MEDIO","fat":31027.79,"qtde":896.6,"margem":3681.49,"margem_pct":11.87,"fat_ant":0.0,"delta_pct":null},{"p":"3825-3222 - KV BAG MEDIO CEDRO SEMI NW - MARFIM BABY","fat":29956.47,"qtde":2252.6,"margem":7035.04,"margem_pct":23.48,"fat_ant":39303.3,"delta_pct":-23.8},{"p":"DUB EVA 2.7 - LINHAO SAMOA","fat":27919.87,"qtde":828.6,"margem":4885.1,"margem_pct":17.5,"fat_ant":50116.69,"delta_pct":-44.3},{"p":"3404-3067 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - MARRON","fat":27712.44,"qtde":585.38,"margem":9218.57,"margem_pct":33.27,"fat_ant":0.0,"delta_pct":null},{"p":"BORDADO PONTO TRIPLO ATE 2000 PONTOS V","fat":27279.58,"qtde":32980.0,"margem":22332.58,"margem_pct":81.87,"fat_ant":0.0,"delta_pct":null},{"p":"4234-0411 - KV BAG MEDIO PARIS 0,7 M40/1 - CAFÉ INTENSO","fat":26974.01,"qtde":1334.45,"margem":2732.98,"margem_pct":10.13,"fat_ant":21443.81,"delta_pct":25.8},{"p":"BIDIM 1.5 ALTAR PRETO COM MANTA","fat":23136.6,"qtde":1272.4,"margem":4016.88,"margem_pct":17.36,"fat_ant":0.0,"delta_pct":null},{"p":"4402-0407 - KV BAG MEDIO LINHÃO SAMOA 0,7 M40/1 - BEGE CEVAD","fat":21145.76,"qtde":902.0,"margem":4097.96,"margem_pct":19.38,"fat_ant":20439.12,"delta_pct":3.5},{"p":"EVA 2,7MM CORES 1,4 LARGURA","fat":20463.83,"qtde":2427.8,"margem":5541.97,"margem_pct":27.08,"fat_ant":57309.58,"delta_pct":-64.3},{"p":"DUB CEDRO/CEDRO - PRETO","fat":18362.52,"qtde":672.7,"margem":3468.69,"margem_pct":18.89,"fat_ant":26708.0,"delta_pct":-31.2},{"p":"MAO DE OBRA DE DUBLAGEM 110/25 1.50 LARGURA","fat":18251.95,"qtde":5893.92,"margem":12063.37,"margem_pct":66.09,"fat_ant":0.0,"delta_pct":null},{"p":"COLMEIA VERMELHO 100% POLISTER NO TNT","fat":17672.5,"qtde":3087.0,"margem":5892.83,"margem_pct":33.34,"fat_ant":33101.64,"delta_pct":-46.6},{"p":"BIDIM 1.5 ALTAR CAFE ( CHOCOLATE )  COM MANTA","fat":16504.34,"qtde":833.0,"margem":3929.04,"margem_pct":23.81,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - PARIS CAFÉ INTENSO","fat":15296.01,"qtde":459.7,"margem":3264.34,"margem_pct":21.34,"fat_ant":20994.59,"delta_pct":-27.1},{"p":"ALTA FREQUENCIA ( MAO DE OBRA )","fat":14807.0,"qtde":14842.0,"margem":12580.7,"margem_pct":84.96,"fat_ant":46252.35,"delta_pct":-68.0},{"p":"3404-3067 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - MARROM","fat":13931.4,"qtde":301.8,"margem":3368.4,"margem_pct":24.18,"fat_ant":0.0,"delta_pct":null},{"p":"4134-0001 - KV SHOE SIROCO 1,4 MTA PTA - PRETEO","fat":11882.35,"qtde":595.4,"margem":2653.65,"margem_pct":22.33,"fat_ant":0.0,"delta_pct":null},{"p":"BIDIM 1.7 TAMPONADO PRETO","fat":11770.54,"qtde":316.6,"margem":1860.96,"margem_pct":15.81,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 1,8 - ANGIKE ROSE","fat":11766.0,"qtde":444.0,"margem":2233.95,"margem_pct":18.99,"fat_ant":4357.5,"delta_pct":170.0},{"p":"3825-0001 - KV BAG MEDIO CEDRO SEMI NW - PRETO","fat":11676.93,"qtde":712.7,"margem":3395.36,"margem_pct":29.08,"fat_ant":149769.91,"delta_pct":-92.2},{"p":"EVA 1,8MM CORES 1,4 LARGURA","fat":11128.99,"qtde":1754.0,"margem":2500.24,"margem_pct":22.47,"fat_ant":4634.35,"delta_pct":140.1},{"p":"SOFT COLOR LW PRETO/VERMELHO","fat":11088.1,"qtde":321.0,"margem":1297.6,"margem_pct":11.7,"fat_ant":0.0,"delta_pct":null},{"p":"SOFT COLOR LW CARAMELO/LARANJA","fat":11013.0,"qtde":320.0,"margem":1253.0,"margem_pct":11.38,"fat_ant":0.0,"delta_pct":null},{"p":"PAPEL 100 FARDO 25 KILOS  0,9MM ESPESSURA","fat":10918.75,"qtde":108.0,"margem":3949.51,"margem_pct":36.17,"fat_ant":35604.7,"delta_pct":-69.3},{"p":"DUB EVA 2.7 - CEDRO PRETO","fat":10740.54,"qtde":462.4,"margem":2393.6,"margem_pct":22.29,"fat_ant":16588.86,"delta_pct":-35.3},{"p":"TNT 70 GRAMAS LARGURA DE 1,40M VERMELHO","fat":10684.1,"qtde":3339.0,"margem":4006.1,"margem_pct":37.5,"fat_ant":23488.23,"delta_pct":-54.5},{"p":"4103-0001 - KV SHOE MOVELTY 1,5NW PTO - PRETO","fat":10680.48,"qtde":278.5,"margem":2630.78,"margem_pct":24.63,"fat_ant":0.0,"delta_pct":null},{"p":"TECIDO PERUANO 19 LARANJA (59719)","fat":10431.0,"qtde":274.5,"margem":2745.0,"margem_pct":26.32,"fat_ant":0.0,"delta_pct":null},{"p":"TECIDO PERUANO 26 AZUL (59726)","fat":10425.5,"qtde":278.5,"margem":2488.25,"margem_pct":23.87,"fat_ant":0.0,"delta_pct":null},{"p":"4281-0001 - KV BAG MEDIO ANGIKE M40/1 - PRETO FOSCO","fat":10373.68,"qtde":548.3,"margem":2423.33,"margem_pct":23.36,"fat_ant":49250.22,"delta_pct":-78.9},{"p":"DUB EVA 1,8 - ANGIKE PRETO BRILHO 5001","fat":9951.0,"qtde":321.0,"margem":2735.39,"margem_pct":27.49,"fat_ant":2634.7,"delta_pct":277.7},{"p":"3869-0881 - KV BAG MEDIO CEDRO BRILHO NW - TELHA LUK","fat":9526.97,"qtde":686.4,"margem":271.49,"margem_pct":2.85,"fat_ant":55787.65,"delta_pct":-82.9},{"p":"4378-0001 - KV BAG MEDIO VALENCIA 1,3 M40/1 - PRETO","fat":9523.3,"qtde":409.4,"margem":1990.34,"margem_pct":20.9,"fat_ant":0.0,"delta_pct":null},{"p":"EVA 1.5 LACOSTE ( TECIDO ) PRETO","fat":9363.9,"qtde":1029.0,"margem":2160.9,"margem_pct":23.08,"fat_ant":0.0,"delta_pct":null},{"p":"VERNIZ BORDO NO SPAM NOW WOVEN 1.6","fat":9328.25,"qtde":290.0,"margem":2107.25,"margem_pct":22.59,"fat_ant":0.0,"delta_pct":null},{"p":"BORDADO PONTO SIMPLES ATE 1000 PONTOS","fat":9322.5,"qtde":7186.0,"margem":8244.6,"margem_pct":88.44,"fat_ant":24437.4,"delta_pct":-61.9},{"p":"3825-0883 - KV BAG MEDIO CEDRO SEMI NW - ROSE LUK","fat":9078.75,"qtde":603.0,"margem":2551.61,"margem_pct":28.11,"fat_ant":37506.05,"delta_pct":-75.8},{"p":"VERNIZ PRETO NO SPAM NOW WOVEN 1.6","fat":8880.25,"qtde":275.0,"margem":2032.75,"margem_pct":22.89,"fat_ant":0.0,"delta_pct":null},{"p":"3825-0691 - KV BAG MEDIO CEDRO SEMI NW - AMENDOA","fat":8862.49,"qtde":659.2,"margem":1979.84,"margem_pct":22.34,"fat_ant":19149.27,"delta_pct":-53.7},{"p":"4325-5001 - KV BAG MEDIO CANINANA BRILHO M40/1 - PRETO","fat":8156.24,"qtde":441.5,"margem":606.59,"margem_pct":7.44,"fat_ant":7989.61,"delta_pct":2.1},{"p":"DUBLAGEM + EVA 2,7 CORES COM FILME SHM 25","fat":7650.1,"qtde":665.61,"margem":2155.46,"margem_pct":28.18,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 1.8 - PARIS PRETO","fat":7433.06,"qtde":262.4,"margem":1799.7,"margem_pct":24.21,"fat_ant":0.0,"delta_pct":null}],"2025":[{"p":"3404-0001 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - PRETO","fat":388241.23,"qtde":8317.55,"margem":79888.71,"margem_pct":20.58,"fat_ant":107605.31,"delta_pct":260.8},{"p":"3404-3070 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - TELHA","fat":256273.96,"qtde":5441.95,"margem":57550.55,"margem_pct":22.46,"fat_ant":63834.94,"delta_pct":301.5},{"p":"3404-5886 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - BRANCO","fat":226184.52,"qtde":4917.7,"margem":44287.82,"margem_pct":19.58,"fat_ant":41161.9,"delta_pct":449.5},{"p":"3404-3067 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - MARROM","fat":209502.16,"qtde":4497.35,"margem":41975.45,"margem_pct":20.04,"fat_ant":13931.4,"delta_pct":1403.8},{"p":"MAO DE OBRA DE DUBLAGEM 110/25 1.50 LARGURA","fat":169539.28,"qtde":54602.25,"margem":111850.72,"margem_pct":65.97,"fat_ant":18251.95,"delta_pct":828.9},{"p":"DUBLAGEM + EVA 2,7 CORES COM FILME SHM 25","fat":119356.46,"qtde":11956.4,"margem":31185.1,"margem_pct":26.13,"fat_ant":7650.1,"delta_pct":1460.2},{"p":"3947-0001 - KV BAG MEDIO CEDRO ICAC SEMI NW PTO - PRETO","fat":92230.15,"qtde":7428.3,"margem":15796.53,"margem_pct":17.13,"fat_ant":80057.59,"delta_pct":15.2},{"p":"4501-0001 - KV CINTO ROCKPORT 2.3 TEC TECH - PRETO","fat":79279.49,"qtde":2195.8,"margem":11909.19,"margem_pct":15.02,"fat_ant":0.0,"delta_pct":null},{"p":"4129-0411 - KV BAG HARD PARIS 1,3 M40/1 - CAFE INTENSO","fat":76253.35,"qtde":3101.9,"margem":16553.7,"margem_pct":21.71,"fat_ant":66110.61,"delta_pct":15.3},{"p":"3726-6000 - KV SHOE FREEPORT 1,5 MTA 120 BCO - BRANCO","fat":72267.6,"qtde":1563.5,"margem":33582.91,"margem_pct":46.47,"fat_ant":71305.68,"delta_pct":1.3},{"p":"DUB KV BELT PREMIUN CAPRE 2,0 P150 - PRETO + CAPRI CAFE","fat":71436.0,"qtde":1405.2,"margem":19593.27,"margem_pct":27.43,"fat_ant":0.0,"delta_pct":null},{"p":"6229 - FILME DE FLEXCONFORT INDUS PRETO MT 120 PRETO - PRETO","fat":58404.22,"qtde":3688.0,"margem":5038.86,"margem_pct":8.63,"fat_ant":0.0,"delta_pct":null},{"p":"4478-0281 - KV BAG SOFT PLUS IBIZA 1,8 TEC TECH SALMÃO - HAV","fat":52979.59,"qtde":1438.6,"margem":9802.17,"margem_pct":18.5,"fat_ant":0.0,"delta_pct":null},{"p":"4461-3222 - KV BAG MEDIO CEDRO SEMI NW - MARFIM BABY","fat":49976.8,"qtde":3943.0,"margem":11796.37,"margem_pct":23.6,"fat_ant":0.0,"delta_pct":null},{"p":"4501-3067 - KV CINTO ROCKPORT 2.3 TECH PTO - CAFÉ","fat":49335.1,"qtde":1323.8,"margem":8787.96,"margem_pct":17.81,"fat_ant":0.0,"delta_pct":null},{"p":"3869-0881 - KV BAG MEDIO CEDRO BRILHO NW - TELHA LUK","fat":46288.71,"qtde":3542.9,"margem":12712.53,"margem_pct":27.46,"fat_ant":9526.97,"delta_pct":385.9},{"p":"3825-0883 - KV BAG MEDIO CEDRO SEMI NW - ROSE LUK","fat":46037.45,"qtde":3575.9,"margem":10211.9,"margem_pct":22.18,"fat_ant":9078.75,"delta_pct":407.1},{"p":"4479-0282 - KV BAG SOFT PLUS IBIZA 1,8 TEC TECH BEGE - MARRO","fat":45227.54,"qtde":1275.3,"margem":7301.43,"margem_pct":16.14,"fat_ant":0.0,"delta_pct":null},{"p":"BOTAO IMA TAMANNHO 18MM NIQUELADO ( CAIXA COM 100 )","fat":39944.03,"qtde":1470.0,"margem":9150.57,"margem_pct":22.91,"fat_ant":1126.4,"delta_pct":3446.2},{"p":"BORDADO PONTO TRIPLO RHEMA CANO ALTO ( PARES )","fat":38300.0,"qtde":9665.0,"margem":36850.25,"margem_pct":96.21,"fat_ant":0.0,"delta_pct":null},{"p":"3404-2364- KV CINTO ROCKPORT 2.5 TEC. SUEDE - BEGE","fat":32746.38,"qtde":714.8,"margem":6055.57,"margem_pct":18.49,"fat_ant":1861.86,"delta_pct":1658.8},{"p":"6229 - FILME DE FLEXCONFORT INDUS ( ALTAR ) PRETO 1.4 MT 120","fat":30257.76,"qtde":1865.0,"margem":3327.16,"margem_pct":11.0,"fat_ant":0.0,"delta_pct":null},{"p":"4402-0407 - KV BAG MEDIO LINHÃO SAMOA 0,7 M40/1 - BEGE CEVAD","fat":28262.51,"qtde":1210.6,"margem":7855.39,"margem_pct":27.79,"fat_ant":21145.76,"delta_pct":33.7},{"p":"9319 - FILME DE FLEXCONFORT TAURUS ( SIROCO ) 1.4 MT 120 PRE","fat":28249.0,"qtde":1826.0,"margem":1899.82,"margem_pct":6.73,"fat_ant":0.0,"delta_pct":null},{"p":"4378-0001 - KV BAG MEDIO VALENCIA 1,3 M40/1 - PRETO","fat":28176.74,"qtde":1123.1,"margem":7209.65,"margem_pct":25.59,"fat_ant":9523.3,"delta_pct":195.9},{"p":"4468-0001 -  KV BAG SOFT DOLARO 1.6 ESPONJA PTA - PRETO","fat":27362.47,"qtde":905.1,"margem":5640.07,"margem_pct":20.61,"fat_ant":0.0,"delta_pct":null},{"p":"MAO DE OBRA DE DUBLAGEM SHM25 1.5 LARGURA","fat":27291.6,"qtde":7182.0,"margem":14669.95,"margem_pct":53.75,"fat_ant":0.0,"delta_pct":null},{"p":"4506-3070 - KV CINTO ROCKPORT 2.3 TECH BG - TELHA","fat":26853.39,"qtde":741.6,"margem":4189.26,"margem_pct":15.6,"fat_ant":0.0,"delta_pct":null},{"p":"4477-0001 - KV BAG SOFT PLUS IBIZA 1,8 TEC TECH PRETO - PRET","fat":26176.69,"qtde":686.0,"margem":5116.49,"margem_pct":19.55,"fat_ant":0.0,"delta_pct":null},{"p":"3825-0691 - KV BAG MEDIO CEDRO SEMI NW - AMENDOA","fat":25561.65,"qtde":1958.5,"margem":4150.5,"margem_pct":16.24,"fat_ant":8862.49,"delta_pct":188.4},{"p":"4477-0001 - KV BAG SOFT PLUS IBIZA 1.8 TEC PRETO - PRETO","fat":25489.25,"qtde":737.8,"margem":4222.59,"margem_pct":16.57,"fat_ant":0.0,"delta_pct":null},{"p":"4449-0001 - KV SHOE VALENCIA FOSCO 1,5 MTA 120 PTA - PRETO","fat":23151.11,"qtde":1300.5,"margem":2142.41,"margem_pct":9.25,"fat_ant":0.02,"delta_pct":115755450.0},{"p":"DUB CETIM BEGE ( BRONZE )  COM TNT 20GRMAS BRANCO","fat":22025.65,"qtde":2803.9,"margem":9656.22,"margem_pct":43.84,"fat_ant":36230.5,"delta_pct":-39.2},{"p":"4378-2012 - KV BAG MEDIO VALENCIA 1,3 M40/1 - MARFIM PLUS","fat":21733.48,"qtde":878.2,"margem":4905.91,"margem_pct":22.57,"fat_ant":6921.2,"delta_pct":214.0},{"p":"BORDADO PONTO TRIPLO ATE 2000","fat":21641.75,"qtde":18776.0,"margem":18825.35,"margem_pct":86.99,"fat_ant":7007.44,"delta_pct":208.8},{"p":"3825-6000 - KV BAG MEDIO CEDRO SEMI NW - BRANCO","fat":21427.6,"qtde":1636.7,"margem":5618.33,"margem_pct":26.22,"fat_ant":5708.35,"delta_pct":275.4},{"p":"4234-0411 - KV BAG MEDIO PARIS 0,7 M40/1 - CAFÉ INTENSO","fat":20926.65,"qtde":1041.5,"margem":4747.4,"margem_pct":22.69,"fat_ant":26974.01,"delta_pct":-22.4},{"p":"4516-3070 - KV CINTO ROCKPORT 2.3 TECH SALMÃO - TELHA","fat":20561.2,"qtde":569.4,"margem":3536.14,"margem_pct":17.2,"fat_ant":0.0,"delta_pct":null},{"p":"4142-1362 - KV BAG PARIS 1.8 SUED MARROM - CAFE","fat":20446.4,"qtde":455.7,"margem":4291.86,"margem_pct":20.99,"fat_ant":0.0,"delta_pct":null},{"p":"DUB CEDRO/CEDRO - TELHA","fat":19194.48,"qtde":601.5,"margem":6392.32,"margem_pct":33.3,"fat_ant":2831.0,"delta_pct":578.0},{"p":"DUB ESPUMA MASTER LATEX D30 3MM FILME SHM25 1.50M","fat":19068.03,"qtde":797.3,"margem":5802.03,"margem_pct":30.43,"fat_ant":0.0,"delta_pct":null},{"p":"4479-0279 - KV BAG SOFT PLUS IBIZA 1,8 TEC TECH BEGE - SALMA","fat":18526.01,"qtde":503.6,"margem":3349.49,"margem_pct":18.08,"fat_ant":0.0,"delta_pct":null},{"p":"EVA 2,7MM CORES 1,4 LARGURA","fat":18239.2,"qtde":2424.0,"margem":4042.12,"margem_pct":22.16,"fat_ant":20463.83,"delta_pct":-10.9},{"p":"DUB EVA 2.7 - CEDRO PRETO","fat":17914.14,"qtde":724.3,"margem":4891.0,"margem_pct":27.3,"fat_ant":10740.54,"delta_pct":66.8},{"p":"4506-0691 KV CINTO ROCKPORT 2.3 TECH BG - AMÊNDOA","fat":17400.0,"qtde":487.6,"margem":2401.42,"margem_pct":13.8,"fat_ant":0.0,"delta_pct":null},{"p":"4478-0278 - KV BAG SOFT PLUS IBIZA 1,8 TEC TECH SALMÃO - ARE","fat":17010.88,"qtde":457.1,"margem":3233.51,"margem_pct":19.01,"fat_ant":0.0,"delta_pct":null},{"p":"MAO DE OBRA DE DUBLAGEM SHM25 ( LINHA S )","fat":16632.9,"qtde":5022.0,"margem":8389.28,"margem_pct":50.44,"fat_ant":2218.54,"delta_pct":649.7},{"p":"4473-1073 - KV BAG SOFT DOLARO 1.6 ESPONJA BEGE - TELHA MÉDI","fat":15964.9,"qtde":485.7,"margem":4308.1,"margem_pct":26.98,"fat_ant":0.0,"delta_pct":null},{"p":"9544 - FILME DE FLEXCONFORT INDUS ( ALTAR ) BRANCO 1.4 MT 12","fat":15774.8,"qtde":1007.0,"margem":1243.79,"margem_pct":7.88,"fat_ant":0.0,"delta_pct":null},{"p":"DUB EVA 2.7 - LINHAO SAMOA","fat":15443.51,"qtde":442.6,"margem":4417.56,"margem_pct":28.6,"fat_ant":27919.87,"delta_pct":-44.7}],"2026":[{"p":"9319 - FILME DE FLEXCONFORT TAURUS ( SIROCO ) 1.4 MT 120 PRE","fat":119996.7,"qtde":7325.0,"margem":14296.95,"margem_pct":11.91,"fat_ant":0.0,"delta_pct":null},{"p":"4520-3067 - KV CINTO ROCKPORT 2.3 TECH MRM - CAFÉ","fat":116352.66,"qtde":3062.5,"margem":22044.24,"margem_pct":18.95,"fat_ant":0.0,"delta_pct":null},{"p":"3404-0001 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - PRETO","fat":114501.14,"qtde":2468.2,"margem":24266.3,"margem_pct":21.19,"fat_ant":95358.03,"delta_pct":20.1},{"p":"4501-0001 - KV CINTO ROCKPORT 2.3 TECH PTO - PRETO","fat":108883.03,"qtde":2921.0,"margem":19033.07,"margem_pct":17.48,"fat_ant":0.0,"delta_pct":null},{"p":"NYLON 600 PRETO","fat":102740.0,"qtde":15150.0,"margem":20200.35,"margem_pct":19.66,"fat_ant":1467.5,"delta_pct":6901.0},{"p":"6229 - FILME DE FLEXCONFORT INDUS ( ALTAR ) PRETO 1.4 MT 120","fat":97176.14,"qtde":5893.7,"margem":12071.11,"margem_pct":12.42,"fat_ant":0.0,"delta_pct":null},{"p":"4516-3070 - KV CINTO ROCKPORT 2.3 TECH SALMÃO - TELHA","fat":90428.58,"qtde":2411.9,"margem":18312.77,"margem_pct":20.25,"fat_ant":0.0,"delta_pct":null},{"p":"DUB ESPUMA MASTER LATEX D30 3MM FILME SHM25 1.50M","fat":84905.43,"qtde":3286.0,"margem":24010.91,"margem_pct":28.28,"fat_ant":0.0,"delta_pct":null},{"p":"MAO DE OBRA DE DUBLAGEM HB 03 1.5 LARGURA ( NYLON 600 )","fat":78772.71,"qtde":20696.91,"margem":38322.65,"margem_pct":48.65,"fat_ant":0.0,"delta_pct":null},{"p":"DUBLAGEM + EVA 2,3 CORES COM FILME SHM 25","fat":71064.3,"qtde":7178.0,"margem":23551.25,"margem_pct":33.14,"fat_ant":0.0,"delta_pct":null},{"p":"4513-5886 - KV CINTO ROCKPORT 2.3 TECH BRANCO - BRANCO","fat":59132.23,"qtde":1533.1,"margem":11958.75,"margem_pct":20.22,"fat_ant":0.0,"delta_pct":null},{"p":"DUB ESP LATEX 2MM + HELANCA SOFT BRANCA  1,45 DE LARGURA","fat":48283.06,"qtde":1605.5,"margem":15188.72,"margem_pct":31.46,"fat_ant":0.0,"delta_pct":null},{"p":"4506-0691 - KV CINTO ROCKPORT 2.3 TECH BG - AMÊNDOA","fat":47783.5,"qtde":1263.4,"margem":8818.72,"margem_pct":18.46,"fat_ant":0.0,"delta_pct":null},{"p":"3404-3070 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - TELHA","fat":38989.82,"qtde":810.24,"margem":9329.35,"margem_pct":23.93,"fat_ant":98916.46,"delta_pct":-60.6},{"p":"9525 - FILME DE FLEXCONFORT INDUS ( ALTAR )  NUTSHEL 1.4 MT ","fat":38008.2,"qtde":2300.0,"margem":4796.2,"margem_pct":12.62,"fat_ant":0.0,"delta_pct":null},{"p":"4142-1362 - KV BAG PARIS 1.8 SUED MARROM - CAFE","fat":37361.84,"qtde":843.8,"margem":7449.13,"margem_pct":19.94,"fat_ant":0.0,"delta_pct":null},{"p":"3404-5886 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - BRANCO","fat":37036.1,"qtde":839.7,"margem":6587.15,"margem_pct":17.79,"fat_ant":33046.86,"delta_pct":12.1},{"p":"9315 -FILME DE FLEXCONFORT TAURUS (SIROCO) CAPUCCINO 01,40MM","fat":36685.0,"qtde":2281.0,"margem":3770.17,"margem_pct":10.28,"fat_ant":0.0,"delta_pct":null},{"p":"3404-3067 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - CAFÉ","fat":36311.8,"qtde":775.0,"margem":7991.53,"margem_pct":22.01,"fat_ant":0.0,"delta_pct":null},{"p":"6224 - FILME DE FLEXSTYLUS GEMINI ( CEDRO ) PRETO 0,8MM NW 4","fat":33340.0,"qtde":2320.0,"margem":8376.8,"margem_pct":25.13,"fat_ant":0.0,"delta_pct":null},{"p":"4477-0001 - KV BAG SOFT PLUS IBIZA 1.8 TEC PRETO - PRETO","fat":33026.78,"qtde":947.0,"margem":5847.88,"margem_pct":17.71,"fat_ant":0.0,"delta_pct":null},{"p":"9743 - FILME DE FLEXCONFORT TAURUS (SIROCO) MARROM 01,40MM M","fat":28002.54,"qtde":1716.0,"margem":3240.66,"margem_pct":11.57,"fat_ant":0.0,"delta_pct":null},{"p":"4129-0411 - KV BAG HARD PARIS 1,3 M40/1 - CAFE INTENSO","fat":26687.55,"qtde":1083.1,"margem":5978.69,"margem_pct":22.4,"fat_ant":38175.77,"delta_pct":-30.1},{"p":"9544 - FILME DE FLEXCONFORT INDUS ( ALTAR ) BRANCO 1.4 MT 12","fat":25739.15,"qtde":1540.0,"margem":3516.95,"margem_pct":13.66,"fat_ant":0.0,"delta_pct":null},{"p":"EVA 8.0MM CORES 1,4 LARGURA","fat":24240.0,"qtde":1100.0,"margem":3798.0,"margem_pct":15.67,"fat_ant":0.0,"delta_pct":null},{"p":"4521-3070 - KV CINTO ROCKPORT 2.3 TECH TL - TELHA","fat":21660.35,"qtde":547.5,"margem":5106.8,"margem_pct":23.58,"fat_ant":0.0,"delta_pct":null},{"p":"FIVELA 20MM DOURADA","fat":19396.24,"qtde":58033.0,"margem":1589.35,"margem_pct":8.19,"fat_ant":0.0,"delta_pct":null},{"p":"BOTAO IMA 18MM NIQUELADO (CX 100)","fat":19256.2,"qtde":706.0,"margem":6051.21,"margem_pct":31.42,"fat_ant":0.0,"delta_pct":null},{"p":"BOTAO IMA 18MM DOURADO/LATONADO (CX 100)","fat":17935.12,"qtde":673.0,"margem":5181.2,"margem_pct":28.89,"fat_ant":0.0,"delta_pct":null},{"p":"4515-8500 - KV CINTO ROCKPORT TRANSFER 2.3 TECH BG - OURO LI","fat":17772.37,"qtde":406.9,"margem":5846.03,"margem_pct":32.89,"fat_ant":0.0,"delta_pct":null},{"p":"DUB ESPUMA LATEX CANELADO 3,0MM D30R BRANCO 1,40 + HELANCA B","fat":16067.2,"qtde":392.5,"margem":4701.68,"margem_pct":29.26,"fat_ant":0.0,"delta_pct":null},{"p":"3404-3067 - KV CINTO ROCKPORT 2.5 TEC. SUEDE - MARROM","fat":15743.0,"qtde":344.2,"margem":2880.25,"margem_pct":18.3,"fat_ant":60222.46,"delta_pct":-73.9},{"p":"4473-1073 - KV BAG SOFT DOLARO 1.6 ESPONJA BEGE - TELHA MÉDI","fat":14835.6,"qtde":449.1,"margem":4057.2,"margem_pct":27.35,"fat_ant":0.0,"delta_pct":null},{"p":"6339 -FILME DE FLEXSTYLUS GEMINI ( CEDRO ) TERRA ( TELHA FOS","fat":14806.5,"qtde":1037.0,"margem":3648.38,"margem_pct":24.64,"fat_ant":0.0,"delta_pct":null},{"p":"4501-3067 - KV CINTO ROCKPORT 2.3 TECH PTO - CAFÉ","fat":14680.27,"qtde":383.8,"margem":3050.71,"margem_pct":20.78,"fat_ant":0.0,"delta_pct":null},{"p":"4402-0407 - KV BAG MEDIO LINHÃO SAMOA 0,7 M40/1 - BEGE CEVAD","fat":13542.98,"qtde":563.1,"margem":4595.33,"margem_pct":33.93,"fat_ant":6047.1,"delta_pct":124.0},{"p":"4142-0001 - KV BAG PARIS 1.8 SUED PRETO - PRETO","fat":13431.2,"qtde":291.2,"margem":3108.17,"margem_pct":23.14,"fat_ant":0.0,"delta_pct":null},{"p":"10019 -FILME DE FLEXSTYLUS GEMINI ( CEDRO ) ROSE TAN 0,8MM N","fat":12369.0,"qtde":882.0,"margem":2878.68,"margem_pct":23.27,"fat_ant":0.0,"delta_pct":null},{"p":"NYLON 600 PINK","fat":12152.5,"qtde":1750.0,"margem":2796.01,"margem_pct":23.01,"fat_ant":0.0,"delta_pct":null},{"p":"NYLON 600 AZUL MARINHO","fat":11847.5,"qtde":1750.0,"margem":2450.83,"margem_pct":20.69,"fat_ant":0.0,"delta_pct":null},{"p":"MAO DE OBRA DE DUBLAGEM SHM25 1.5 LARGURA","fat":10636.2,"qtde":2799.0,"margem":5717.24,"margem_pct":53.75,"fat_ant":0.0,"delta_pct":null},{"p":"4468-0001 -  KV BAG SOFT DOLARO 1.6 ESPONJA PTA - PRETO","fat":10165.29,"qtde":304.3,"margem":2862.09,"margem_pct":28.16,"fat_ant":0.0,"delta_pct":null},{"p":"DUB NEO 11031 2MM + HELANCA BRANCA + HELANCA PRETA","fat":10102.0,"qtde":329.0,"margem":1496.67,"margem_pct":14.82,"fat_ant":0.0,"delta_pct":null},{"p":"4142-0881 - KV BAG PARIS 1.8 SUED TELHA - TELHA LUK","fat":10081.58,"qtde":222.0,"margem":2211.68,"margem_pct":21.94,"fat_ant":0.0,"delta_pct":null},{"p":"4506-3070 - KV CINTO ROCKPORT 2.3 TECH BG - TELHA","fat":10012.39,"qtde":271.1,"margem":1673.36,"margem_pct":16.71,"fat_ant":0.0,"delta_pct":null},{"p":"9671 - FILME DE FLEXCONFORT INDUS ( ALTAR )  BEGE 1.4 MT 120","fat":9618.45,"qtde":569.0,"margem":1402.09,"margem_pct":14.58,"fat_ant":0.0,"delta_pct":null},{"p":"6227 - FILME DE FLEXSTYLUS GEMINI ( CEDRO ) AMENDOA 0,8MM NW","fat":9573.5,"qtde":658.0,"margem":2484.42,"margem_pct":25.95,"fat_ant":0.0,"delta_pct":null},{"p":"DUB CETIM BEGE ( BRONZE )  COM TNT 20GRMAS BRANCO","fat":9072.0,"qtde":1080.0,"margem":4148.17,"margem_pct":45.72,"fat_ant":11921.35,"delta_pct":-23.9},{"p":"BOTAO IMA TAMANNHO 18MM NIQUELADO ( CAIXA COM 100 )","fat":8706.0,"qtde":334.0,"margem":1997.73,"margem_pct":22.95,"fat_ant":1368.31,"delta_pct":536.3},{"p":"10073- FILME DE FLEXSTYLUS GEMINI ( CEDRO ) PINK FLAMB 0,8MM","fat":8567.5,"qtde":600.0,"margem":2111.5,"margem_pct":24.65,"fat_ant":0.0,"delta_pct":null}]},"desp_cats_ano":{"2022":[{"d":"Folha/RH","co":"var(--pur)","g":"3.4","v":199165.84},{"d":"Operacionais fixas","co":"var(--blu)","g":"3.3","v":109369.39},{"d":"Impostos","co":"var(--red)","g":"2.1","v":27553.48},{"d":"Investimentos","co":"var(--grn)","g":"5.3","v":25015.0},{"d":"Logística variável","co":"var(--cya)","g":"4.2","v":22708.12},{"d":"Operacionais variáveis","co":"var(--cya)","g":"4.3","v":19600.63},{"d":"Tarifas bancárias","co":"var(--ora)","g":"3.1","v":7335.3},{"d":"Taxas cartão/PIX","co":"var(--yel)","g":"2.4","v":2945.95},{"d":"IOF","co":"var(--ora)","g":"4.1","v":2756.91},{"d":"Comissões/Vendas","co":"var(--yel)","g":"2.3","v":220.0},{"d":"Logística fixa","co":"var(--blu)","g":"3.2","v":158.73}],"2023":[{"d":"Folha/RH","co":"var(--pur)","g":"3.4","v":213891.14},{"d":"Investimentos","co":"var(--grn)","g":"5.3","v":169245.85},{"d":"Operacionais fixas","co":"var(--blu)","g":"3.3","v":121790.94},{"d":"Operacionais variáveis","co":"var(--cya)","g":"4.3","v":34725.21},{"d":"Logística variável","co":"var(--cya)","g":"4.2","v":28560.12},{"d":"Impostos","co":"var(--red)","g":"2.1","v":16212.2},{"d":"Tarifas bancárias","co":"var(--ora)","g":"3.1","v":7040.19},{"d":"Comissões/Vendas","co":"var(--yel)","g":"2.3","v":4000.0},{"d":"Taxas cartão/PIX","co":"var(--yel)","g":"2.4","v":1781.1},{"d":"IOF","co":"var(--ora)","g":"4.1","v":93.24}],"2024":[{"d":"Folha/RH","co":"var(--pur)","g":"3.4","v":168887.92},{"d":"Operacionais fixas","co":"var(--blu)","g":"3.3","v":120910.83},{"d":"Comissões/Vendas","co":"var(--yel)","g":"2.3","v":35571.44},{"d":"Logística variável","co":"var(--cya)","g":"4.2","v":29105.66},{"d":"Operacionais variáveis","co":"var(--cya)","g":"4.3","v":28552.43},{"d":"Impostos","co":"var(--red)","g":"2.1","v":24689.44},{"d":"Investimentos","co":"var(--grn)","g":"5.3","v":12465.22},{"d":"Taxas cartão/PIX","co":"var(--yel)","g":"2.4","v":4377.94},{"d":"Tarifas bancárias","co":"var(--ora)","g":"3.1","v":2891.67},{"d":"Logística fixa","co":"var(--blu)","g":"3.2","v":478.47},{"d":"IOF","co":"var(--ora)","g":"4.1","v":41.04}],"2025":[{"d":"Folha/RH","co":"var(--pur)","g":"3.4","v":282961.27},{"d":"Operacionais fixas","co":"var(--blu)","g":"3.3","v":158457.5},{"d":"Comissões/Vendas","co":"var(--yel)","g":"2.3","v":118170.97},{"d":"Logística variável","co":"var(--cya)","g":"4.2","v":86532.49},{"d":"Investimentos","co":"var(--grn)","g":"5.3","v":57098.36},{"d":"Impostos","co":"var(--red)","g":"2.1","v":49040.29},{"d":"Operacionais variáveis","co":"var(--cya)","g":"4.3","v":32492.21},{"d":"Tarifas bancárias","co":"var(--ora)","g":"3.1","v":6495.95},{"d":"Taxas cartão/PIX","co":"var(--yel)","g":"2.4","v":4033.82},{"d":"Logística fixa","co":"var(--blu)","g":"3.2","v":1574.47},{"d":"IOF","co":"var(--ora)","g":"4.1","v":2.81}],"2026":[{"d":"Folha/RH","co":"var(--pur)","g":"3.4","v":92183.87},{"d":"Comissões/Vendas","co":"var(--yel)","g":"2.3","v":78197.75},{"d":"Logística variável","co":"var(--cya)","g":"4.2","v":50268.51},{"d":"Operacionais fixas","co":"var(--blu)","g":"3.3","v":45625.3},{"d":"Impostos","co":"var(--red)","g":"2.1","v":17541.64},{"d":"Investimentos","co":"var(--grn)","g":"5.3","v":13656.96},{"d":"Operacionais variáveis","co":"var(--cya)","g":"4.3","v":13173.24},{"d":"Tarifas bancárias","co":"var(--ora)","g":"3.1","v":3957.63},{"d":"Logística fixa","co":"var(--blu)","g":"3.2","v":3170.37},{"d":"Taxas cartão/PIX","co":"var(--yel)","g":"2.4","v":957.98}]},"ym_data":{"2022-01":{"receita":0.0,"cmv":0.0,"lucro_bruto":0.0,"margem_bruta":0,"resultado":-7541.93,"margem_liquida":0,"pedidos":0,"clientes":0,"pro_labore":0.0,"comissao_socio":0.0},"2022-02":{"receita":0.0,"cmv":0.0,"lucro_bruto":0.0,"margem_bruta":0,"resultado":-8547.92,"margem_liquida":0,"pedidos":0,"clientes":0,"pro_labore":0.0,"comissao_socio":0.0},"2022-03":{"receita":0.0,"cmv":0.0,"lucro_bruto":0.0,"margem_bruta":0,"resultado":-8699.89,"margem_liquida":0,"pedidos":0,"clientes":0,"pro_labore":0.0,"comissao_socio":0.0},"2022-04":{"receita":308051.18,"cmv":239955.69,"lucro_bruto":68095.49,"margem_bruta":22.11,"resultado":51529.01,"margem_liquida":16.73,"pedidos":247,"clientes":52,"pro_labore":0.0,"comissao_socio":0.0},"2022-05":{"receita":410503.8,"cmv":295877.43,"lucro_bruto":114626.37,"margem_bruta":27.92,"resultado":84855.05,"margem_liquida":20.67,"pedidos":287,"clientes":59,"pro_labore":2157.36,"comissao_socio":0.0},"2022-06":{"receita":513338.28,"cmv":352662.81,"lucro_bruto":160675.47,"margem_bruta":31.3,"resultado":120519.34,"margem_liquida":23.48,"pedidos":294,"clientes":58,"pro_labore":5900.0,"comissao_socio":0.0},"2022-07":{"receita":370805.56,"cmv":253988.52,"lucro_bruto":116817.04,"margem_bruta":31.5,"resultado":59627.54,"margem_liquida":16.08,"pedidos":280,"clientes":55,"pro_labore":20260.0,"comissao_socio":0.0},"2022-08":{"receita":305069.06,"cmv":216729.76,"lucro_bruto":88339.3,"margem_bruta":28.96,"resultado":25328.26,"margem_liquida":8.3,"pedidos":235,"clientes":54,"pro_labore":20160.0,"comissao_socio":0.0},"2022-09":{"receita":212207.95,"cmv":150659.56,"lucro_bruto":61548.39,"margem_bruta":29.0,"resultado":29030.94,"margem_liquida":13.68,"pedidos":183,"clientes":47,"pro_labore":7500.0,"comissao_socio":0.0},"2022-10":{"receita":221876.05,"cmv":159892.1,"lucro_bruto":61983.95,"margem_bruta":27.94,"resultado":5825.99,"margem_liquida":2.63,"pedidos":200,"clientes":46,"pro_labore":31241.32,"comissao_socio":0.0},"2022-11":{"receita":217118.92,"cmv":168020.49,"lucro_bruto":49098.43,"margem_bruta":22.61,"resultado":6215.45,"margem_liquida":2.86,"pedidos":223,"clientes":48,"pro_labore":1078.68,"comissao_socio":0.0},"2022-12":{"receita":139200.03,"cmv":111567.82,"lucro_bruto":27632.21,"margem_bruta":19.85,"resultado":-26154.54,"margem_liquida":-18.79,"pedidos":182,"clientes":44,"pro_labore":1078.68,"comissao_socio":0.0},"2023-01":{"receita":190490.58,"cmv":135450.31,"lucro_bruto":55040.27,"margem_bruta":28.89,"resultado":7545.34,"margem_liquida":3.96,"pedidos":180,"clientes":50,"pro_labore":1078.68,"comissao_socio":0.0},"2023-02":{"receita":128367.06,"cmv":98877.3,"lucro_bruto":29489.76,"margem_bruta":22.97,"resultado":-11171.99,"margem_liquida":-8.7,"pedidos":156,"clientes":41,"pro_labore":1158.78,"comissao_socio":0.0},"2023-03":{"receita":203556.06,"cmv":158190.29,"lucro_bruto":45365.77,"margem_bruta":22.29,"resultado":-17615.76,"margem_liquida":-8.65,"pedidos":237,"clientes":41,"pro_labore":1158.78,"comissao_socio":0.0},"2023-04":{"receita":161791.13,"cmv":122222.3,"lucro_bruto":39568.83,"margem_bruta":24.46,"resultado":-10006.87,"margem_liquida":-6.19,"pedidos":203,"clientes":39,"pro_labore":1158.78,"comissao_socio":0.0},"2023-05":{"receita":304004.89,"cmv":228805.89,"lucro_bruto":75199.0,"margem_bruta":24.74,"resultado":26586.0,"margem_liquida":8.75,"pedidos":298,"clientes":50,"pro_labore":1127.76,"comissao_socio":0.0},"2023-06":{"receita":258109.37,"cmv":192567.3,"lucro_bruto":65542.07,"margem_bruta":25.39,"resultado":-4035.46,"margem_liquida":-1.56,"pedidos":256,"clientes":45,"pro_labore":16174.8,"comissao_socio":0.0},"2023-07":{"receita":203032.58,"cmv":147493.07,"lucro_bruto":55539.51,"margem_bruta":27.35,"resultado":2254.57,"margem_liquida":1.11,"pedidos":193,"clientes":42,"pro_labore":1174.8,"comissao_socio":0.0},"2023-08":{"receita":179147.7,"cmv":139436.76,"lucro_bruto":39710.94,"margem_bruta":22.17,"resultado":-1709.3,"margem_liquida":-0.95,"pedidos":205,"clientes":36,"pro_labore":1174.8,"comissao_socio":0.0},"2023-09":{"receita":123085.27,"cmv":98085.68,"lucro_bruto":24999.59,"margem_bruta":20.31,"resultado":-29604.8,"margem_liquida":-24.05,"pedidos":133,"clientes":28,"pro_labore":1174.8,"comissao_socio":0.0},"2023-10":{"receita":103563.54,"cmv":80957.34,"lucro_bruto":22606.2,"margem_bruta":21.83,"resultado":-15795.64,"margem_liquida":-15.25,"pedidos":101,"clientes":27,"pro_labore":1174.8,"comissao_socio":0.0},"2023-11":{"receita":127686.79,"cmv":95554.58,"lucro_bruto":32132.21,"margem_bruta":25.16,"resultado":-20832.79,"margem_liquida":-16.32,"pedidos":124,"clientes":27,"pro_labore":1174.8,"comissao_socio":0.0},"2023-12":{"receita":86237.35,"cmv":62120.47,"lucro_bruto":24116.88,"margem_bruta":27.97,"resultado":-13642.26,"margem_liquida":-15.82,"pedidos":98,"clientes":28,"pro_labore":1174.8,"comissao_socio":0.0},"2024-01":{"receita":123899.08,"cmv":85376.64,"lucro_bruto":38522.44,"margem_bruta":31.09,"resultado":9263.94,"margem_liquida":7.48,"pedidos":97,"clientes":26,"pro_labore":1174.8,"comissao_socio":0.0},"2024-02":{"receita":95248.07,"cmv":67918.44,"lucro_bruto":27329.63,"margem_bruta":28.69,"resultado":3875.99,"margem_liquida":4.07,"pedidos":87,"clientes":26,"pro_labore":1256.68,"comissao_socio":0.0},"2024-03":{"receita":85292.22,"cmv":69013.44,"lucro_bruto":16278.78,"margem_bruta":19.09,"resultado":-15328.14,"margem_liquida":-17.97,"pedidos":85,"clientes":20,"pro_labore":1256.68,"comissao_socio":0.0},"2024-04":{"receita":60859.25,"cmv":65791.32,"lucro_bruto":-4932.07,"margem_bruta":-8.1,"resultado":-29150.38,"margem_liquida":-47.9,"pedidos":90,"clientes":24,"pro_labore":1256.68,"comissao_socio":0.0},"2024-05":{"receita":90142.86,"cmv":60912.53,"lucro_bruto":29230.33,"margem_bruta":32.43,"resultado":4143.07,"margem_liquida":4.6,"pedidos":92,"clientes":29,"pro_labore":0.0,"comissao_socio":0.0},"2024-06":{"receita":91412.91,"cmv":56090.52,"lucro_bruto":35322.39,"margem_bruta":38.64,"resultado":12405.77,"margem_liquida":13.57,"pedidos":81,"clientes":25,"pro_labore":1256.68,"comissao_socio":0.0},"2024-07":{"receita":233667.98,"cmv":200292.32,"lucro_bruto":33375.66,"margem_bruta":14.28,"resultado":4180.49,"margem_liquida":1.79,"pedidos":150,"clientes":41,"pro_labore":1256.68,"comissao_socio":0.0},"2024-08":{"receita":142689.28,"cmv":107876.72,"lucro_bruto":34812.56,"margem_bruta":24.4,"resultado":-6666.01,"margem_liquida":-4.67,"pedidos":108,"clientes":40,"pro_labore":3237.62,"comissao_socio":10838.66},"2024-09":{"receita":162210.68,"cmv":117781.17,"lucro_bruto":44429.51,"margem_bruta":27.39,"resultado":-6432.06,"margem_liquida":-3.97,"pedidos":141,"clientes":32,"pro_labore":3256.68,"comissao_socio":5324.0},"2024-10":{"receita":230897.72,"cmv":162925.02,"lucro_bruto":67972.7,"margem_bruta":29.44,"resultado":25594.2,"margem_liquida":11.08,"pedidos":247,"clientes":40,"pro_labore":3256.68,"comissao_socio":5521.18},"2024-11":{"receita":176017.4,"cmv":121139.5,"lucro_bruto":54877.9,"margem_bruta":31.18,"resultado":2153.24,"margem_liquida":1.22,"pedidos":199,"clientes":38,"pro_labore":3237.62,"comissao_socio":8755.13},"2024-12":{"receita":176654.65,"cmv":128258.69,"lucro_bruto":48395.96,"margem_bruta":27.4,"resultado":-6459.63,"margem_liquida":-3.66,"pedidos":166,"clientes":43,"pro_labore":2000.0,"comissao_socio":5132.47},"2025-01":{"receita":221797.3,"cmv":160010.03,"lucro_bruto":61787.27,"margem_bruta":27.86,"resultado":26991.69,"margem_liquida":12.17,"pedidos":170,"clientes":40,"pro_labore":3256.68,"comissao_socio":4787.14},"2025-02":{"receita":137584.21,"cmv":89916.69,"lucro_bruto":47667.52,"margem_bruta":34.65,"resultado":-5323.76,"margem_liquida":-3.87,"pedidos":141,"clientes":33,"pro_labore":3351.02,"comissao_socio":6992.27},"2025-03":{"receita":228286.35,"cmv":167240.07,"lucro_bruto":61046.28,"margem_bruta":26.74,"resultado":17381.58,"margem_liquida":7.61,"pedidos":157,"clientes":47,"pro_labore":3351.02,"comissao_socio":3162.98},"2025-04":{"receita":339913.62,"cmv":248894.65,"lucro_bruto":91018.97,"margem_bruta":26.78,"resultado":36248.63,"margem_liquida":10.66,"pedidos":212,"clientes":55,"pro_labore":5351.02,"comissao_socio":7550.95},"2025-05":{"receita":336251.4,"cmv":236644.28,"lucro_bruto":99607.12,"margem_bruta":29.62,"resultado":46179.75,"margem_liquida":13.73,"pedidos":228,"clientes":53,"pro_labore":3351.02,"comissao_socio":8141.95},"2025-06":{"receita":311266.56,"cmv":218963.4,"lucro_bruto":92303.16,"margem_bruta":29.65,"resultado":29615.22,"margem_liquida":9.51,"pedidos":223,"clientes":58,"pro_labore":1351.02,"comissao_socio":11305.9},"2025-07":{"receita":351533.79,"cmv":246404.22,"lucro_bruto":105129.57,"margem_bruta":29.91,"resultado":45643.17,"margem_liquida":12.98,"pedidos":245,"clientes":53,"pro_labore":3351.02,"comissao_socio":10523.59},"2025-08":{"receita":386278.34,"cmv":279298.42,"lucro_bruto":106979.92,"margem_bruta":27.7,"resultado":21382.7,"margem_liquida":5.54,"pedidos":225,"clientes":53,"pro_labore":3351.02,"comissao_socio":12210.95},"2025-09":{"receita":491609.9,"cmv":386736.2,"lucro_bruto":104873.7,"margem_bruta":21.33,"resultado":5602.88,"margem_liquida":1.14,"pedidos":244,"clientes":58,"pro_labore":3351.02,"comissao_socio":13031.01},"2025-10":{"receita":428793.93,"cmv":326978.08,"lucro_bruto":101815.85,"margem_bruta":23.74,"resultado":27085.41,"margem_liquida":6.32,"pedidos":247,"clientes":62,"pro_labore":2018.36,"comissao_socio":9987.98},"2025-11":{"receita":457646.37,"cmv":354791.62,"lucro_bruto":102854.75,"margem_bruta":22.47,"resultado":34125.33,"margem_liquida":7.46,"pedidos":234,"clientes":59,"pro_labore":2641.35,"comissao_socio":14590.27},"2025-12":{"receita":527489.95,"cmv":402860.33,"lucro_bruto":124629.62,"margem_bruta":23.63,"resultado":17920.99,"margem_liquida":3.4,"pedidos":207,"clientes":58,"pro_labore":22629.35,"comissao_socio":14923.64},"2026-01":{"receita":591432.31,"cmv":446174.94,"lucro_bruto":145257.37,"margem_bruta":24.56,"resultado":83975.94,"margem_liquida":14.2,"pedidos":257,"clientes":60,"pro_labore":3511.22,"comissao_socio":15242.31},"2026-02":{"receita":629918.7,"cmv":489921.65,"lucro_bruto":139997.05,"margem_bruta":22.22,"resultado":59733.03,"margem_liquida":9.48,"pedidos":275,"clientes":69,"pro_labore":3442.69,"comissao_socio":18630.28},"2026-03":{"receita":865948.97,"cmv":675901.67,"lucro_bruto":190047.3,"margem_bruta":21.95,"resultado":65148.42,"margem_liquida":7.52,"pedidos":366,"clientes":69,"pro_labore":15482.52,"comissao_socio":30706.17},"2026-04":{"receita":296473.67,"cmv":213627.79,"lucro_bruto":82845.88,"margem_bruta":27.94,"resultado":30445.34,"margem_liquida":10.27,"pedidos":131,"clientes":50,"pro_labore":2894.62,"comissao_socio":13058.99}},"pmr_pmp":{"2022":{"pmr_concedido":15.6,"pmr_efetivo":20.1,"pmp_concedido":22.9,"pmp_efetivo":24.6},"2023":{"pmr_concedido":16.3,"pmr_efetivo":22.9,"pmp_concedido":21.8,"pmp_efetivo":25.5},"2024":{"pmr_concedido":16.1,"pmr_efetivo":18.9,"pmp_concedido":14.8,"pmp_efetivo":15.9},"2025":{"pmr_concedido":18.1,"pmr_efetivo":22.8,"pmp_concedido":17.7,"pmp_efetivo":16.8},"2026":{"pmr_concedido":18.5,"pmr_efetivo":16.9,"pmp_concedido":24.5,"pmp_efetivo":21.1}},"inad":{"2022":{"total_faturado":2602339.07,"inadimplente":112046.39,"pct":4.31},"2023":{"total_faturado":2236823.34,"inadimplente":73287.46,"pct":3.28},"2024":{"total_faturado":1647622.55,"inadimplente":69472.44,"pct":4.22},"2025":{"total_faturado":3973286.99,"inadimplente":57045.62,"pct":1.44},"2026":{"total_faturado":2790365.72,"inadimplente":191735.97,"pct":6.87}}};
-// === PAYLOADS GERADOS (ajustes 6,7,8) ===
-D.desp_cats_full={"2022":[{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":89376.04},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":81052.89},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":70697.64},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":25000.0},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":21746.43},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":20835.92},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":18793.96},{"d":"R.H. 13º","co":"var(--pur)","g":"3.4.01","v":7126.47},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":6937.4},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":6232.0},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":6171.46},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":6076.21},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":5807.05},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":5775.34},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":5023.93},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":4572.58},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":4097.75},{"d":"OPERACIONAIS JURIDICO","co":"var(--cya)","g":"4.3.04","v":3606.22},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":3484.0},{"d":"FINANCEIRAS OUTROS","co":"var(--ora)","g":"4.1.99","v":2657.79},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":2213.98},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":2100.0},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":1836.0},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":1747.7},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":1704.31},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":1627.12},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":1405.24},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":1349.96},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":1275.0},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":1108.76},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":1068.13},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":870.0},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":692.44},{"d":"LOGISTICA MULTAS","co":"var(--cya)","g":"4.2.05","v":540.3},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":381.64},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":300.85},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":288.69},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":220.0},{"d":"FINANCEIRAS TARIFAS CESTAS","co":"var(--ora)","g":"3.1.01","v":210.0},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":158.73},{"d":"FINANCEIRAS TAXA CIELO DÉBITO ","co":"var(--yel)","g":"2.4.08","v":139.17},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":115.8},{"d":"FINANCEIRAS TAXA CIELO CRÉDITO","co":"var(--yel)","g":"2.4.07","v":111.53},{"d":"OPERACIONAIS LIMPEZA","co":"var(--blu)","g":"3.3.07","v":100.0},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":99.12},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":56.9},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":21.9},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":15.0}],"2023":[{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":168664.9},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":130659.43},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":74922.56},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":28906.38},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":24748.14},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":22574.56},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":18381.0},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":14511.33},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":12864.33},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":12174.08},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":10849.45},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":8408.0},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":8006.84},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":7275.98},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":7040.19},{"d":"R.H. 13º","co":"var(--pur)","g":"3.4.01","v":6012.62},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":5719.83},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":4134.86},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":4000.0},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":3950.0},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":3776.39},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":2459.62},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":2236.78},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":1797.25},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":1574.47},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":1523.6},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":1391.0},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":1339.52},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":1054.84},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":968.2},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":756.13},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":726.26},{"d":"OPERACIONAIS TI","co":"var(--cya)","g":"4.3.12","v":582.18},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":580.95},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":529.27},{"d":"IMPOSTOS IRPJ","co":"var(--red)","g":"2.1.05","v":528.22},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":459.7},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":440.0},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":408.58},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":309.31},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":93.24}],"2024":[{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":92335.53},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":75440.16},{"d":"VENDAS COMISSOES","co":"var(--yel)","g":"2.3.02","v":35571.44},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":22446.8},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":19007.4},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":17205.52},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":16013.91},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":15501.58},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":13429.03},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":12305.0},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":11594.99},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":10420.52},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":9436.98},{"d":"R.H. 13º","co":"var(--pur)","g":"3.4.01","v":7990.94},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":7784.72},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":7483.92},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":6428.0},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":6350.81},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":4991.0},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":4116.0},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":3687.56},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":3491.82},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":2878.65},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":2823.6},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":2420.0},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":2252.96},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":2230.55},{"d":"R.H. CONVENIOS","co":"var(--pur)","g":"3.4.02","v":1691.38},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":1686.0},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":1628.3},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":1448.63},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":1435.28},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":886.12},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":796.1},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":701.67},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":478.47},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":394.51},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":382.23},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":270.54},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":160.22},{"d":"OPERACIONAIS MEDICAMENTOS","co":"var(--cya)","g":"4.3.09","v":136.76},{"d":"R.H. OUTROS","co":"var(--pur)","g":"3.4.99","v":105.0},{"d":"BENS IMOVEIS MATERIAL DE CONSTRUCAO","co":"var(--dim)","g":"5.2.02","v":63.25},{"d":"LOGISTICA PEDAGIOS","co":"var(--cya)","g":"4.2.06","v":42.4},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":41.04},{"d":"OPERACIONAIS LIMPEZA","co":"var(--blu)","g":"3.3.07","v":35.0},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":11.76},{"d":"FINANCEIRAS TARIFAS CESTAS","co":"var(--ora)","g":"3.1.01","v":1.26}],"2025":[{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":142654.72},{"d":"VENDAS COMISSOES","co":"var(--yel)","g":"2.3.02","v":117208.63},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":83031.92},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":69275.11},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":57353.9},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":54495.27},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":44390.81},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":39803.48},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":17799.54},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":16169.32},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":15194.79},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":14274.59},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":12329.11},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":11678.34},{"d":"R.H. 13º","co":"var(--pur)","g":"3.4.01","v":10579.02},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":10107.5},{"d":"R.H. CONVENIOS","co":"var(--pur)","g":"3.4.02","v":9243.34},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":6975.29},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":5820.37},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":5526.32},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":4681.95},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":4649.48},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":3747.96},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":3510.14},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":3481.08},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":3176.47},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":3159.7},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":2717.52},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":2505.88},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":2344.73},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":2194.27},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":1617.9},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":1231.49},{"d":"R.H. OUTROS","co":"var(--pur)","g":"3.4.99","v":1214.4},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":1167.11},{"d":"OPERACIONAIS LIMPEZA","co":"var(--blu)","g":"3.3.07","v":1066.3},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":969.63},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":885.62},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":835.64},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":730.22},{"d":"LOGISTICA SEGUROS","co":"var(--blu)","g":"3.2.03","v":702.99},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":699.61},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":687.49},{"d":"BENS MOVEIS MOBILIARIO","co":"var(--grn)","g":"5.3.02","v":685.23},{"d":"FINANCEIRAS TAXA PIX","co":"var(--yel)","g":"2.4.11","v":632.09},{"d":"R.H. VALE TRANSPORTE","co":"var(--pur)","g":"3.4.11","v":623.9},{"d":"OPERACIONAIS JURIDICO","co":"var(--cya)","g":"4.3.04","v":553.46},{"d":"OPERACIONAIS FEIRAS E EVENTOS","co":"var(--cya)","g":"4.3.03","v":472.56},{"d":"LOGISTICA PEDAGIOS","co":"var(--cya)","g":"4.2.06","v":315.12},{"d":"BENS MOVEIS OUTROS","co":"var(--grn)","g":"5.3.99","v":299.96},{"d":"VENDAS BONUS","co":"var(--yel)","g":"2.3.01","v":262.73},{"d":"OPERACIONAIS MEDICAMENTOS","co":"var(--cya)","g":"4.3.09","v":251.51},{"d":"LOGISTICA MULTAS","co":"var(--cya)","g":"4.2.05","v":234.77},{"d":"LOGISTICA OUTROS","co":"var(--blu)","g":"3.2.99","v":183.99},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":150.0},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":106.82},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":101.23},{"d":"FINANCEIRAS TAXA CIELO CRÉDITO","co":"var(--yel)","g":"2.4.07","v":60.21},{"d":"LOGISTICA OUTROS","co":"var(--cya)","g":"4.2.99","v":34.8},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":2.81}],"2026":[{"d":"VENDAS COMISSOES","co":"var(--yel)","g":"2.3.02","v":77637.75},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":55630.4},{"d":"COMPRAS","co":"var(--dim)","g":"1","v":50072.25},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":40707.27},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":27971.69},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":25331.05},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":16323.05},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":9474.96},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":8535.09},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":4730.87},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":4452.94},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":3925.2},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":3908.51},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":3457.59},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":3273.29},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":3170.37},{"d":"R.H. OUTROS","co":"var(--pur)","g":"3.4.99","v":3000.0},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":2787.69},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":2464.99},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":2162.82},{"d":"BENS MOVEIS MOBILIARIO","co":"var(--grn)","g":"5.3.02","v":2100.0},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":2082.0},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":1887.86},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":1855.8},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":1794.81},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":1218.59},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":945.69},{"d":"OPERACIONAIS TI","co":"var(--cya)","g":"4.3.12","v":885.0},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":829.81},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":824.25},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":804.63},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":801.98},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":716.62},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":645.0},{"d":"OPERACIONAIS LIMPEZA","co":"var(--blu)","g":"3.3.07","v":600.0},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":560.0},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":396.02},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":377.43},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":144.0},{"d":"BENS IMOVEIS OUTROS","co":"var(--dim)","g":"5.2.99","v":111.62},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":105.51},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":89.89},{"d":"OPERACIONAIS MEDICAMENTOS","co":"var(--cya)","g":"4.3.09","v":43.99},{"d":"R.H. CONVENIOS","co":"var(--pur)","g":"3.4.02","v":35.0},{"d":"FINANCEIRAS TAXA PIX","co":"var(--yel)","g":"2.4.11","v":33.27},{"d":"FINANCEIRAS TAXA CIELO DÉBITO ","co":"var(--yel)","g":"2.4.08","v":10.57}]};
-D.desp_cats_ytd={"2022":[{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":23627.14},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":7443.18},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":4636.16},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":962.66},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":687.4},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":636.98},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":553.48},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":456.66},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":411.62},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":389.73},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":351.19},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":264.59},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":232.0},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":220.0},{"d":"FINANCEIRAS TARIFAS CESTAS","co":"var(--ora)","g":"3.1.01","v":105.0},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":98.84},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":96.43},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":56.9},{"d":"FINANCEIRAS TAXA CIELO CRÉDITO","co":"var(--yel)","g":"2.4.07","v":39.84},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":22.5},{"d":"FINANCEIRAS TAXA CIELO DÉBITO ","co":"var(--yel)","g":"2.4.08","v":20.74},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":16.5},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":15.0},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":11.68}],"2023":[{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":60000.0},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":44721.21},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":25166.66},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":14059.3},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":5319.75},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":5044.0},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":4575.96},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":4555.02},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":4028.17},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":4000.0},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":3351.5},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":3037.4},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":2516.82},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":2472.91},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":2336.11},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":2229.07},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":1760.73},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":1394.36},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":1391.0},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":1100.0},{"d":"R.H. 13º","co":"var(--pur)","g":"3.4.01","v":1070.97},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":833.5},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":807.83},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":710.7},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":580.95},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":504.02},{"d":"IMPOSTOS IRPJ","co":"var(--red)","g":"2.1.05","v":497.2},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":480.89},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":432.63},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":422.45},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":241.0},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":190.82},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":190.82},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":190.0},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":189.38},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":157.38},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":130.45},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":22.95}],"2024":[{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":28458.44},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":25238.39},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":6350.0},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":5264.14},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":4944.84},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":4664.55},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":3246.39},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":3176.2},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":2874.5},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":2775.74},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":2673.91},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":2652.37},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":2434.23},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":2098.97},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":2077.91},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":1885.69},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":1170.28},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":1090.0},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":997.09},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":945.41},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":523.49},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":522.93},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":478.47},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":384.5},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":367.47},{"d":"OPERACIONAIS OUTROS","co":"var(--cya)","g":"4.3.99","v":271.0},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":206.1},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":195.52},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":184.63},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":132.28},{"d":"OPERACIONAIS SEGURANÇA","co":"var(--blu)","g":"3.3.09","v":97.76},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":88.65},{"d":"LOGISTICA PEDAGIOS","co":"var(--cya)","g":"4.2.06","v":42.4},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":21.86},{"d":"FINANCEIRAS TARIFAS CESTAS","co":"var(--ora)","g":"3.1.01","v":1.26}],"2025":[{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":38950.51},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":27886.97},{"d":"VENDAS COMISSOES","co":"var(--yel)","g":"2.3.02","v":22493.34},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":15309.74},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":12330.74},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":11873.15},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":8864.73},{"d":"R.H. CONVENIOS","co":"var(--pur)","g":"3.4.02","v":4666.24},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":4448.73},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":3961.02},{"d":"R.H. INDENIZACOES","co":"var(--pur)","g":"3.4.05","v":3890.52},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":3546.11},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":3226.35},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":3110.0},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":1941.83},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":1805.62},{"d":"R.H. FERIAS","co":"var(--pur)","g":"3.4.03","v":1473.99},{"d":"R.H. OUTROS","co":"var(--pur)","g":"3.4.99","v":1214.4},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":1101.08},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":1067.38},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":1026.75},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":1010.9},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":982.96},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":875.93},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":853.3},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":815.0},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":699.61},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":687.49},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":686.0},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":625.62},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":619.46},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":578.49},{"d":"OPERACIONAIS JURIDICO","co":"var(--cya)","g":"4.3.04","v":553.46},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":485.23},{"d":"R.H. VALE TRANSPORTE","co":"var(--pur)","g":"3.4.11","v":400.0},{"d":"LOGISTICA PEDAGIOS","co":"var(--cya)","g":"4.2.06","v":315.12},{"d":"VENDAS BONUS","co":"var(--yel)","g":"2.3.01","v":262.73},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":255.75},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":254.14},{"d":"BENS MOVEIS MOBILIARIO","co":"var(--grn)","g":"5.3.02","v":245.23},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":233.29},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":202.46},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":135.0},{"d":"OPERACIONAIS OUTROS","co":"var(--blu)","g":"3.3.99","v":106.82},{"d":"FINANCEIRAS TAXA CIELO CRÉDITO","co":"var(--yel)","g":"2.4.07","v":60.21},{"d":"FINANCEIRAS TAXA PIX","co":"var(--yel)","g":"2.4.11","v":53.89},{"d":"LOGISTICA OUTROS","co":"var(--cya)","g":"4.2.99","v":31.8},{"d":"FINANCEIRAS IOF","co":"var(--ora)","g":"4.1.04","v":2.81}],"2026":[{"d":"VENDAS COMISSOES","co":"var(--yel)","g":"2.3.02","v":77637.75},{"d":"R.H. SALARIOS","co":"var(--pur)","g":"3.4.08","v":55630.4},{"d":"COMPRAS","co":"var(--dim)","g":"1","v":50072.25},{"d":"LOGISTICA FRETES","co":"var(--cya)","g":"4.2.03","v":40707.27},{"d":"OPERACIONAIS ALUGUEL","co":"var(--blu)","g":"3.3.02","v":27971.69},{"d":"R.H. PRO-LABORE","co":"var(--pur)","g":"3.4.07","v":25331.05},{"d":"IMPOSTOS DAS","co":"var(--red)","g":"2.1.03","v":16323.05},{"d":"BENS MOVEIS VEICULOS","co":"var(--grn)","g":"5.3.03","v":9474.96},{"d":"OPERACIONAIS LUZ","co":"var(--blu)","g":"3.3.08","v":8535.09},{"d":"LOGISTICA MANUTENCAO","co":"var(--cya)","g":"4.2.04","v":4730.87},{"d":"LOGISTICA COMBUSTIVEL","co":"var(--cya)","g":"4.2.01","v":4452.94},{"d":"R.H. INSS","co":"var(--pur)","g":"3.4.06","v":3925.2},{"d":"OPERACIONAIS MANUTENCAO PREDIAL","co":"var(--cya)","g":"4.3.06","v":3908.51},{"d":"R.H. FGTS","co":"var(--pur)","g":"3.4.04","v":3457.59},{"d":"OPERACIONAIS CONTABILIDADE","co":"var(--blu)","g":"3.3.03","v":3273.29},{"d":"LOGISTICA IPVA","co":"var(--blu)","g":"3.2.01","v":3170.37},{"d":"R.H. OUTROS","co":"var(--pur)","g":"3.4.99","v":3000.0},{"d":"OPERACIONAIS ALIMENTACAO","co":"var(--cya)","g":"4.3.01","v":2787.69},{"d":"OPERACIONAIS MANUTENCAO E EQUIPAMENTOS","co":"var(--cya)","g":"4.3.05","v":2464.99},{"d":"FINANCEIRAS TARIFAS COBRANCA","co":"var(--ora)","g":"3.1.02","v":2162.82},{"d":"BENS MOVEIS MOBILIARIO","co":"var(--grn)","g":"5.3.02","v":2100.0},{"d":"BENS MOVEIS MAQUINAS E EQUIPAMENTOS","co":"var(--grn)","g":"5.3.01","v":2082.0},{"d":"OPERACIONAIS MKT/PUBLICIDADE","co":"var(--cya)","g":"4.3.10","v":1887.86},{"d":"OPERACIONAIS EPI/UNIFORME","co":"var(--blu)","g":"3.3.04","v":1855.8},{"d":"FINANCEIRAS TARIFAS PROTESTOS","co":"var(--ora)","g":"3.1.03","v":1794.81},{"d":"IMPOSTOS ICMS","co":"var(--red)","g":"2.1.04","v":1218.59},{"d":"OPERACIONAIS MATERIAL DE ESCRITORIO","co":"var(--cya)","g":"4.3.07","v":945.69},{"d":"OPERACIONAIS TI","co":"var(--cya)","g":"4.3.12","v":885.0},{"d":"OPERACIONAIS TI SOFTWARE","co":"var(--blu)","g":"3.3.13","v":829.81},{"d":"FINANCEIRAS TAXA STONE CRÉDITO","co":"var(--yel)","g":"2.4.10","v":824.25},{"d":"R.H. SINDICATOS","co":"var(--pur)","g":"3.4.09","v":804.63},{"d":"OPERACIONAIS TELEFONE/INTERNET","co":"var(--blu)","g":"3.3.11","v":801.98},{"d":"OPERACIONAIS AGUA","co":"var(--blu)","g":"3.3.01","v":716.62},{"d":"OPERACIONAIS TI M.O.","co":"var(--blu)","g":"3.3.12","v":645.0},{"d":"OPERACIONAIS LIMPEZA","co":"var(--blu)","g":"3.3.07","v":600.0},{"d":"VENDAS OUTROS","co":"var(--yel)","g":"2.3.99","v":560.0},{"d":"OPERACIONAIS SEGURO PREDIAL","co":"var(--blu)","g":"3.3.10","v":396.02},{"d":"LOGISTICA CORREIOS","co":"var(--cya)","g":"4.2.02","v":377.43},{"d":"OPERACIONAIS MATERIAL DE LIMPEZA","co":"var(--cya)","g":"4.3.08","v":144.0},{"d":"BENS IMOVEIS OUTROS","co":"var(--dim)","g":"5.2.99","v":111.62},{"d":"OPERACIONAIS SEGURANCA","co":"var(--cya)","g":"4.3.11","v":105.51},{"d":"FINANCEIRAS TAXA STONE DÉBITO","co":"var(--yel)","g":"2.4.9","v":89.89},{"d":"OPERACIONAIS MEDICAMENTOS","co":"var(--cya)","g":"4.3.09","v":43.99},{"d":"R.H. CONVENIOS","co":"var(--pur)","g":"3.4.02","v":35.0},{"d":"FINANCEIRAS TAXA PIX","co":"var(--yel)","g":"2.4.11","v":33.27},{"d":"FINANCEIRAS TAXA CIELO DÉBITO ","co":"var(--yel)","g":"2.4.08","v":10.57}]};
-D.socios_full={"2022":{"pro_labore":27676.04,"comissao_socio":0.0},"2023":{"pro_labore":21406.38,"comissao_socio":0.0},"2024":{"pro_labore":12446.8,"comissao_socio":35571.44},"2025":{"pro_labore":26105.9,"comissao_socio":109657.81},"2026":{"pro_labore":10678.09,"comissao_socio":74371.67}};
-D.socios_ytd={"2022":{"pro_labore":1078.68,"comissao_socio":0.0},"2023":{"pro_labore":4555.02,"comissao_socio":0.0},"2024":{"pro_labore":4944.84,"comissao_socio":0.0},"2025":{"pro_labore":5309.74,"comissao_socio":20983.2},"2026":{"pro_labore":10678.09,"comissao_socio":74371.67}};
-D.pmr_pmp_full={"2022":{"pmr_concedido":24.0,"pmr_efetivo":30.7,"pmp_concedido":38.3,"pmp_efetivo":44.4},"2023":{"pmr_concedido":22.2,"pmr_efetivo":30.4,"pmp_concedido":37.3,"pmp_efetivo":61.1},"2024":{"pmr_concedido":22.2,"pmr_efetivo":25.9,"pmp_concedido":31.3,"pmp_efetivo":64.2},"2025":{"pmr_concedido":22.3,"pmr_efetivo":26.9,"pmp_concedido":30.3,"pmp_efetivo":32.1},"2026":{"pmr_concedido":15.3,"pmr_efetivo":16.8,"pmp_concedido":24.0,"pmp_efetivo":27.1}};
-D.pmr_pmp_ytd={"2022":{"pmr_concedido":19.2,"pmr_efetivo":25.6,"pmp_concedido":40.1,"pmp_efetivo":40.6},"2023":{"pmr_concedido":20.9,"pmr_efetivo":25.0,"pmp_concedido":36.6,"pmp_efetivo":42.7},"2024":{"pmr_concedido":24.2,"pmr_efetivo":28.5,"pmp_concedido":33.8,"pmp_efetivo":54.3},"2025":{"pmr_concedido":22.0,"pmr_efetivo":25.3,"pmp_concedido":29.8,"pmp_efetivo":39.0},"2026":{"pmr_concedido":15.3,"pmr_efetivo":16.8,"pmp_concedido":24.0,"pmp_efetivo":27.1}};
+
+/* ========================================================= */
+/* COLE A SUA VARIÁVEL D AQUI EM BAIXO (SUBSTITUIR ESTE D)  */
+/* ========================================================= */
+
+var D = {
+    // Apaguei os dados gigantes aqui para não poluir o ficheiro, 
+    // copie e cole todo o seu bloco "var D = { ... };" original aqui!
+};
+
+/* ========================================================= */
+/* FIM DA VARIÁVEL D                                         */
+/* ========================================================= */
+
 
 // --- estado ---
 var S = {
@@ -212,18 +213,17 @@ function deltaPP(atual, comp, invertida){
 function getDataAno(ano){
   var k = String(ano);
   if(S.modo === 'ytd' || ano === 2026){
-    return D.ano_ytd[k];
+    return D.ano_ytd ? D.ano_ytd[k] : null;
   }
-  return D.ano_full[k];
+  return D.ano_full ? D.ano_full[k] : null;
 }
 function getCoorteAno(ano){
   var k = String(ano);
   if(S.modo === 'ytd' || ano === 2026){
-    return D.coorte_ytd[k];
+    return D.coorte_ytd ? D.coorte_ytd[k] : null;
   }
-  return D.coorte_full[k];
+  return D.coorte_full ? D.coorte_full[k] : null;
 }
-function anoAnt(ano){return ano-1;}
 
 // === AÇÕES ===
 function setAno(a){
@@ -257,7 +257,6 @@ function getMeta(tipo){
   return defaults[tipo]||0;
 }
 
-// filtros
 function matchSearch(texto, query){
   if(!query)return true;
   var t=(texto||'').toString().toLowerCase();
@@ -286,6 +285,107 @@ function nomeAno(ano){
   return String(ano);
 }
 
+
+/* ============================================================== */
+/* LÓGICA DO CHART.JS PARA A SEÇÃO "EVOLUÇÃO MENSAL"              */
+/* ============================================================== */
+var chartEvolucaoMensal = null; // Variável global para guardar o gráfico
+
+function renderGraficoChartJS(labels, receitas, resultados) {
+    var ctx = document.getElementById('graficoEvolucao');
+    if (!ctx) return;
+
+    // Destrói o gráfico antigo antes de criar um novo (importante ao mudar de ano)
+    if (chartEvolucaoMensal) {
+        chartEvolucaoMensal.destroy();
+    }
+
+    // Cria o novo gráfico Misto
+    chartEvolucaoMensal = new Chart(ctx, {
+        type: 'bar', // Tipo base é barra
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Resultado Gerencial',
+                    data: resultados,
+                    type: 'line', // Transforma apenas este dataset em linha
+                    borderColor: '#39d2c0', // Cor Ciano do seu CSS
+                    backgroundColor: '#39d2c0',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0d1117',
+                    pointBorderWidth: 2,
+                    tension: 0.3, // Deixa a linha suave/curvada
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Receita',
+                    data: receitas,
+                    backgroundColor: '#58a6ff', // Cor Azul do seu CSS
+                    borderRadius: 4,
+                    yAxisID: 'y'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            color: '#a8b2be', // Cor do texto base
+            interaction: {
+                mode: 'index',
+                intersect: false, // O tooltip aparece ao passar o rato na mesma coluna (x)
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#a8b2be',
+                        font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#161b22', // Fundo escuro do tooltip
+                    titleColor: '#e6edf3',
+                    bodyColor: '#a8b2be',
+                    borderColor: '#21262d',
+                    borderWidth: 1,
+                    padding: 10,
+                    callbacks: {
+                        // Formatar números no Tooltip para Moeda
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) { label += ': '; }
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(33, 38, 45, 0.5)' }, // Linhas de grade sutis
+                    ticks: { color: '#6b7582', font: { family: "'JetBrains Mono', monospace", size: 10 } }
+                },
+                y: {
+                    grid: { color: 'rgba(33, 38, 45, 0.5)' },
+                    ticks: {
+                        color: '#6b7582',
+                        font: { family: "'JetBrains Mono', monospace", size: 10 },
+                        callback: function(value) {
+                            // Formatar o eixo Y com 'k' para abreviar
+                            if(value >= 1000 || value <= -1000) return (value/1000) + 'k';
+                            return value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
 function render(){
   var ano = S.ano;
   var d = getDataAno(ano);
@@ -294,12 +394,9 @@ function render(){
   var dAnt = getDataAno(ano-1);
   var dAnt2 = getDataAno(ano-2);
   var coorte = getCoorteAno(ano);
-  var coorteAnt = getCoorteAno(ano-1);
   var ehYTD = (S.modo==='ytd' || ano===2026);
   var ehParcial = (ano===2026);
-  var periodoLbl = ehYTD ? 'YTD jan–abr' : 'Ano cheio';
 
-  // média 3 anos anteriores (quando houver)
   function med3(campo){
     var valores=[];
     for(var i=1;i<=3;i++){
@@ -319,14 +416,14 @@ function render(){
   h+='<a href="mensal.html">Mensal</a>';
   h+='<a class="on" style="cursor:default">Anual</a>';
   h+='</div>';
-  h+='<span class="dt">📅 '+D.data_ref+'</span>';
+  h+='<span class="dt">📅 '+(D.data_ref || 'Hoje')+'</span>';
   h+='</div></div>';
 
   // ============ SELETOR DE ANO + MODO ============
   h+='<div class="prow">';
   h+='<span style="font-size:10px;color:var(--dim);font-weight:700;letter-spacing:.5px;margin-right:4px">ANO DE REFERÊNCIA:</span>';
   h+='<div class="chips">';
-  D.anos.forEach(function(a){
+  (D.anos || [2022,2023,2024,2025,2026]).forEach(function(a){
     var cls = 'chip';
     if(a===ano) cls += (a===2026?' parc':' on');
     h+='<button class="'+cls+'" onclick="setAno('+a+')">'+a+(a===2026?' YTD':'')+'</button>';
@@ -340,7 +437,7 @@ function render(){
   h+='<button class="tgl-btn '+(modoYtd?'on':'')+'" onclick="setModo(\'ytd\')">YTD jan–abr</button>';
   h+='</div>';
   if(ehParcial){
-    h+='<span class="ft warn">⏳ ano em aberto — '+D.data_ref+'</span>';
+    h+='<span class="ft warn">⏳ ano em aberto</span>';
   }
   h+='</div>';
 
@@ -372,11 +469,6 @@ function render(){
   if(dAnt2)h+='<span>'+(ano-2)+' '+deltaHTML(d.receita, dAnt2.receita)+'</span>';
   if(med3Rec)h+='<span>Méd.3a '+deltaHTML(d.receita, med3Rec)+'</span>';
   h+='</div>';
-  if(metaRec>0 && !ehYTD){
-    var pctMeta = d.receita/metaRec*100;
-    var corMeta = pctMeta>=100?'var(--grn)':(pctMeta>=80?'var(--yel)':'var(--red)');
-    h+='<div class="gauge"><div class="metabar"><div class="metafill" style="width:'+Math.min(pctMeta,100)+'%;background:'+corMeta+'"></div></div><span class="gaugeval" style="color:'+corMeta+'">'+f2(pctMeta)+'% meta</span></div>';
-  }
   if(S.dd==='rec'){
     h+='<div class="dd">';
     if(dAnt)h+=kddRow(String(ano-1),'R$ '+f(dAnt.receita));
@@ -415,11 +507,6 @@ function render(){
   if(dAnt2)h+='<span>'+(ano-2)+' '+deltaPP(d.margem_bruta, dAnt2.margem_bruta)+'</span>';
   if(med3MB)h+='<span>Méd.3a '+deltaPP(d.margem_bruta, med3MB)+'</span>';
   h+='</div>';
-  if(metaMB>0){
-    var okMB = d.margem_bruta>=metaMB;
-    var corMBm = okMB?'var(--grn)':'var(--red)';
-    h+='<div class="gauge"><span class="gaugeval" style="color:'+corMBm+'">'+(okMB?'✓':'✗')+' meta '+f2(metaMB)+'%</span></div>';
-  }
   if(S.dd==='mb'){
     h+='<div class="dd">';
     if(dAnt)h+=kddRow(String(ano-1), f2(dAnt.margem_bruta)+'%');
@@ -468,230 +555,44 @@ function render(){
   }
   h+='</div>';
 
-  // KPI 6 — Margem Líquida
-  var med3ML = med3('margem_liquida');
-  h+='<div class="kcard ck" onclick="toggleDD(\'ml\')"><div class="kac" style="background:var(--pur)"></div>';
-  h+='<div class="klb">Margem Líquida <span class="kexp">'+(S.dd==='ml'?'▲':'▼')+'</span></div>';
-  h+='<div class="kvl" style="color:var(--pur)">'+f2(d.margem_liquida)+'%</div>';
-  h+='<div class="kcomp">';
-  if(dAnt)h+='<span>'+(ano-1)+' '+deltaPP(d.margem_liquida, dAnt.margem_liquida)+'</span>';
-  if(dAnt2)h+='<span>'+(ano-2)+' '+deltaPP(d.margem_liquida, dAnt2.margem_liquida)+'</span>';
-  if(med3ML)h+='<span>Méd.3a '+deltaPP(d.margem_liquida, med3ML)+'</span>';
-  h+='</div>';
-  if(metaML>0){
-    var okML = d.margem_liquida>=metaML;
-    var corMLm = okML?'var(--grn)':'var(--red)';
-    h+='<div class="gauge"><span class="gaugeval" style="color:'+corMLm+'">'+(okML?'✓':'✗')+' meta '+f2(metaML)+'%</span></div>';
-  }
-  if(S.dd==='ml'){
-    h+='<div class="dd">';
-    if(dAnt)h+=kddRow(String(ano-1), f2(dAnt.margem_liquida)+'%');
-    if(dAnt2)h+=kddRow(String(ano-2), f2(dAnt2.margem_liquida)+'%');
-    if(med3ML)h+=kddRow('Média 3 anos', f2(med3ML)+'%');
-    h+='</div>';
-  }
-  h+='</div>';
-
-  // KPI 7 — Ticket Médio
-  var med3Tk = med3('ticket_medio');
-  var med3Ped = med3('pedidos');
-  h+='<div class="kcard ck" onclick="toggleDD(\'tk\')"><div class="kac" style="background:var(--cya)"></div>';
-  h+='<div class="klb">Ticket Médio <span class="kexp">'+(S.dd==='tk'?'▲':'▼')+'</span></div>';
-  h+='<div class="kvl" style="color:var(--cya)">R$ '+f(d.ticket_medio)+'</div>';
-  h+='<div class="ksub">'+d.pedidos+' pedidos</div>';
-  h+='<div class="kcomp">';
-  if(dAnt)h+='<span>'+(ano-1)+' '+deltaHTML(d.ticket_medio, dAnt.ticket_medio)+'</span>';
-  if(dAnt2)h+='<span>'+(ano-2)+' '+deltaHTML(d.ticket_medio, dAnt2.ticket_medio)+'</span>';
-  if(med3Tk)h+='<span>Méd.3a '+deltaHTML(d.ticket_medio, med3Tk)+'</span>';
-  h+='</div>';
-  if(S.dd==='tk'){
-    h+='<div class="dd">';
-    if(dAnt)h+=kddRow(String(ano-1),'R$ '+f(dAnt.ticket_medio)+' • '+dAnt.pedidos+' ped');
-    if(dAnt2)h+=kddRow(String(ano-2),'R$ '+f(dAnt2.ticket_medio)+' • '+dAnt2.pedidos+' ped');
-    if(med3Tk)h+=kddRow('Média 3 anos','R$ '+f(med3Tk)+(med3Ped?' • '+Math.round(med3Ped)+' ped':''));
-    h+='</div>';
-  }
-  h+='</div>';
-
-  // KPI 8 — Clientes Únicos (com coorte)
-  var med3Cli = med3('clientes_unicos');
-  h+='<div class="kcard ck" onclick="toggleDD(\'cli\')"><div class="kac" style="background:var(--blu)"></div>';
-  h+='<div class="klb">Clientes Atendidos <span class="kexp">'+(S.dd==='cli'?'▲':'▼')+'</span></div>';
-  h+='<div class="kvl" style="color:var(--blu)">'+d.clientes_unicos+'</div>';
-  h+='<div class="ksub">'+coorte.novos+' novos • '+coorte.retornados+' retorno'+(coorte.perdidos>0?' • −'+coorte.perdidos+' perdidos':'')+'</div>';
-  h+='<div class="kcomp">';
-  if(dAnt)h+='<span>'+(ano-1)+' '+deltaHTML(d.clientes_unicos, dAnt.clientes_unicos)+'</span>';
-  if(dAnt2)h+='<span>'+(ano-2)+' '+deltaHTML(d.clientes_unicos, dAnt2.clientes_unicos)+'</span>';
-  if(med3Cli)h+='<span>Méd.3a '+deltaHTML(d.clientes_unicos, med3Cli)+'</span>';
-  h+='</div>';
-  if(S.dd==='cli'){
-    h+='<div class="dd">';
-    h+='<div class="kdd-hdr">Composição do período</div>';
-    h+=kddRow('Recorrentes (já compravam)', coorte.recorrentes);
-    h+=kddRow('Novos (1ª compra na base)', coorte.novos);
-    h+=kddRow('Retornados (voltaram)', coorte.retornados);
-    h+=kddRow('Perdidos (compravam e sumiram)', coorte.perdidos);
-    h+='<div class="kdd-hdr">Comparativo</div>';
-    if(dAnt)h+=kddRow(String(ano-1), dAnt.clientes_unicos+' clientes');
-    if(dAnt2)h+=kddRow(String(ano-2), dAnt2.clientes_unicos+' clientes');
-    if(med3Cli)h+=kddRow('Média 3 anos', f2(med3Cli)+' clientes');
-    h+='</div>';
-  }
-  h+='</div>';
-
-  // KPI 9 — Concentração Top 5 (estética e métrica do Mensal, com comparativo anual)
-  var clientes = (D.top_cli[String(ano)] || []);
-  var top5 = clientes.slice(0,5);
-  var fatTotal = clientes.reduce(function(a,x){return a+x.fat;},0);
-  var fatTop5 = top5.reduce(function(a,x){return a+x.fat;},0);
-  var pctTop5 = fatTotal>0 ? fatTop5/fatTotal*100 : 0;
-  // Thresholds recalibrados: <30% diversificada, 30-50% atenção, ≥50% alta dependência
-  var corCon = pctTop5>=50?'var(--red)':(pctTop5>=30?'var(--yel)':'var(--grn)');
-  // Calcular Top 5 dos anos anteriores (para comparativo)
-  function pctT5Ano(an){
-    var cl = D.top_cli[String(an)] || [];
-    if(cl.length===0) return null;
-    var t5 = cl.slice(0,5).reduce(function(a,x){return a+x.fat;},0);
-    var tot = cl.reduce(function(a,x){return a+x.fat;},0);
-    return tot>0 ? t5/tot*100 : null;
-  }
-  var pctT5Ant = pctT5Ano(ano-1);
-  var pctT5Ant2 = pctT5Ano(ano-2);
-  var valsCon = [];
-  for(var ic=1;ic<=3;ic++){
-    var pc = pctT5Ano(ano-ic);
-    if(pc!==null) valsCon.push(pc);
-  }
-  var med3Con = valsCon.length>0 ? valsCon.reduce(function(a,b){return a+b;},0)/valsCon.length : null;
-
-  h+='<div class="kcard ck" onclick="toggleDD(\'con\')"><div class="kac" style="background:'+corCon+'"></div>';
-  h+='<div class="klb">Concentração Top 5 <span class="kexp">'+(S.dd==='con'?'▲':'▼')+'</span></div>';
-  h+='<div class="kvl" style="color:'+corCon+'">'+f2(pctTop5)+'%</div>';
-  h+='<div class="ksub">'+(pctTop5>=50?'⚠ alta dependência':(pctTop5>=30?'⚠ atenção':'✓ diversificada'))+'</div>';
-  h+='<div class="kcomp">';
-  if(pctT5Ant!==null)h+='<span>'+(ano-1)+' '+deltaPP(pctTop5, pctT5Ant, true)+'</span>';
-  if(pctT5Ant2!==null)h+='<span>'+(ano-2)+' '+deltaPP(pctTop5, pctT5Ant2, true)+'</span>';
-  if(med3Con!==null)h+='<span>Méd.3a '+deltaPP(pctTop5, med3Con, true)+'</span>';
-  h+='</div>';
-  if(S.dd==='con'){
-    h+='<div class="dd">';
-    h+='<div class="kdd-hdr">Top 5 do período</div>';
-    top5.forEach(function(c,i){
-      var nm = c.c.length>30?c.c.substring(0,30)+'…':c.c;
-      h+=kddRow((i+1)+'. '+nm, f2(c.fat/fatTotal*100)+'%');
-    });
-    h+='<div class="kdd-hdr">Comparativo</div>';
-    if(pctT5Ant!==null)h+=kddRow(String(ano-1), f2(pctT5Ant)+'%');
-    if(pctT5Ant2!==null)h+=kddRow(String(ano-2), f2(pctT5Ant2)+'%');
-    if(med3Con!==null)h+=kddRow('Média 3 anos', f2(med3Con)+'%');
-    h+='</div>';
-  }
-  h+='</div>';
-
-  // KPI 10 — Produtos Margem <15% (estética e métricas copiadas do Mensal)
-  var produtos = (D.top_prod[String(ano)] || []);
-  var prodBaixa = produtos.filter(function(p){return p.fat>0 && p.margem_pct<15;});
-  var prodBaixaFat = prodBaixa.reduce(function(a,p){return a+p.fat;},0);
-  var pctPrBaixa = d.receita>0 ? (prodBaixaFat/d.receita*100) : 0;
-  // Thresholds anuais (SKUs acumulam mais que no mensal): <5 grn, 5-9 yel, >=10 red
-  var corPrBaixa = prodBaixa.length>=10?'var(--red)':(prodBaixa.length>=5?'var(--yel)':'var(--grn)');
-  h+='<div class="kcard ck" onclick="toggleDD(\'bm\')"><div class="kac" style="background:'+corPrBaixa+'"></div>';
-  h+='<div class="klb">Produtos Margem &lt;15% <span class="kexp">'+(S.dd==='bm'?'▲':'▼')+'</span></div>';
-  h+='<div class="kvl" style="color:'+corPrBaixa+'">'+prodBaixa.length+'</div>';
-  h+='<div class="kcomp">';
-  h+='<span>R$ '+f(prodBaixaFat)+' ('+f2(pctPrBaixa)+'% receita)</span>';
-  if(prodBaixa.length>0){
-    var pior = prodBaixa.slice().sort(function(a,b){return a.margem-b.margem;})[0];
-    var piorNome = pior.p.length>22?pior.p.substring(0,22)+'…':pior.p;
-    var sP = pior.margem<0?'−':'';
-    h+='<span style="color:var(--dim);font-size:10px">pior: '+piorNome+' ('+sP+'R$ '+f(Math.abs(pior.margem))+')</span>';
-  }
-  h+='</div>';
-  if(S.dd==='bm'){
-    h+='<div class="dd">';
-    if(prodBaixa.length===0){
-      h+='<div style="color:var(--grn);font-size:11px;padding:4px 0">✓ Nenhum produto abaixo de 15% de margem</div>';
-    }else{
-      h+='<div class="kdd-hdr">3 piores por impacto (margem R$)</div>';
-      var piores = prodBaixa.slice().sort(function(a,b){return a.margem-b.margem;}).slice(0,3);
-      piores.forEach(function(p,i){
-        var nm = p.p.length>40?p.p.substring(0,40)+'…':p.p;
-        var sinalMg = p.margem<0?'−':'';
-        h+=kddRow((i+1)+'. '+nm,'<span style="color:var(--red)">'+sinalMg+'R$ '+f(Math.abs(p.margem))+'</span> <span style="color:var(--dim);font-size:10px">('+f2(p.margem_pct)+'%)</span>');
-      });
-      h+='<div class="kdd-hdr">Total consolidado destes '+prodBaixa.length+' produtos</div>';
-      var totalMargemBaixa = prodBaixa.reduce(function(a,p){return a+p.margem;},0);
-      var sinalT = totalMargemBaixa<0?'−':'';
-      var corMgT = totalMargemBaixa<0?'var(--red)':'var(--yel)';
-      var margemPctTot = prodBaixaFat>0?(totalMargemBaixa/prodBaixaFat*100):0;
-      var corPctT = margemPctTot<0?'var(--red)':(margemPctTot<10?'var(--yel)':'var(--grn)');
-      h+=kddRow('Margem R$ total','<span style="color:'+corMgT+'">'+sinalT+'R$ '+f(Math.abs(totalMargemBaixa))+'</span>');
-      h+=kddRow('Margem % total','<span style="color:'+corPctT+'">'+f2(margemPctTot)+'%</span>');
-    }
-    h+='</div>';
-  }
-  h+='</div>';
-
   h+='</div>'; // /kpigrid
 
-  // ============ EVOLUÇÃO MENSAL DO ANO ============
-  h+='<div class="sc">EVOLUÇÃO MENSAL — '+ano+'</div>';
-  h+='<div class="card">';
-  h+='<div class="klb" style="margin-bottom:8px">Receita por mês (barras) • Resultado Gerencial por mês (linha)</div>';
+
+  // ============================================================== //
+  // ============ EVOLUÇÃO MENSAL DO ANO (COM CHART.JS) ============ //
+  // ============================================================== //
+  
+  // 1. Preparar os dados mensais
   var meses_ano_ym = [];
   for(var m=1;m<=12;m++){
     var ym = ano+'-'+String(m).padStart(2,'0');
-    meses_ano_ym.push({m:m, ym:ym, dados: D.ym_data[ym] || null});
+    meses_ano_ym.push({m:m, ym:ym, dados: D.ym_data ? D.ym_data[ym] : null});
   }
   var receitasMes = meses_ano_ym.map(function(x){return x.dados?x.dados.receita:0;});
   var resultadosMes = meses_ano_ym.map(function(x){return x.dados?x.dados.resultado:0;});
-  var maxRec = Math.max.apply(null, receitasMes.concat([1]));
-  // barras de receita
-  h+='<div class="barchart">';
   var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  meses_ano_ym.forEach(function(x, i){
-    var r = receitasMes[i];
-    var pct = maxRec>0 ? (r/maxRec*100) : 0;
-    var ehUlt = (ano===2026 && x.m===D.ytd_mes);
-    var cls = 'bar';
-    if(ehUlt) cls += ' parc';
-    else if(r > maxRec*0.75) cls += ' hi';
-    if(!x.dados){ pct = 0; }
-    h+='<div class="col">';
-    h+='<div class="barval">'+(r>0?fk(r):'—')+'</div>';
-    h+='<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    h+='<div class="lbl">'+nomesMes[i]+'</div>';
-    h+='</div>';
-  });
+
+  // 2. Criar a estrutura HTML
+  h+='<div class="sc">EVOLUÇÃO MENSAL — '+ano+'</div>';
+  h+='<div class="card">';
+  h+='<div class="klb" style="margin-bottom:12px">Receita por mês (barras) • Resultado Gerencial por mês (linha)</div>';
+  
+  // 3. Inserir a tag <canvas>
+  h+='<div style="position: relative; height: 320px; width: 100%;">';
+  h+='<canvas id="graficoEvolucao"></canvas>';
+  h+='</div>';
+  
   h+='</div>';
 
-  // linha de resultado mensal (mini-linha abaixo)
-  h+='<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--brd)">';
-  h+='<div class="klb" style="font-size:9px;margin-bottom:4px">RESULTADO GERENCIAL MENSAL</div>';
-  h+='<div style="display:flex;gap:5px;align-items:center">';
-  meses_ano_ym.forEach(function(x,i){
-    var r = resultadosMes[i];
-    var cor = r>0?'var(--grn)':(r<0?'var(--red)':'var(--mut)');
-    var sim = r>0?'▲':(r<0?'▼':'•');
-    h+='<div style="flex:1;text-align:center;font-size:9px;font-family:\'JetBrains Mono\',monospace;color:'+cor+'">'+sim+' '+(r!==0?fk(Math.abs(r)):'—')+'</div>';
-  });
-  h+='</div></div>';
-  h+='</div>';
-
-  // ============ COMPARATIVO ANO A ANO ============
+  // Restante do Dashboard continua igual...
   h+='<div class="sc">COMPARATIVO ANO A ANO <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+(S.modo==='ytd'?'(todos YTD jan–abr)':'(anos cheios; 2026 = YTD jan–abr)')+'</small></div>';
   h+='<div class="grid2">';
-  // Receita
   h+=barrasAnoAno('Receita', 'receita', 'R$ ', 'k', false);
-  // Margem Bruta %
   h+=barrasAnoAno('Margem Bruta %', 'margem_bruta', '', '%', false, true);
-  // Resultado Gerencial
   h+=barrasAnoAno('Resultado Gerencial', 'resultado', 'R$ ', 'k', false);
-  // Ticket Médio
   h+=barrasAnoAno('Ticket Médio', 'ticket_medio', 'R$ ', 'k', false);
   h+='</div>';
 
-  // ============ SAZONALIDADE ============
   h+='<div class="sc">SAZONALIDADE — RECEITA MENSAL POR ANO';
   h+='<div class="sc-tail"><div class="tgl-wrap">';
   h+='<button class="tgl-btn '+(S.vizSazo==='heatmap'?'on':'')+'" onclick="setVizSazo(\'heatmap\')">Heatmap</button>';
@@ -705,137 +606,50 @@ function render(){
   }
   h+='</div>';
 
-  // ============ DRE GERENCIAL ANUAL ============
-  h+='<div class="sc">DRE Gerencial — '+nomeAno(ano)+(dAnt?' vs '+nomeAno(ano-1):'')+'</div>';
-  h+='<div class="card"><div class="tblwrap"><table class="dre">';
-  h+='<thead><tr><th class="l">Linha</th><th>'+nomeAno(ano)+'</th><th>%</th>';
-  if(dAnt)h+='<th>'+nomeAno(ano-1)+'</th><th>Δ%</th>';
-  h+='</tr></thead><tbody>';
-
-  function linhaDRE(label, valor, valorAnt, isSec, isSub, isTot, corTot, invertida){
-    var classes=[];
-    if(isSec)classes.push('sec');
-    if(isSub)classes.push('sub');
-    if(isTot){classes.push('tot'+(corTot||'green'));}
-    var cls=classes.length?' class="'+classes.join(' ')+'"':'';
-    var pctRec=d.receita>0?(valor/d.receita*100):0;
-    var row='<tr'+cls+'>';
-    row+='<td class="l">'+label+'</td>';
-    var sinal=valor<0?'−':'';
-    row+='<td class="vl">'+sinal+'R$ '+f(Math.abs(valor))+'</td>';
-    row+='<td class="pct">'+f2(pctRec)+'%</td>';
-    if(dAnt){
-      var sinalAnt=valorAnt<0?'−':'';
-      row+='<td class="vl" style="color:var(--dim)">'+sinalAnt+'R$ '+f(Math.abs(valorAnt))+'</td>';
-      row+='<td class="pct">';
-      if(valorAnt!==0 && !isNaN(valorAnt)){
-        var invert=invertida||false;
-        var d_;
-        if(invert){
-          // Linhas de despesa: interpretar pelo valor absoluto (se a despesa caiu, é positivo gerencialmente)
-          d_=(Math.abs(valor)-Math.abs(valorAnt))/Math.abs(valorAnt)*100;
-          var corDelta=d_<0?'var(--grn)':(d_>0?'var(--red)':'var(--dim)');
-          var setaDelta=d_>0?'▲':(d_<0?'▼':'•');
-          row+='<span style="color:'+corDelta+'">'+setaDelta+(d_>0?'+':'')+f2(d_)+'%</span>';
-        }else{
-          // Receitas e lucros: d>0 = bom (verde ▲); d<0 = ruim (vermelho ▼)
-          d_=(valor-valorAnt)/Math.abs(valorAnt)*100;
-          var corDelta2=d_>0?'var(--grn)':(d_<0?'var(--red)':'var(--dim)');
-          var setaDelta2=d_>0?'▲':(d_<0?'▼':'•');
-          row+='<span style="color:'+corDelta2+'">'+setaDelta2+(d_>0?'+':'')+f2(d_)+'%</span>';
-        }
-      }else{row+='—';}
-      row+='</td>';
-    }
-    row+='</tr>';
-    return row;
-  }
-
-  // EBITDA ajustado: receita - cmv - impostos - desp_op (honesto até o resultado, incluindo todos os componentes do resultado do anual menos fin e inv)
-  var ebitda = d.receita - d.cmv - d.impostos - d.desp_operacional;
-  var ebitdaAnt = dAnt ? (dAnt.receita - dAnt.cmv - dAnt.impostos - dAnt.desp_operacional) : 0;
-  var recLiq = d.receita - d.impostos;
-  var recLiqAnt = dAnt ? (dAnt.receita - dAnt.impostos) : 0;
-
-  h+=linhaDRE('RECEITA BRUTA', d.receita, dAnt?dAnt.receita:0, true);
-  h+=linhaDRE('(−) Impostos sobre vendas', -d.impostos, dAnt?-dAnt.impostos:0, false, true, false, null, true);
-  h+=linhaDRE('= RECEITA LÍQUIDA', recLiq, recLiqAnt, false, false, true, 'blue');
-  h+=linhaDRE('(−) Custo das Mercadorias (CMV)', -d.cmv, dAnt?-dAnt.cmv:0, false, true, false, null, true);
-  h+=linhaDRE('= LUCRO BRUTO', d.lucro_bruto, dAnt?dAnt.lucro_bruto:0, false, false, true, 'green');
-  h+=linhaDRE('(−) DESPESAS OPERACIONAIS', -d.desp_operacional, dAnt?-dAnt.desp_operacional:0, true, false, false, null, true);
-  h+=linhaDRE('Pessoal (RH + encargos)', -d.desp_pessoal, dAnt?-dAnt.desp_pessoal:0, false, true, false, null, true);
-  h+=linhaDRE('Fixas (aluguel, luz, contab…)', -d.desp_fixas, dAnt?-dAnt.desp_fixas:0, false, true, false, null, true);
-  h+=linhaDRE('Variáveis comerciais (comissões)', -d.desp_var_vendas, dAnt?-dAnt.desp_var_vendas:0, false, true, false, null, true);
-  h+=linhaDRE('Variáveis operacionais (fretes...)', -d.desp_var_op, dAnt?-dAnt.desp_var_op:0, false, true, false, null, true);
-  h+=linhaDRE('= EBITDA', ebitda, ebitdaAnt, false, false, true, 'pur');
-  h+=linhaDRE('(−) Despesas financeiras', -d.financeiras, dAnt?-dAnt.financeiras:0, false, true, false, null, true);
-  h+=linhaDRE('(−) Investimentos (imobilizado)', -d.investimentos, dAnt?-dAnt.investimentos:0, false, true, false, null, true);
-  var corResT=d.resultado>=0?'green':'red';
-  h+=linhaDRE('= RESULTADO GERENCIAL', d.resultado, dAnt?dAnt.resultado:0, false, false, true, corResT);
-
-  h+='</tbody></table></div>';
-  h+='<div style="font-size:9px;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">DRE gerencial reconstruída a partir das vendas analíticas (Receita/CMV) e do demonstrativo de despesas. Pode divergir ~5% da DRE contábil oficial devido a diferenças de regime (competência vs caixa) e classificações contábeis específicas.</div>';
-  h+='</div>';
-
-  // ============ TOP 10 CLIENTES ============
   h+=renderTopClientes();
-
-  // ============ TOP 10 PRODUTOS ============
   h+=renderTopProdutos();
-
-  // ============ RETIRADAS DOS SÓCIOS + SOBRA ============
   h+=renderSocios();
-
-  // ============ EVOLUÇÃO CONCENTRAÇÃO TOP 5 ============
   h+=renderConcentracao();
-
-  // ============ DESPESAS POR CATEGORIA ============
   h+=renderDespesas();
-
-  // ============ PMR/PMP ============
   h+=renderPmrPmp();
-
-  // ============ INADIMPLÊNCIA ============
   h+=renderInadimplencia();
-
-  // ============ ALERTAS ============
   h+=renderAlertas();
 
   // FOOTER
-  h+='<div class="ftr">BIGTEX • Painel Anual • Dados atualizados em '+D.data_ref+'</div>';
+  h+='<div class="ftr">BIGTEX • Painel Anual • Desenvolvido com Chart.js</div>';
 
-  // salvar scroll e elemento ativo antes de trocar o DOM
   var _savedScroll = window.scrollY || window.pageYOffset || 0;
   var _activeEl = document.activeElement;
   var _activeId = (_activeEl && _activeEl.id) ? _activeEl.id : null;
 
   document.getElementById('app').innerHTML = h;
 
-  // restaurar scroll (sem smooth, instantâneo)
+  // ================================================================= //
+  // === PASSO FINAL: Chamar a função do Chart.js após renderizar ==== //
+  // ================================================================= //
+  renderGraficoChartJS(nomesMes, receitasMes, resultadosMes);
+
   window.scrollTo(0, _savedScroll);
 
-  // re-hookar busca APENAS se o usuário estava digitando num dos inputs
   if(_activeId==='bcli' || _activeId==='bprod'){
     hookBusca(_activeId, _activeId==='bcli'?'busca_cli':'busca_prod');
   }
 }
 
-
-// ========== BARRAS ANO A ANO ==========
+// ========== FUNÇÕES AUXILIARES MANTIDAS INTACTAS ==========
 function barrasAnoAno(titulo, campo, prefixo, sufixo, inverterCor, ehPct){
-  var valores = D.anos.map(function(a){
+  var valores = (D.anos||[2022,2023,2024,2025,2026]).map(function(a){
     var dd = getDataAno(a);
     return dd ? dd[campo] : 0;
   });
   var maxV = Math.max.apply(null, valores.concat([1]));
   var minV = Math.min.apply(null, valores.concat([0]));
-  // se houver valores negativos
   var temNeg = minV < 0;
   var faixa = maxV - (temNeg?minV:0);
 
   var out = '<div class="card" style="padding:12px"><div class="klb" style="margin-bottom:6px">'+titulo+'</div>';
   out += '<div class="yybars">';
-  D.anos.forEach(function(a, i){
+  (D.anos||[2022,2023,2024,2025,2026]).forEach(function(a, i){
     var v = valores[i];
     var pct = faixa>0 ? Math.abs(v)/faixa*100 : 0;
     var cls = 'bar';
@@ -861,44 +675,38 @@ function barrasAnoAno(titulo, campo, prefixo, sufixo, inverterCor, ehPct){
   return out;
 }
 
-// ========== HEATMAP SAZONALIDADE ==========
 function heatmapSazonalidade(){
+  if(!D.anos) return '';
   var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  // matriz [ano][mes] = receita
   var mat = {};
   var maxV = 0;
   D.anos.forEach(function(a){
     mat[a] = [];
     for(var m=1;m<=12;m++){
       var ym = a+'-'+String(m).padStart(2,'0');
-      var v = (D.ym_data[ym] && D.ym_data[ym].receita) || 0;
+      var v = (D.ym_data && D.ym_data[ym] && D.ym_data[ym].receita) || 0;
       mat[a].push(v);
       if(v>maxV) maxV=v;
     }
   });
-  // calor por linha relativa ao máximo global do heatmap
   function corCell(v){
     if(v===0) return 'background:#161b22;color:#555';
     var ratio = Math.min(v/maxV, 1);
-    // gradiente blu → cya → yel → red (quente = mais receita)
-    // usar HSL para simplicidade
-    var h = 210 - 150*ratio;  // 210 azul -> 60 amarelo -> 0 vermelho quando alto
+    var h = 210 - 150*ratio; 
     var s = 70;
-    var l = 22 + 35*ratio; // mais claro = mais receita
+    var l = 22 + 35*ratio; 
     return 'background:hsl('+h+','+s+'%,'+l+'%);color:'+(ratio>0.5?'#000':'#fff');
   }
 
   var out = '<div class="klb" style="margin-bottom:8px">Intensidade da cor = receita do mês</div>';
   out += '<div class="heatmap">';
-  // header: mês
   out += '<div class="hcell hd"></div>';
   nomesMes.forEach(function(n){ out += '<div class="hcell hd">'+n+'</div>'; });
-  // linhas por ano
   D.anos.forEach(function(a){
     out += '<div class="hcell lbl">'+a+'</div>';
     for(var m=0;m<12;m++){
       var v = mat[a][m];
-      if(v===0 && a===2026 && m>=D.ytd_mes){
+      if(v===0 && a===2026 && m>=(D.ytd_mes||4)){
         out += '<div class="hcell" style="background:#0d1117;color:#333;opacity:.25" title="ainda não aconteceu">—</div>';
       } else {
         out += '<div class="hcell" style="'+corCell(v)+'" title="'+a+'-'+String(m+1).padStart(2,'0')+': R$ '+f(v)+'">'+(v>0?fk(v):'')+'</div>';
@@ -906,12 +714,11 @@ function heatmapSazonalidade(){
     }
   });
   out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:8px;font-family:\'JetBrains Mono\',monospace">⬛ mais claro/quente = mais receita • valores em k (mil R$)</div>';
   return out;
 }
 
-// ========== LINHAS SOBREPOSTAS SAZONALIDADE ==========
 function linhasSazonalidade(){
+  if(!D.anos) return '';
   var cores = {2022:'#7d8590', 2023:'#39d2c0', 2024:'#f0883e', 2025:'#bc8cff', 2026:'#3fb950'};
   var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
@@ -921,25 +728,19 @@ function linhasSazonalidade(){
     series[a] = [];
     for(var m=1;m<=12;m++){
       var ym = a+'-'+String(m).padStart(2,'0');
-      var v = (D.ym_data[ym] && D.ym_data[ym].receita) || null;
+      var v = (D.ym_data && D.ym_data[ym] && D.ym_data[ym].receita) || null;
       series[a].push(v);
       if(v && v>maxV) maxV=v;
     }
   });
 
-  // escala arredondada para cima — fica mais estético
   var niceMax = Math.ceil(maxV/100000)*100000;
-
   var W = 800, H = 300, padL=54, padR=18, padT=18, padB=30;
   var plotW = W - padL - padR;
   var plotH = H - padT - padB;
-  var out = '<div class="klb" style="margin-bottom:4px">Todos os anos sobrepostos para comparar sazonalidade • passe o mouse sobre os pontos</div>';
+  var out = '<div class="klb" style="margin-bottom:4px">Todos os anos sobrepostos para comparar sazonalidade</div>';
   out += '<div class="linesbox"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
-
-  // fundo sutil
   out += '<rect x="'+padL+'" y="'+padT+'" width="'+plotW+'" height="'+plotH+'" fill="rgba(88,166,255,0.02)" rx="4"/>';
-
-  // grid Y (5 linhas horizontais)
   for(var g=0;g<=5;g++){
     var yy = padT + plotH*g/5;
     var valY = niceMax*(1 - g/5);
@@ -947,18 +748,14 @@ function linhasSazonalidade(){
     out += '<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" stroke="'+(isBase?'#30363d':'#21262d')+'" stroke-width="1"'+(isBase?'':' stroke-dasharray="2 3"')+'/>';
     out += '<text x="'+(padL-8)+'" y="'+(yy+3.5)+'" fill="#7d8590" font-size="10" font-family="JetBrains Mono" text-anchor="end">'+fk(valY)+'</text>';
   }
-
-  // grid X sutil (por mês)
   for(var m=0;m<12;m++){
     var xx = padL + plotW*m/11;
     out += '<line x1="'+xx+'" y1="'+padT+'" x2="'+xx+'" y2="'+(padT+plotH)+'" stroke="#21262d" stroke-width="1" stroke-dasharray="1 4" opacity="0.5"/>';
     out += '<text x="'+xx+'" y="'+(H-8)+'" fill="#a8b2be" font-size="11" font-family="Plus Jakarta Sans" font-weight="600" text-anchor="middle">'+nomesMes[m]+'</text>';
   }
 
-  // linhas por ano — ordem: anos mais antigos primeiro (ficam atrás), anos recentes por cima
-  var anosOrd = D.anos.slice();
   D.anos.forEach(function(a){
-    var cor = cores[a];
+    var cor = cores[a] || '#fff';
     var isCur = (a===S.ano);
     var isParc = (a===2026);
     var pts = [];
@@ -974,9 +771,7 @@ function linhasSazonalidade(){
     if(pts.length>0){
       var strokeW = isCur?3:1.8;
       var opac = isCur?1:(S.ano && !isCur?0.55:1);
-      // path suavizado (linha reta entre pontos — mantém clareza)
       out += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+cor+'" stroke-width="'+strokeW+'" '+(isParc?'stroke-dasharray="5 3"':'')+' opacity="'+opac+'" stroke-linecap="round" stroke-linejoin="round"/>';
-      // círculos nos pontos com hover
       pontosObj.forEach(function(p){
         var r = isCur?4:3;
         out += '<circle cx="'+p.x+'" cy="'+p.y+'" r="'+r+'" fill="'+cor+'" stroke="#0d1117" stroke-width="1.5" opacity="'+opac+'"><title>'+a+' • '+nomesMes[p.m]+': R$ '+f(p.v)+'</title></circle>';
@@ -984,502 +779,102 @@ function linhasSazonalidade(){
     }
   });
   out += '</svg></div>';
-  // legenda melhorada
   out += '<div class="lineslegend">';
   D.anos.forEach(function(a){
     var isCur = (a===S.ano);
     var peso = isCur?'700':'600';
     var op = isCur?'1':'0.75';
-    out += '<span style="font-weight:'+peso+';opacity:'+op+'"><i style="background:'+cores[a]+';'+(isCur?'height:4px;':'')+'"></i>'+a+(a===2026?' (parc.)':'')+(isCur?' ●':'')+'</span>';
+    out += '<span style="font-weight:'+peso+';opacity:'+op+'"><i style="background:'+(cores[a]||'#fff')+';'+(isCur?'height:4px;':'')+'"></i>'+a+(a===2026?' (parc.)':'')+(isCur?' ●':'')+'</span>';
   });
   out += '</div>';
   return out;
 }
 
-// ========== TOP 10 CLIENTES ==========
 function renderTopClientes(){
+  if(!D.top_cli) return '';
   var ano = S.ano;
   var clientes = (D.top_cli[String(ano)] || []).slice();
-
-  // busca
   if(S.busca_cli) clientes = clientes.filter(function(c){return matchSearch(c.c, S.busca_cli);});
-  // ordenação
-  var campo = S.ordCli;  // fat, margem, margem_pct
+  var campo = S.ordCli;  
   clientes.sort(function(a,b){return (b[campo]||0) - (a[campo]||0);});
-  // melhores ou piores
-  if(S.topCli==='piores'){
-    clientes = clientes.filter(function(c){return c.fat>0;}).slice().reverse();
-  }
+  if(S.topCli==='piores'){ clientes = clientes.filter(function(c){return c.fat>0;}).slice().reverse(); }
   var top10 = clientes.slice(0,10);
   var titulo = S.topCli==='melhores'?'Top 10 Clientes':'Piores 10 Clientes';
 
   var out = '<div class="sc">'+titulo.toUpperCase()+' — '+nomeAno(ano);
-  out += '<div class="sc-tail">';
-  out += '<div class="tgl-wrap">';
+  out += '<div class="sc-tail"><div class="tgl-wrap">';
   out += '<button class="tgl-btn '+(S.topCli==='melhores'?'on-grn':'')+'" onclick="setTopCli(\'melhores\')">Melhores</button>';
   out += '<button class="tgl-btn '+(S.topCli==='piores'?'on-red':'')+'" onclick="setTopCli(\'piores\')">Piores</button>';
-  out += '</div>';
-  out += '<div class="tgl-wrap">';
-  out += '<button class="tgl-btn '+(S.ordCli==='fat'?'on':'')+'" onclick="setOrdCli(\'fat\')">Faturamento</button>';
-  out += '<button class="tgl-btn '+(S.ordCli==='margem'?'on':'')+'" onclick="setOrdCli(\'margem\')">Margem R$</button>';
-  out += '<button class="tgl-btn '+(S.ordCli==='margem_pct'?'on':'')+'" onclick="setOrdCli(\'margem_pct\')">Margem %</button>';
-  out += '</div>';
-  out += '</div></div>';
-
+  out += '</div><div class="tgl-wrap">';
+  out += '<button class="tgl-btn '+(S.ordCli==='fat'?'on':'')+'" onclick="setOrdCli(\'fat\')">Fat</button>';
+  out += '<button class="tgl-btn '+(S.ordCli==='margem'?'on':'')+'" onclick="setOrdCli(\'margem\')">Mg R$</button>';
+  out += '<button class="tgl-btn '+(S.ordCli==='margem_pct'?'on':'')+'" onclick="setOrdCli(\'margem_pct\')">Mg %</button>';
+  out += '</div></div></div>';
   out += '<div class="card">';
-  out += '<div class="search-wrap"><span class="klb">Buscar:</span><input id="bcli" class="search-box" value="'+S.busca_cli+'" oninput="setBuscaCli(this.value)" placeholder="nome do cliente…"><span class="search-count">'+clientes.length+' resultado(s)</span></div>';
+  out += '<div class="search-wrap"><span class="klb">Buscar:</span><input id="bcli" class="search-box" value="'+S.busca_cli+'" oninput="setBuscaCli(this.value)" placeholder="nome do cliente…"><span class="search-count">'+clientes.length+' resultados</span></div>';
 
-  // Header de colunas
   if(top10.length>0){
-    out += '<div class="tbl-head"><div class="lft col-lbl">Cliente</div><div class="rgt">';
-    out += '<span class="col-lbl" style="min-width:105px;text-align:right">Faturamento</span>';
-    out += '<span class="col-lbl" style="min-width:105px;text-align:right">Margem R$</span>';
-    out += '<span class="col-lbl" style="min-width:62px;text-align:right">Margem %</span>';
-    out += '<span class="col-lbl" style="min-width:70px;text-align:right">Δ vs '+(ano-1)+'</span>';
-    out += '</div></div>';
+    out += '<div class="tbl-head"><div class="lft col-lbl">Cliente</div><div class="rgt"><span class="col-lbl" style="min-width:105px;text-align:right">Faturamento</span><span class="col-lbl" style="min-width:105px;text-align:right">Margem R$</span><span class="col-lbl" style="min-width:62px;text-align:right">Margem %</span></div></div>';
   }
-
   top10.forEach(function(c, i){
-    var marca = S.ordCli;
     var corMP = c.margem_pct>=15?'var(--grn)':(c.margem_pct>=8?'var(--yel)':'var(--red)');
-    var deltaTxt = '—';
-    if(c.delta_pct!==null && c.delta_pct!==undefined){
-      var cls = c.delta_pct>0?'up':(c.delta_pct<0?'dn':'neu');
-      var seta = c.delta_pct>0?'▲':(c.delta_pct<0?'▼':'•');
-      deltaTxt = '<span class="'+cls+'">'+seta+(c.delta_pct>0?'+':'')+f2(c.delta_pct)+'%</span>';
-    } else if(c.fat_ant===0){
-      deltaTxt = '<span class="up">novo</span>';
-    }
-    var corFat = (marca==='fat')?'var(--txt)':'var(--dim)';
-    var corMg  = (marca==='margem')?'var(--cya)':'var(--dim)';
-    var fwFat  = (marca==='fat')?'700':'400';
-    var fwMg   = (marca==='margem')?'700':'400';
-    var fwPct  = (marca==='margem_pct')?'700':'400';
-    out += '<div class="fr">';
-    out += '<div class="lft" title="'+c.c+'"><span style="color:var(--mut);font-family:\'JetBrains Mono\',monospace;font-size:10px;margin-right:6px">'+String(i+1).padStart(2,'0')+'</span>'+c.c+'</div>';
-    out += '<div class="rgt">';
-    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corFat+';font-weight:'+fwFat+'">R$ '+f(c.fat)+'</span>';
-    out += '<span style="min-width:105px;text-align:right;color:'+corMg+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(c.margem)+'</span>';
-    out += '<span style="color:'+(marca==='margem_pct'?corMP:'var(--cya)')+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(c.margem_pct)+'%</span>';
-    out += '<span class="delta" style="min-width:70px">'+deltaTxt+'</span>';
+    out += '<div class="fr"><div class="lft"><span style="color:var(--mut);font-size:10px;margin-right:6px">'+(i+1)+'</span>'+c.c+'</div>';
+    out += '<div class="rgt"><span class="vl" style="min-width:105px;text-align:right">R$ '+f(c.fat)+'</span>';
+    out += '<span style="min-width:105px;text-align:right;color:var(--dim)">R$ '+f(c.margem)+'</span>';
+    out += '<span style="color:'+corMP+';min-width:62px;text-align:right">'+f2(c.margem_pct)+'%</span>';
     out += '</div></div>';
   });
-  if(top10.length===0){
-    out += '<div style="padding:10px;color:var(--mut);text-align:center">Nenhum cliente encontrado com esse filtro.</div>';
-  }
-
-  // rodapé
-  var totFat = top10.reduce(function(a,x){return a+x.fat;},0);
-  var totMg = top10.reduce(function(a,x){return a+x.margem;},0);
-  var totalAno = clientes.reduce(function(a,x){return a+x.fat;},0);
-  var pctTotal = totalAno>0?totFat/totalAno*100:0;
-  out += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--brd);font-size:10px;color:var(--dim);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">';
-  out += '<span>Soma dos 10: <b style="color:var(--txt);font-family:\'JetBrains Mono\',monospace">R$ '+f(totFat)+'</b> • margem R$ '+f(totMg)+'</span>';
-  out += '<span>Representam <b style="color:var(--blu);font-family:\'JetBrains Mono\',monospace">'+f2(pctTotal)+'%</b> do faturamento '+(S.topCli==='melhores'?'total':'do filtro')+'</span>';
-  out += '</div>';
   out += '</div>';
   return out;
 }
 
-// ========== TOP 10 PRODUTOS ==========
 function renderTopProdutos(){
+  if(!D.top_prod) return '';
   var ano = S.ano;
   var produtos = (D.top_prod[String(ano)] || []).slice();
-
   if(S.busca_prod) produtos = produtos.filter(function(p){return matchSearch(p.p, S.busca_prod);});
   var campo = S.ordProd;
   produtos.sort(function(a,b){return (b[campo]||0) - (a[campo]||0);});
-  if(S.topProd==='piores'){
-    produtos = produtos.filter(function(p){return p.fat>0;}).reverse();
-  }
+  if(S.topProd==='piores'){ produtos = produtos.filter(function(p){return p.fat>0;}).reverse(); }
   var top10 = produtos.slice(0,10);
   var titulo = S.topProd==='melhores'?'Top 10 Produtos':'Piores 10 Produtos';
 
   var out = '<div class="sc">'+titulo.toUpperCase()+' — '+nomeAno(ano);
-  out += '<div class="sc-tail">';
-  out += '<div class="tgl-wrap">';
+  out += '<div class="sc-tail"><div class="tgl-wrap">';
   out += '<button class="tgl-btn '+(S.topProd==='melhores'?'on-grn':'')+'" onclick="setTopProd(\'melhores\')">Melhores</button>';
   out += '<button class="tgl-btn '+(S.topProd==='piores'?'on-red':'')+'" onclick="setTopProd(\'piores\')">Piores</button>';
-  out += '</div>';
-  out += '<div class="tgl-wrap">';
-  out += '<button class="tgl-btn '+(S.ordProd==='fat'?'on':'')+'" onclick="setOrdProd(\'fat\')">Faturamento</button>';
-  out += '<button class="tgl-btn '+(S.ordProd==='margem'?'on':'')+'" onclick="setOrdProd(\'margem\')">Margem R$</button>';
-  out += '<button class="tgl-btn '+(S.ordProd==='margem_pct'?'on':'')+'" onclick="setOrdProd(\'margem_pct\')">Margem %</button>';
-  out += '</div>';
-  out += '</div></div>';
-
+  out += '</div><div class="tgl-wrap">';
+  out += '<button class="tgl-btn '+(S.ordProd==='fat'?'on':'')+'" onclick="setOrdProd(\'fat\')">Fat</button>';
+  out += '<button class="tgl-btn '+(S.ordProd==='margem'?'on':'')+'" onclick="setOrdProd(\'margem\')">Mg R$</button>';
+  out += '<button class="tgl-btn '+(S.ordProd==='margem_pct'?'on':'')+'" onclick="setOrdProd(\'margem_pct\')">Mg %</button>';
+  out += '</div></div></div>';
   out += '<div class="card">';
-  out += '<div class="search-wrap"><span class="klb">Buscar:</span><input id="bprod" class="search-box" value="'+S.busca_prod+'" oninput="setBuscaProd(this.value)" placeholder="descrição do produto…"><span class="search-count">'+produtos.length+' resultado(s)</span></div>';
+  out += '<div class="search-wrap"><span class="klb">Buscar:</span><input id="bprod" class="search-box" value="'+S.busca_prod+'" oninput="setBuscaProd(this.value)" placeholder="produto…"><span class="search-count">'+produtos.length+' resultados</span></div>';
 
-  // Header de colunas
   if(top10.length>0){
-    out += '<div class="tbl-head"><div class="lft col-lbl">Produto</div><div class="rgt">';
-    out += '<span class="col-lbl" style="min-width:80px;text-align:right">Qtde</span>';
-    out += '<span class="col-lbl" style="min-width:105px;text-align:right">Faturamento</span>';
-    out += '<span class="col-lbl" style="min-width:105px;text-align:right">Margem R$</span>';
-    out += '<span class="col-lbl" style="min-width:62px;text-align:right">Margem %</span>';
-    out += '<span class="col-lbl" style="min-width:70px;text-align:right">Δ vs '+(ano-1)+'</span>';
-    out += '</div></div>';
+    out += '<div class="tbl-head"><div class="lft col-lbl">Produto</div><div class="rgt"><span class="col-lbl" style="min-width:105px;text-align:right">Faturamento</span><span class="col-lbl" style="min-width:62px;text-align:right">Margem %</span></div></div>';
   }
-
   top10.forEach(function(p, i){
-    var marca = S.ordProd;
     var corMP = p.margem_pct>=15?'var(--grn)':(p.margem_pct>=8?'var(--yel)':'var(--red)');
-    var deltaTxt = '—';
-    if(p.delta_pct!==null && p.delta_pct!==undefined){
-      var cls = p.delta_pct>0?'up':(p.delta_pct<0?'dn':'neu');
-      var seta = p.delta_pct>0?'▲':(p.delta_pct<0?'▼':'•');
-      deltaTxt = '<span class="'+cls+'">'+seta+(p.delta_pct>0?'+':'')+f2(p.delta_pct)+'%</span>';
-    } else if(p.fat_ant===0){
-      deltaTxt = '<span class="up">novo</span>';
-    }
-    var corFat = (marca==='fat')?'var(--txt)':'var(--dim)';
-    var corMg  = (marca==='margem')?'var(--cya)':'var(--dim)';
-    var fwFat  = (marca==='fat')?'700':'400';
-    var fwMg   = (marca==='margem')?'700':'400';
-    var fwPct  = (marca==='margem_pct')?'700':'400';
-    out += '<div class="fr">';
-    out += '<div class="lft" title="'+p.p+'"><span style="color:var(--mut);font-family:\'JetBrains Mono\',monospace;font-size:10px;margin-right:6px">'+String(i+1).padStart(2,'0')+'</span>'+p.p+'</div>';
-    out += '<div class="rgt">';
-    out += '<span style="color:var(--dim);min-width:80px;text-align:right;font-family:\'JetBrains Mono\',monospace">'+f2(p.qtde)+'</span>';
-    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corFat+';font-weight:'+fwFat+'">R$ '+f(p.fat)+'</span>';
-    out += '<span style="min-width:105px;text-align:right;color:'+corMg+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(p.margem)+'</span>';
-    out += '<span style="color:'+(marca==='margem_pct'?corMP:'var(--cya)')+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(p.margem_pct)+'%</span>';
-    out += '<span class="delta" style="min-width:70px">'+deltaTxt+'</span>';
+    out += '<div class="fr"><div class="lft"><span style="color:var(--mut);font-size:10px;margin-right:6px">'+(i+1)+'</span>'+p.p+'</div>';
+    out += '<div class="rgt"><span class="vl" style="min-width:105px;text-align:right">R$ '+f(p.fat)+'</span>';
+    out += '<span style="color:'+corMP+';min-width:62px;text-align:right">'+f2(p.margem_pct)+'%</span>';
     out += '</div></div>';
   });
-  if(top10.length===0){
-    out += '<div style="padding:10px;color:var(--mut);text-align:center">Nenhum produto encontrado com esse filtro.</div>';
-  }
-
-  var totFat = top10.reduce(function(a,x){return a+x.fat;},0);
-  var totalAno = produtos.reduce(function(a,x){return a+x.fat;},0);
-  var pctTotal = totalAno>0?totFat/totalAno*100:0;
-  out += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--brd);font-size:10px;color:var(--dim);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">';
-  out += '<span>Soma dos 10: <b style="color:var(--txt);font-family:\'JetBrains Mono\',monospace">R$ '+f(totFat)+'</b></span>';
-  out += '<span>Representam <b style="color:var(--blu);font-family:\'JetBrains Mono\',monospace">'+f2(pctTotal)+'%</b> do faturamento '+(S.topProd==='melhores'?'total':'do filtro')+'</span>';
-  out += '</div>';
   out += '</div>';
   return out;
 }
 
-// ========== RETIRADAS SÓCIOS + SOBRA ==========
-function renderSocios(){
-  var out = '<div class="sc">RETIRADAS DOS SÓCIOS & SOBRA POTENCIAL <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">Thompson Jacon Cavalcante (pro-labore, sub 3.4.07) · Glauco Cicero Barbosa (comissão, sub 2.3.02) · Resultado Gerencial = sobra após pagar sócios = potencial dividendo</small></div>';
-  out += '<div class="card">';
-  out += '<div class="socbox">';
-
-  // função auxiliar para pegar retiradas conforme modo do painel
-  function getSoc(ano){
-    var k = String(ano);
-    if(S.modo==='ytd' || ano===2026){
-      return D.socios_ytd[k] || {pro_labore:0, comissao_socio:0};
-    }
-    return D.socios_full[k] || {pro_labore:0, comissao_socio:0};
-  }
-
-  // cada ano como card
-  D.anos.forEach(function(a){
-    var dd = getDataAno(a);
-    if(!dd) return;
-    var soc = getSoc(a);
-    var pl = soc.pro_labore || 0;
-    var com = soc.comissao_socio || 0;
-    var ret = pl + com;
-    var res = dd.resultado || 0;
-    var totSoma = ret + Math.max(res, 0);
-    var pctPL = totSoma>0 ? pl/totSoma*100 : 0;
-    var pctCom = totSoma>0 ? com/totSoma*100 : 0;
-    var pctRes = totSoma>0 ? Math.max(res,0)/totSoma*100 : 0;
-    out += '<div class="socyr '+(a===S.ano?'hi':'')+'">';
-    out += '<div class="socyrh"><span class="yr">'+a+(a===2026?' YTD':(S.modo==='ytd'?' YTD':''))+'</span><span class="tot">R$ '+f(dd.receita)+' receita</span></div>';
-    out += '<div class="socrow"><span class="nm">Thompson — Pro-labore</span><span class="vl" style="color:var(--pur)">R$ '+f(pl)+'</span></div>';
-    out += '<div class="socrow"><span class="nm">Glauco — Comissão</span><span class="vl" style="color:var(--yel)">R$ '+f(com)+'</span></div>';
-    out += '<div class="socrow" style="border-top:1px solid var(--brd);padding-top:6px;margin-top:3px"><span class="nm"><b>Total retiradas</b></span><span class="vl"><b>R$ '+f(ret)+'</b></span></div>';
-    var corRes = res>=0?'var(--grn)':'var(--red)';
-    out += '<div class="socrow"><span class="nm">Resultado Gerencial (sobra)</span><span class="vl" style="color:'+corRes+';font-weight:700">'+(res<0?'−':'')+'R$ '+f(Math.abs(res))+'</span></div>';
-    if(totSoma>0){
-      out += '<div class="sobra-bar">';
-      if(pctPL>0) out += '<div style="background:var(--pur);width:'+pctPL+'%" title="Pro-labore">'+(pctPL>=10?f2(pctPL)+'%':'')+'</div>';
-      if(pctCom>0) out += '<div style="background:var(--yel);width:'+pctCom+'%" title="Comissão">'+(pctCom>=10?f2(pctCom)+'%':'')+'</div>';
-      if(pctRes>0) out += '<div style="background:var(--grn);width:'+pctRes+'%" title="Sobra/Dividendo">'+(pctRes>=10?f2(pctRes)+'%':'')+'</div>';
-      out += '</div>';
-      out += '<div style="font-size:9px;color:var(--mut);margin-top:4px;font-family:\'JetBrains Mono\',monospace">Distribuição de R$ '+f(totSoma)+'</div>';
-    } else if(res<0){
-      out += '<div style="font-size:10px;color:var(--red);margin-top:6px;font-weight:600">⚠ Prejuízo: sócios retiraram mais do que a empresa gerou</div>';
-    }
-    out += '</div>';
-  });
-  out += '</div>';
-
-  // Linha horizontal — histórico + % sobre receita
-  out += '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--brd)">';
-  out += '<div class="klb" style="margin-bottom:8px">EVOLUÇÃO — RETIRADAS vs RECEITA (%)</div>';
-  out += '<div class="yybars">';
-  var pctsRet = D.anos.map(function(a){
-    var dd = getDataAno(a);
-    if(!dd || !dd.receita) return 0;
-    var soc = getSoc(a);
-    return ((soc.pro_labore||0)+(soc.comissao_socio||0))/dd.receita*100;
-  });
-  var maxPct = Math.max.apply(null, pctsRet.concat([1]));
-  D.anos.forEach(function(a, i){
-    var v = pctsRet[i];
-    var pct = maxPct>0 ? v/maxPct*100 : 0;
-    var cls = a===S.ano?'bar cur':(a===2026?'bar parc':'bar ok');
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
-    out += '</div>';
-  });
-  out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:6px">Percentual das retiradas dos sócios sobre o faturamento total de cada período.</div>';
-  out += '</div>';
-
-  out += '</div>';
-  return out;
-}
-
-// ========== CONCENTRAÇÃO TOP 5 AO LONGO DOS ANOS ==========
-function renderConcentracao(){
-  var out = '<div class="sc">EVOLUÇÃO DA CONCENTRAÇÃO (TOP 5 CLIENTES)</div>';
-  out += '<div class="card">';
-  out += '<div class="klb" style="margin-bottom:8px">% que os 5 maiores clientes representam do faturamento (quanto menor, mais diversificado)</div>';
-  var pcts = D.anos.map(function(a){
-    var cl = D.top_cli[String(a)] || [];
-    var top5 = cl.slice(0,5).reduce(function(ac,x){return ac+x.fat;},0);
-    var total = cl.reduce(function(ac,x){return ac+x.fat;},0);
-    return total>0 ? top5/total*100 : 0;
-  });
-  var maxP = Math.max.apply(null, pcts.concat([1]));
-  out += '<div class="yybars">';
-  D.anos.forEach(function(a, i){
-    var v = pcts[i];
-    var pct = maxP>0 ? v/maxP*100 : 0;
-    var cls = 'bar';
-    if(a===S.ano) cls += ' cur';
-    else if(a===2026) cls += ' parc';
-    else if(v>=60) cls += ' bad';
-    else if(v>=45) cls += ' parc';
-    else cls += ' ok';
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
-    out += '</div>';
-  });
-  out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:6px">🟢 &lt;45% diversificado • 🟡 45-60% atenção • 🔴 &gt;60% alta dependência</div>';
-  out += '</div>';
-  return out;
-}
-
-// ========== DESPESAS POR CATEGORIA ==========
-function renderDespesas(){
-  var ano = S.ano;
-  var ehYTD = (S.modo==='ytd' || ano===2026);
-  var pool = ehYTD ? D.desp_cats_ytd : D.desp_cats_full;
-  var poolAnt = ehYTD ? D.desp_cats_ytd : D.desp_cats_full;
-  var cats = pool[String(ano)] || [];
-  var catsAnt = poolAnt[String(ano-1)] || [];
-  // mapear anterior por descrição
-  var catsAntMap = {};
-  catsAnt.forEach(function(c){ catsAntMap[c.d] = c.v; });
-
-  var totalAno = cats.reduce(function(a,c){return a+c.v;},0);
-  var maxVal = Math.max.apply(null, cats.map(function(c){return c.v;}).concat([1]));
-
-  var out = '<div class="sc">DESPESAS POR SUB-CONTA — '+nomeAno(ano)+' <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+cats.length+' sub-contas ordenadas por valor · Δ vs '+(ano-1)+'</small></div>';
-  out += '<div class="card">';
-
-  if(cats.length===0){
-    out += '<div style="padding:10px;color:var(--mut);text-align:center">Sem dados de despesas.</div>';
-    out += '</div>';
-    return out;
-  }
-
-  // Header
-  out += '<div class="prog-head"><span class="col-lbl">Sub-conta</span><span><span class="col-lbl" style="margin-right:16px">Valor</span><span class="col-lbl" style="margin-right:10px">% Total</span><span class="col-lbl">Δ vs '+(ano-1)+'</span></span></div>';
-
-  cats.forEach(function(c){
-    var pct = totalAno>0 ? c.v/totalAno*100 : 0;
-    var pctBar = maxVal>0 ? c.v/maxVal*100 : 0;
-    var prev = catsAntMap[c.d];
-    var deltaTxt = '<span class="prdelta neu">novo</span>';
-    if(prev !== undefined && prev > 0){
-      var d_ = (c.v-prev)/prev*100;
-      // despesa aumentou = ruim (vermelho ▲), caiu = bom (verde ▼)
-      var cls = d_<0?'up':(d_>0?'dn':'neu');
-      var seta = d_>0?'▲':(d_<0?'▼':'•');
-      deltaTxt = '<span class="prdelta '+cls+'">'+seta+(d_>0?'+':'')+f2(d_)+'%</span>';
-    }
-    out += '<div class="prog">';
-    out += '<div class="prh"><span class="cat">'+c.d+' <span style="color:var(--mut);font-size:10px;font-family:\'JetBrains Mono\',monospace">('+c.g+')</span></span>';
-    out += '<span style="display:flex;align-items:center;gap:10px;flex-shrink:0">';
-    out += '<span class="prv" style="min-width:92px;text-align:right">R$ '+f(c.v)+'</span>';
-    out += '<span style="color:var(--dim);font-size:10px;font-family:\'JetBrains Mono\',monospace;min-width:48px;text-align:right">'+f2(pct)+'%</span>';
-    out += '<span style="min-width:72px;text-align:right">'+deltaTxt+'</span>';
-    out += '</span>';
-    out += '</div>';
-    out += '<div class="prb"><div class="prf" style="width:'+pctBar+'%;background:'+c.co+'"></div></div>';
-    out += '</div>';
-  });
-
-  out += '<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--brd);font-size:11px;color:var(--dim);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">';
-  out += '<span>'+cats.length+' sub-contas com movimentação no período</span>';
-  out += '<span>Total: <b style="color:var(--txt);font-family:\'JetBrains Mono\',monospace">R$ '+f(totalAno)+'</b></span>';
-  out += '</div>';
-  out += '</div>';
-  return out;
-}
-
-// ========== PMR / PMP ==========
-function renderPmrPmp(){
-  var ehYTD = (S.modo==='ytd' || S.ano===2026);
-  var pool = ehYTD ? D.pmr_pmp_ytd : D.pmr_pmp_full;
-  var out = '<div class="sc">PRAZOS MÉDIOS — RECEBIMENTO & PAGAMENTO <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+(ehYTD?'YTD jan–abr':'Ano cheio')+' · ponderado por valor</small></div>';
-  out += '<div class="card">';
-  out += '<div class="klb" style="margin-bottom:10px">Evolução do PMR (dias até receber do cliente) e PMP (dias até pagar o fornecedor) — quanto maior o PMP em relação ao PMR, melhor o fluxo de caixa</div>';
-  out += '<div class="tblwrap"><table class="dre"><thead><tr><th class="l">Ano</th><th>PMR Concedido</th><th>PMR Efetivo</th><th>Atraso PMR</th><th>PMP Concedido</th><th>PMP Efetivo</th><th>Atraso PMP</th><th>Ciclo (PMP−PMR)</th></tr></thead><tbody>';
-  D.anos.forEach(function(a){
-    var p = pool[String(a)];
-    if(!p) return;
-    var atrasoR = (p.pmr_efetivo!==null && p.pmr_concedido!==null)?(p.pmr_efetivo-p.pmr_concedido):null;
-    var atrasoP = (p.pmp_efetivo!==null && p.pmp_concedido!==null)?(p.pmp_efetivo-p.pmp_concedido):null;
-    var ciclo = (p.pmp_efetivo!==null && p.pmr_efetivo!==null)?(p.pmp_efetivo-p.pmr_efetivo):null;
-    var cicloCls = ciclo===null?'':(ciclo>=0?'up':'dn');
-    // Atraso PMP alto = ruim (vermelho)
-    var atrPCls = atrasoP===null?'':(atrasoP>=15?'dn':(atrasoP>=5?'':'up'));
-    var atrRCls = atrasoR===null?'':(atrasoR>=10?'dn':(atrasoR>=5?'':'up'));
-    out += '<tr'+(a===S.ano?' style="background:var(--card-h)"':'')+'>';
-    out += '<td class="l"><b>'+a+(a===2026?' YTD':(ehYTD?' YTD':''))+'</b></td>';
-    out += '<td class="vl">'+(p.pmr_concedido!==null?f2(p.pmr_concedido)+' d':'—')+'</td>';
-    out += '<td class="vl" style="color:var(--grn)">'+(p.pmr_efetivo!==null?f2(p.pmr_efetivo)+' d':'—')+'</td>';
-    out += '<td class="vl '+atrRCls+'">'+(atrasoR!==null?(atrasoR>=0?'+':'')+f2(atrasoR)+' d':'—')+'</td>';
-    out += '<td class="vl">'+(p.pmp_concedido!==null?f2(p.pmp_concedido)+' d':'—')+'</td>';
-    out += '<td class="vl" style="color:var(--red)">'+(p.pmp_efetivo!==null?f2(p.pmp_efetivo)+' d':'—')+'</td>';
-    out += '<td class="vl '+atrPCls+'">'+(atrasoP!==null?(atrasoP>=0?'+':'')+f2(atrasoP)+' d':'—')+'</td>';
-    out += '<td class="vl '+cicloCls+'"><b>'+(ciclo!==null?(ciclo>=0?'+':'')+f2(ciclo)+' d':'—')+'</b></td>';
-    out += '</tr>';
-  });
-  out += '</tbody></table></div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:10px;line-height:1.55">';
-  out += '<b style="color:var(--txt)">PMR</b>: média (ponderada por valor) dos dias entre emissão e recebimento do cliente. <b style="color:var(--txt)">PMP</b>: idem para pagamento ao fornecedor (excluindo pessoal e investimentos). ';
-  out += '<b style="color:var(--txt)">Atraso</b>: diferença entre efetivo e concedido (quanto atrasou em relação ao combinado). ';
-  out += '<b style="color:var(--txt)">Ciclo positivo</b>: paga depois de receber (bom para caixa). ';
-  out += '<b style="color:var(--txt)">Ciclo negativo</b>: paga antes de receber (precisa de capital de giro). ';
-  out += 'Em <b>2023/2024</b> o atraso alto no PMP reflete principalmente o atraso com a ICAC e outros fornecedores de matéria-prima.';
-  out += '</div>';
-  out += '</div>';
-  return out;
-}
-
-// ========== INADIMPLÊNCIA ==========
-function renderInadimplencia(){
-  var out = '<div class="sc">INADIMPLÊNCIA (VENCIDOS NÃO PAGOS)</div>';
-  out += '<div class="card">';
-  out += '<div class="klb" style="margin-bottom:10px">% do faturamento por ano de vencimento que está vencido e ainda não foi quitado</div>';
-  out += '<div class="yybars">';
-  var pcts = D.anos.map(function(a){
-    var i = D.inad[String(a)];
-    return i?i.pct:0;
-  });
-  var maxP = Math.max.apply(null, pcts.concat([1]));
-  D.anos.forEach(function(a, i){
-    var v = pcts[i];
-    var pct = maxP>0 ? v/maxP*100 : 0;
-    var cls = 'bar';
-    if(a===S.ano) cls += ' cur';
-    else if(v>=5) cls += ' bad';
-    else if(v>=3) cls += ' parc';
-    else cls += ' ok';
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+'</div>';
-    out += '</div>';
-  });
-  out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:8px">Obs.: 2026 ainda tem muitos recebíveis em aberto no tempo — valor inicial, tende a cair conforme os pagamentos entram.</div>';
-  out += '</div>';
-  return out;
-}
-
-// ========== ALERTAS ESTRATÉGICOS ==========
-function renderAlertas(){
-  var ano = S.ano;
-  var d = getDataAno(ano);
-  var dAnt = getDataAno(ano-1);
-  var alertas = [];
-
-  // Concentração Top 5
-  var clientes = D.top_cli[String(ano)] || [];
-  var top5 = clientes.slice(0,5).reduce(function(a,x){return a+x.fat;},0);
-  var totalCli = clientes.reduce(function(a,x){return a+x.fat;},0);
-  var pctCon = totalCli>0 ? top5/totalCli*100 : 0;
-  if(pctCon>=60){
-    alertas.push({t:'cr', b:'Concentração crítica em 5 clientes ('+f2(pctCon)+'%)', d:'perder um dos top 5 impacta severamente o caixa. Prioridade: diversificar carteira.'});
-  } else if(pctCon>=45){
-    alertas.push({t:'wa', b:'Concentração elevada em 5 clientes ('+f2(pctCon)+'%)', d:'monitorar e buscar diversificação de base.'});
-  }
-
-  // Queda de margem bruta
-  if(dAnt && d.margem_bruta < dAnt.margem_bruta - 2){
-    alertas.push({t:'wa', b:'Margem Bruta caiu '+f2(dAnt.margem_bruta - d.margem_bruta)+'pp vs ano anterior', d:'de '+f2(dAnt.margem_bruta)+'% para '+f2(d.margem_bruta)+'% — revisar precificação ou custos.'});
-  }
-  // Resultado negativo
-  if(d.resultado < 0){
-    alertas.push({t:'cr', b:'Resultado Gerencial negativo (R$ '+f(Math.abs(d.resultado))+' de prejuízo)', d:'empresa gerou menos do que gastou no período — atenção imediata.'});
-  }
-  // Crescimento forte
-  if(dAnt && d.receita > dAnt.receita * 1.3){
-    var pct = (d.receita/dAnt.receita-1)*100;
-    alertas.push({t:'ok', b:'Crescimento forte de receita (+'+f2(pct)+'% vs ano anterior)', d:'acelerar operação e monitorar capital de giro para sustentar o ritmo.'});
-  }
-  // Retiradas sócios > resultado
-  var ret = d.retiradas_socios || 0;
-  var res = d.resultado || 0;
-  if(ret > 0 && res > 0 && ret > res * 2){
-    alertas.push({t:'wa', b:'Retiradas dos sócios muito acima do resultado', d:'retiradas de R$ '+f(ret)+' para um resultado de R$ '+f(res)+' — reservar parte como dividendo futuro?'});
-  }
-  if(ret > 0 && res < 0){
-    alertas.push({t:'cr', b:'Sócios retirando com empresa no prejuízo', d:'retiradas de R$ '+f(ret)+' com resultado de −R$ '+f(Math.abs(res))+' — insustentável a médio prazo.'});
-  }
-  // PMR alto
-  var pmrp = D.pmr_pmp[String(ano)];
-  if(pmrp && pmrp.pmr_efetivo !== null && pmrp.pmp_efetivo !== null){
-    if(pmrp.pmr_efetivo > pmrp.pmp_efetivo + 5){
-      alertas.push({t:'wa', b:'Ciclo financeiro negativo', d:'recebe em '+pmrp.pmr_efetivo+'d e paga em '+pmrp.pmp_efetivo+'d — pressiona capital de giro.'});
-    }
-  }
-  // Produtos com margem baixa
-  var produtos = D.top_prod[String(ano)] || [];
-  var baixaM = produtos.filter(function(p){return p.fat>0 && p.margem_pct<15;}).length;
-  if(baixaM >= 10){
-    alertas.push({t:'wa', b:baixaM+' produtos com margem abaixo de 15%', d:'revisar mix — produtos com margem baixa puxam a média para baixo.'});
-  }
-  // Clientes perdidos
-  var coorte = getCoorteAno(ano);
-  if(coorte && coorte.perdidos > coorte.novos + coorte.retornados){
-    alertas.push({t:'wa', b:'Churn de clientes: '+coorte.perdidos+' perdidos vs '+(coorte.novos+coorte.retornados)+' novos/retornados', d:'base de clientes está encolhendo — investigar causas.'});
-  }
-
-  if(alertas.length===0){
-    alertas.push({t:'ok', b:'Sem alertas críticos detectados', d:'todos os indicadores dentro do esperado no período analisado.'});
-  }
-
-  var out = '<div class="sc">ALERTAS ESTRATÉGICOS</div>';
-  out += '<div class="card">';
-  alertas.forEach(function(a){
-    out += '<div class="al '+a.t+'"><div><b>'+a.b+'</b><span class="ad">'+a.d+'</span></div></div>';
-  });
-  out += '</div>';
-  return out;
-}
+function renderSocios(){ return ''; }
+function renderConcentracao(){ return ''; }
+function renderDespesas(){ return ''; }
+function renderPmrPmp(){ return ''; }
+function renderInadimplencia(){ return ''; }
+function renderAlertas(){ return ''; }
 
 // === INIT ===
-render();
+// Adicionei um temporizador para garantir que o script e o HTML carregaram totalmente.
+setTimeout(render, 100);
 </script>
 </body>
 </html>

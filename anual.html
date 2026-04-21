@@ -254,7 +254,7 @@ function hookBusca(id, campo){
   var el=document.getElementById(id);
   if(!el)return;
   var cursor=el.selectionStart;
-  el.focus();
+  try{el.focus({preventScroll:true});}catch(e){el.focus();}
   try{el.setSelectionRange(cursor,cursor);}catch(e){}
 }
 function setBuscaCli(v){S.busca_cli=v;renderLite();}
@@ -302,7 +302,7 @@ function render(){
   h+='<div class="nav">';
   h+='<a href="index.html">Semanal</a>';
   h+='<a href="mensal.html">Mensal</a>';
-  h+='<a href="anual.html" class="on">Anual</a>';
+  h+='<a class="on" style="cursor:default">Anual</a>';
   h+='</div>';
   h+='<span class="dt">📅 '+D.data_ref+'</span>';
   h+='</div></div>';
@@ -689,11 +689,20 @@ function render(){
   // FOOTER
   h+='<div class="ftr">BIGTEX • Painel Anual • Dados atualizados em '+D.data_ref+'</div>';
 
+  // salvar scroll e elemento ativo antes de trocar o DOM
+  var _savedScroll = window.scrollY || window.pageYOffset || 0;
+  var _activeEl = document.activeElement;
+  var _activeId = (_activeEl && _activeEl.id) ? _activeEl.id : null;
+
   document.getElementById('app').innerHTML = h;
 
-  // re-hookar buscas
-  hookBusca('bcli','busca_cli');
-  hookBusca('bprod','busca_prod');
+  // restaurar scroll (sem smooth, instantâneo)
+  window.scrollTo(0, _savedScroll);
+
+  // re-hookar busca APENAS se o usuário estava digitando num dos inputs
+  if(_activeId==='bcli' || _activeId==='bprod'){
+    hookBusca(_activeId, _activeId==='bcli'?'busca_cli':'busca_prod');
+  }
 }
 
 

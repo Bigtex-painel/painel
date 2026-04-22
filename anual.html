@@ -13,7 +13,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .nav a{font-size:11px;font-weight:600;padding:6px 14px;border-radius:8px;background:transparent;color:var(--dim);text-decoration:none;transition:all .15s}
 .nav a.on{background:var(--blu);color:#fff}.nav a:hover:not(.on){color:var(--txt)}
 .dt{color:var(--dim);font-size:11px;font-weight:500;background:var(--card);padding:4px 10px;border-radius:14px;border:1px solid var(--brd)}
-.prow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.prow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;position:sticky;top:0;z-index:50;background:var(--bg);padding:10px 0;margin-top:0;border-bottom:1px solid var(--brd)}
 .chips{display:flex;gap:4px;background:var(--card);border-radius:10px;padding:3px;border:1px solid var(--brd)}
 .chip{font-size:12px;font-weight:700;padding:6px 14px;border-radius:8px;background:transparent;color:var(--dim);cursor:pointer;border:none;font-family:inherit;transition:all .15s}
 .chip.on{background:var(--blu);color:#fff}
@@ -106,26 +106,43 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 @media(max-width:600px){.kvl{font-size:18px}.hdr h1{font-size:17px}.search-box{width:100%}}
 /* BARCHART (mensal do ano) */
 .barchart{display:flex;align-items:flex-end;gap:5px;height:260px;padding-top:26px;border-bottom:1px solid var(--brd);padding-bottom:4px;position:relative}
-.barchart .col{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative}
+.barchart .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0;position:relative;height:100%}
 .barchart .col:hover .bar{filter:brightness(1.25)}
 .barchart .col:hover .barval{color:var(--blu);font-weight:700;opacity:1}
-.barchart .bar{width:82%;border-radius:2px 2px 0 0;background:linear-gradient(180deg,var(--blu),#1a5399);min-height:2px;position:relative;transition:all .15s}
+.barchart .bar{width:82%;border-radius:2px 2px 0 0;background:linear-gradient(180deg,var(--blu),#1a5399);min-height:2px;position:relative;transition:all .15s;flex-shrink:0}
 .barchart .bar.hi{background:linear-gradient(180deg,var(--grn),#238636)}
 .barchart .bar.parc{background:linear-gradient(180deg,var(--yel),#9c6d0c);opacity:.9}
 .barchart .barval{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:9px;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--dim);white-space:nowrap;transition:all .15s}
-.barchart .lbl{font-size:10px;color:var(--dim);margin-top:4px;font-weight:600}
+.barchart .lbl{font-size:10px;color:var(--dim);margin-top:4px;font-weight:600;flex-shrink:0}
 /* Comparativo ano a ano — 5 barras */
 .yybars{display:flex;align-items:flex-end;gap:8px;height:220px;padding-top:26px;border-bottom:1px solid var(--brd);padding-bottom:4px;position:relative}
-.yybars .col{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;position:relative}
-.yybars .bar{width:70%;border-radius:3px 3px 0 0;min-height:3px;position:relative;transition:all .15s}
+.yybars .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0;position:relative;height:100%}
+.yybars .col .bar-wrap{width:70%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex-shrink:0}
+.yybars .bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;position:relative;transition:all .15s;flex-shrink:0}
 .yybars .bar.cur{background:linear-gradient(180deg,var(--blu),#1a5399)}
 .yybars .bar.ok{background:linear-gradient(180deg,var(--grn),#238636)}
 .yybars .bar.bad{background:linear-gradient(180deg,var(--red),#a5352e)}
 .yybars .bar.parc{background:linear-gradient(180deg,var(--yel),#9c6d0c);opacity:.9}
 .yybars .col:hover .bar{filter:brightness(1.25)}
-.yybars .barval{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--dim);white-space:nowrap}
-.yybars .lbl{font-size:11px;color:var(--dim);margin-top:4px;font-weight:700}
+.yybars .barval{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--dim);white-space:nowrap}
+.yybars .lbl{font-size:11px;color:var(--dim);margin-top:4px;font-weight:700;flex-shrink:0}
 .yybars .lbl.cur{color:var(--blu)}
+/* Variante com eixo zero no meio (para gráficos com valores negativos) */
+.yybars-neg{padding-top:26px;padding-bottom:22px;position:relative}
+.yybars-neg::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--brd);z-index:0;pointer-events:none}
+.yybars-neg .col.neg{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;flex:1;min-width:0}
+.yybars-neg .col.neg .half{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;min-height:0}
+.yybars-neg .col.neg .half.top{justify-content:flex-end}
+.yybars-neg .col.neg .half.bot{justify-content:flex-start}
+.yybars-neg .col.neg .bar-wrap{width:70%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.yybars-neg .col.neg .bar-wrap.down{justify-content:flex-start}
+.yybars-neg .col.neg .bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:all .15s;flex-shrink:0}
+.yybars-neg .col.neg .bar.down{border-radius:0 0 3px 3px}
+.yybars-neg .col.neg .barval{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--dim);white-space:nowrap}
+.yybars-neg .col.neg .barval.below{top:auto;bottom:-16px;color:var(--red)}
+.yybars-neg .col.neg:hover .bar{filter:brightness(1.25)}
+.yybars-neg .col.neg .lbl{font-size:11px;color:var(--dim);margin-top:4px;font-weight:700;flex-shrink:0;position:absolute;bottom:-18px;left:0;right:0;text-align:center}
+.yybars-neg .col.neg .lbl.cur{color:var(--blu)}
 /* Heatmap sazonalidade */
 .heatmap{display:grid;grid-template-columns:60px repeat(12,1fr);gap:3px;margin-top:8px}
 .heatmap .hcell{padding:7px 4px;text-align:center;font-size:10px;font-family:'JetBrains Mono',monospace;border-radius:4px;color:var(--txt);font-weight:600;min-height:26px;display:flex;align-items:center;justify-content:center;cursor:default}
@@ -804,49 +821,29 @@ function render(){
   // ============ EVOLUÇÃO MENSAL DO ANO ============
   h+='<div class="sc">EVOLUÇÃO MENSAL — '+ano+'</div>';
   h+='<div class="card">';
-  h+='<div class="klb" style="margin-bottom:8px">Receita por mês (barras) • Resultado Gerencial por mês (linha)</div>';
+  h+='<div class="klb" style="margin-bottom:12px"><span style="color:var(--blu)">barras azuis: receita</span> <span style="color:var(--mut)">•</span> <span style="color:var(--cya)">linha ciano: resultado gerencial</span></div>';
   var meses_ano_ym = [];
   for(var m=1;m<=12;m++){
     var ym = ano+'-'+String(m).padStart(2,'0');
     meses_ano_ym.push({m:m, ym:ym, dados: D.ym_data[ym] || null});
   }
+  var nomesMesCurto = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   var receitasMes = meses_ano_ym.map(function(x){return x.dados?x.dados.receita:0;});
   var resultadosMes = meses_ano_ym.map(function(x){return x.dados?x.dados.resultado:0;});
-  var maxRec = Math.max.apply(null, receitasMes.concat([1]));
-  // barras de receita
-  h+='<div class="barchart">';
-  var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  meses_ano_ym.forEach(function(x, i){
-    var r = receitasMes[i];
-    var pct = maxRec>0 ? (r/maxRec*100) : 0;
-    var ehUlt = (ano===2026 && x.m===D.ytd_mes);
-    var cls = 'bar';
-    if(ehUlt) cls += ' parc';
-    else if(r > maxRec*0.75) cls += ' hi';
-    if(!x.dados){ pct = 0; }
-    h+='<div class="col">';
-    h+='<div class="barval">'+(r>0?fk(r):'—')+'</div>';
-    h+='<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    h+='<div class="lbl">'+nomesMes[i]+'</div>';
-    h+='</div>';
-  });
-  h+='</div>';
-
-  // linha de resultado mensal (mini-linha abaixo)
-  h+='<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--brd)">';
-  h+='<div class="klb" style="font-size:9px;margin-bottom:4px">RESULTADO GERENCIAL MENSAL</div>';
-  h+='<div style="display:flex;gap:5px;align-items:center">';
-  meses_ano_ym.forEach(function(x,i){
-    var r = resultadosMes[i];
-    var cor = r>0?'var(--grn)':(r<0?'var(--red)':'var(--mut)');
-    var sim = r>0?'▲':(r<0?'▼':'•');
-    h+='<div style="flex:1;text-align:center;font-size:9px;font-family:\'JetBrains Mono\',monospace;color:'+cor+'">'+sim+' '+(r!==0?fk(Math.abs(r)):'—')+'</div>';
-  });
-  h+='</div></div>';
+  h+=svgEvolMensal(meses_ano_ym, receitasMes, resultadosMes, nomesMesCurto, ano);
   h+='</div>';
 
   // ============ COMPARATIVO ANO A ANO ============
-  h+='<div class="sc">COMPARATIVO ANO A ANO <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+(S.modo==='ytd'?'(todos YTD jan–abr)':'(anos cheios; 2026 = YTD jan–abr)')+'</small></div>';
+  var subCompLbl;
+  if(S.periodo && S.periodo !== 'ano'){
+    var nomesTri2 = {q1:'1º Trim.',q2:'2º Trim.',q3:'3º Trim.',q4:'4º Trim.'};
+    subCompLbl = '(todos '+nomesTri2[S.periodo]+')';
+  } else if(S.modo === 'ytd'){
+    subCompLbl = '(todos YTD jan–abr)';
+  } else {
+    subCompLbl = '(anos cheios; 2026 = YTD jan–abr)';
+  }
+  h+='<div class="sc">COMPARATIVO ANO A ANO <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+subCompLbl+'</small></div>';
   h+='<div class="grid2">';
   // Receita
   h+=barrasAnoAno('Receita', 'receita', 'R$ ', 'k', false);
@@ -854,8 +851,8 @@ function render(){
   h+=barrasAnoAno('Margem Bruta %', 'margem_bruta', '', '%', false, true);
   // Resultado Gerencial
   h+=barrasAnoAno('Resultado Gerencial', 'resultado', 'R$ ', 'k', false);
-  // Ticket Médio
-  h+=barrasAnoAno('Ticket Médio', 'ticket_medio', 'R$ ', 'k', false);
+  // Margem Líquida %
+  h+=barrasAnoAno('Margem Líquida %', 'margem_liquida', '', '%', false, true);
   h+='</div>';
 
   // ============ SAZONALIDADE ============
@@ -988,39 +985,251 @@ function render(){
 }
 
 
+// ========== EVOLUÇÃO MENSAL — SVG COM EIXO DUPLO ==========
+function svgEvolMensal(meses, receitas, resultados, nomesMes, ano){
+  // dimensões
+  var W = 1200, H = 340;
+  var mgT = 36, mgB = 64, mgL = 60, mgR = 60;
+  var plotW = W - mgL - mgR;
+  var plotH = H - mgT - mgB;
+  var n = meses.length;
+  // escalas
+  var maxRec = Math.max.apply(null, receitas.concat([1]));
+  var maxRes = Math.max.apply(null, resultados.concat([0]));
+  var minRes = Math.min.apply(null, resultados.concat([0]));
+  // Escala 100% ajustada ao maior valor real (apenas ~5% de folga visual)
+  // e ticks intermediários "redondos" que caem dentro dessa faixa.
+  function niceTickStep(range, approxTicks){
+    if(range<=0) return 1;
+    var raw = range / approxTicks;
+    var p = Math.pow(10, Math.floor(Math.log10(raw)));
+    var n_ = raw/p;
+    var step = n_<1.5?1:(n_<3?2:(n_<7?5:10));
+    return step * p;
+  }
+  // topo: valor real do maior + 5% de folga para headroom visual
+  var recMax = maxRec * 1.05;
+  var resMax = maxRes>0 ? maxRes * 1.08 : 0;
+  var resMin = minRes<0 ? minRes * 1.08 : 0;
+  if(resMax===0 && resMin===0) resMax=1;
+  // ticks do eixo esquerdo (receita) e direito (resultado)
+  var stepRec = niceTickStep(recMax, 4);
+  var recTicks = [];
+  for(var tk=0; tk*stepRec <= recMax + stepRec*0.01; tk++){
+    recTicks.push(tk*stepRec);
+  }
+  // topo exato do eixo esquerdo = último tick (ou o próprio recMax se ainda faltar)
+  var recTop = recTicks[recTicks.length-1];
+  if(recTop < recMax) { recTop += stepRec; recTicks.push(recTop); }
+  // eixo direito: mesma cardinalidade de ticks, mantendo o alinhamento da linha base (0)
+  var resRange = resMax - resMin;
+  var stepRes = niceTickStep(resRange, recTicks.length-1);
+  var resTicks = [];
+  // ancorar ticks no 0 quando houver negativos
+  var startTk = resMin<0 ? Math.floor(resMin/stepRes)*stepRes : 0;
+  var endTk = Math.ceil(resMax/stepRes)*stepRes;
+  for(var tv=startTk; tv<=endTk+stepRes*0.01; tv+=stepRes){
+    resTicks.push(tv);
+  }
+  // usa os extremos dos ticks como limites reais dos eixos
+  recTop = Math.max.apply(null, recTicks);
+  var resTop = Math.max.apply(null, resTicks);
+  var resBot = Math.min.apply(null, resTicks);
+  // helpers geométricos — barras finas com gap generoso
+  var bandW = plotW / n;
+  var barGap = Math.max(10, bandW * 0.42);
+  var barW = bandW - barGap;
+  function xBand(i){ return mgL + i*bandW + bandW/2; }
+  function yRec(v){ return mgT + plotH - (v/recTop)*plotH; }
+  function yRes(v){
+    return mgT + plotH - (v - resBot)/(resTop - resBot) * plotH;
+  }
+  // mês atual (parcial) em 2026
+  var mesParc = (ano===2026 && D.ytd_mes) ? D.ytd_mes : -1;
+
+  var s = '<div style="overflow-x:auto">';
+  s += '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;min-width:800px">';
+
+  // ---- definições: gradiente das barras (contraste forte) ----
+  s += '<defs>';
+  s += '<linearGradient id="gradBar" x1="0%" y1="0%" x2="0%" y2="100%">';
+  s += '<stop offset="0%" stop-color="#9ecbff" stop-opacity="1"/>';
+  s += '<stop offset="55%" stop-color="#3a7dd1" stop-opacity="0.95"/>';
+  s += '<stop offset="100%" stop-color="#153d6e" stop-opacity="0.9"/>';
+  s += '</linearGradient>';
+  s += '<linearGradient id="gradBarParc" x1="0%" y1="0%" x2="0%" y2="100%">';
+  s += '<stop offset="0%" stop-color="#cfe3ff" stop-opacity="1"/>';
+  s += '<stop offset="55%" stop-color="#4a8ee0" stop-opacity="1"/>';
+  s += '<stop offset="100%" stop-color="#1e5299" stop-opacity="0.95"/>';
+  s += '</linearGradient>';
+  s += '</defs>';
+
+  // ---- título dos eixos ----
+  s += '<text x="'+mgL+'" y="18" fill="var(--blu)" font-size="11" font-weight="700" font-family="Plus Jakarta Sans,sans-serif" letter-spacing="0.5">RECEITA (R$)</text>';
+  s += '<text x="'+(W-mgR)+'" y="18" text-anchor="end" fill="var(--cya)" font-size="11" font-weight="700" font-family="Plus Jakarta Sans,sans-serif" letter-spacing="0.5">RESULTADO (R$)</text>';
+
+  // ---- grid horizontal tracejado + labels dos dois eixos ----
+  recTicks.forEach(function(v, i){
+    var y = yRec(v);
+    s += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+y+'" y2="'+y+'" stroke="var(--brd)" stroke-dasharray="3,4" stroke-width="1" opacity="0.55"/>';
+    s += '<text x="'+(mgL-8)+'" y="'+(y+4)+'" text-anchor="end" fill="var(--mut)" font-size="10" font-family="JetBrains Mono,monospace">'+fk(v)+'</text>';
+  });
+  resTicks.forEach(function(v, i){
+    var y = yRes(v);
+    s += '<text x="'+(W-mgR+8)+'" y="'+(y+4)+'" fill="var(--mut)" font-size="10" font-family="JetBrains Mono,monospace">'+fk(v)+'</text>';
+  });
+
+  // ---- barras de receita (com gradiente) ----
+  meses.forEach(function(x, i){
+    var v = receitas[i];
+    if(v<=0) return;
+    var bx = xBand(i) - barW/2;
+    var by = yRec(v);
+    var bh = mgT + plotH - by;
+    var ehParc = (x.m === mesParc);
+    var fill = ehParc ? 'url(#gradBarParc)' : 'url(#gradBar)';
+    var strokeExtra = ehParc ? ' stroke="#7eb9ff" stroke-width="2"' : '';
+    s += '<rect x="'+bx+'" y="'+by+'" width="'+barW+'" height="'+bh+'" rx="5" ry="5" fill="'+fill+'"'+strokeExtra+'/>';
+  });
+
+  // ---- linha zero do eixo direito (destacada quando há negativos) ----
+  if(resBot < 0){
+    var yZero = yRes(0);
+    s += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+yZero+'" y2="'+yZero+'" stroke="var(--mut)" stroke-width="1.2" stroke-dasharray="6,3" opacity="0.85"/>';
+    s += '<text x="'+(W-mgR+8)+'" y="'+(yZero-4)+'" fill="var(--mut)" font-size="9" font-weight="700" font-family="JetBrains Mono,monospace">0</text>';
+  }
+
+  // ---- linha do resultado (sobreposta) — segmentos coloridos por sinal ----
+  var pts = [];
+  var vals = [];
+  meses.forEach(function(x, i){
+    if(!x.dados) return;
+    pts.push([xBand(i), yRes(resultados[i])]);
+    vals.push(resultados[i]);
+  });
+  // desenhar segmentos par-a-par com cor conforme sinal do destino
+  function corPorSinal(v){ return v>=0 ? 'var(--cya)' : 'var(--red)'; }
+  for(var si=0; si<pts.length-1; si++){
+    var a = pts[si], b = pts[si+1];
+    var va = vals[si], vb = vals[si+1];
+    // se cruza o zero, quebra o segmento em 2 cores
+    if((va>=0) !== (vb>=0) && resBot<0){
+      var yZero2 = yRes(0);
+      // interpolação linear para achar x onde y = yZero
+      var t = (yZero2 - a[1]) / (b[1] - a[1]);
+      var xCross = a[0] + (b[0] - a[0]) * t;
+      s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+xCross+'" y2="'+yZero2+'" stroke="'+corPorSinal(va)+'" stroke-width="2" stroke-linecap="round"/>';
+      s += '<line x1="'+xCross+'" y1="'+yZero2+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="'+corPorSinal(vb)+'" stroke-width="2" stroke-linecap="round"/>';
+    } else {
+      s += '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="'+corPorSinal(vb)+'" stroke-width="2" stroke-linecap="round"/>';
+    }
+  }
+  // pontos: cor da borda conforme sinal, fill escuro
+  pts.forEach(function(p, i){
+    var cor = corPorSinal(vals[i]);
+    s += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="5" fill="#0d1117" stroke="'+cor+'" stroke-width="2.5"/>';
+  });
+
+  // ---- eixo-x: labels dos meses (mes/ano curto) ----
+  meses.forEach(function(x, i){
+    var xc = xBand(i);
+    var lblMes = nomesMes[x.m-1] + '/' + String(ano).slice(2);
+    var ehParc = (x.m === mesParc);
+    var corLbl = ehParc ? 'var(--blu)' : 'var(--dim)';
+    var weight = ehParc ? '700' : '600';
+    s += '<text x="'+xc+'" y="'+(mgT+plotH+20)+'" text-anchor="middle" fill="'+corLbl+'" font-size="12" font-weight="'+weight+'" font-family="Plus Jakarta Sans,sans-serif">'+lblMes+'</text>';
+    // receita embaixo do label do mês
+    if(receitas[i]>0){
+      s += '<text x="'+xc+'" y="'+(mgT+plotH+36)+'" text-anchor="middle" fill="var(--blu)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">'+fk(receitas[i])+'</text>';
+    }
+    // resultado embaixo da receita (cor conforme sinal)
+    if(x.dados){
+      var r = resultados[i];
+      var cor = r>0?'var(--cya)':(r<0?'var(--red)':'var(--mut)');
+      s += '<text x="'+xc+'" y="'+(mgT+plotH+52)+'" text-anchor="middle" fill="'+cor+'" font-size="10" font-weight="600" font-family="JetBrains Mono,monospace">'+fk(r)+'</text>';
+    }
+  });
+
+  s += '</svg></div>';
+  return s;
+}
+
 // ========== BARRAS ANO A ANO ==========
 function barrasAnoAno(titulo, campo, prefixo, sufixo, inverterCor, ehPct){
   var valores = D.anos.map(function(a){
     var dd = getDataAno(a);
     return dd ? dd[campo] : 0;
   });
-  var maxV = Math.max.apply(null, valores.concat([1]));
+  var maxV = Math.max.apply(null, valores.concat([0]));
   var minV = Math.min.apply(null, valores.concat([0]));
-  // se houver valores negativos
   var temNeg = minV < 0;
-  var faixa = maxV - (temNeg?minV:0);
+  // escala única simétrica — mesma referência para positivos e negativos
+  var escala = Math.max(Math.abs(maxV), Math.abs(minV), 1);
+
+  function fmtVal(v){
+    if(ehPct) return f2(v)+sufixo;
+    if(sufixo==='k') return prefixo+fk(v);
+    return prefixo+f(v);
+  }
 
   var out = '<div class="card" style="padding:12px"><div class="klb" style="margin-bottom:6px">'+titulo+'</div>';
+
+  if(temNeg){
+    // Layout com eixo-zero: cada metade usa a altura própria (100%) e escala independente
+    out += '<div class="yybars yybars-neg">';
+    D.anos.forEach(function(a, i){
+      var v = valores[i];
+      // escala única simétrica: módulo do valor sobre a escala global,
+      // ocupa 0..100% do semi-container (metade acima ou abaixo do eixo zero)
+      var pct = (Math.abs(v)/escala) * 100;
+      var cls = 'bar';
+      if(a === S.ano) cls += ' cur';
+      else if(a === 2026) cls += ' parc';
+      else if(v >= 0) cls += ' ok';
+      else cls += ' bad';
+      var valTxt = fmtVal(v);
+      out += '<div class="col neg">';
+      if(v >= 0){
+        out += '<div class="half top">';
+        out += '<div class="bar-wrap" style="height:'+pct+'%">';
+        out += '<div class="barval">'+valTxt+'</div>';
+        out += '<div class="'+cls+'" style="height:100%"></div>';
+        out += '</div>';
+        out += '</div>';
+        out += '<div class="half bot"></div>';
+      } else {
+        out += '<div class="half top"></div>';
+        out += '<div class="half bot">';
+        out += '<div class="bar-wrap down" style="height:'+pct+'%">';
+        out += '<div class="'+cls+' down" style="height:100%"></div>';
+        out += '<div class="barval below">'+valTxt+'</div>';
+        out += '</div>';
+        out += '</div>';
+      }
+      out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
+      out += '</div>';
+    });
+    out += '</div></div>';
+    return out;
+  }
+
+  // --- Sem negativos: label acompanha a barra ---
   out += '<div class="yybars">';
   D.anos.forEach(function(a, i){
     var v = valores[i];
-    var pct = faixa>0 ? Math.abs(v)/faixa*100 : 0;
+    var pct = escala>0 ? v/escala*100 : 0;
     var cls = 'bar';
     if(a === S.ano) cls += ' cur';
     else if(a === 2026) cls += ' parc';
     else if(v >= 0) cls += ' ok';
     else cls += ' bad';
-    var valTxt;
-    if(ehPct){
-      valTxt = f2(v)+sufixo;
-    } else if(sufixo==='k'){
-      valTxt = prefixo+fk(v);
-    } else {
-      valTxt = prefixo+f(v);
-    }
+    var valTxt = fmtVal(v);
+    // .bar-wrap controla a altura; dentro dele, label + barra (label no topo, ambos sobem juntos)
     out += '<div class="col">';
+    out += '<div class="bar-wrap" style="height:'+pct+'%">';
     out += '<div class="barval">'+valTxt+'</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
+    out += '<div class="'+cls+'" style="height:100%"></div>';
+    out += '</div>';
     out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
     out += '</div>';
   });

@@ -149,9 +149,16 @@ body{background:var(--bg);color:var(--txt);font-family:'Plus Jakarta Sans',sans-
 .heatmap .hcell.hd{background:transparent;color:var(--dim);font-weight:700;font-size:10px;text-transform:uppercase}
 .heatmap .hcell.lbl{background:transparent;color:var(--dim);text-align:left;padding-left:0;font-weight:700;justify-content:flex-start}
 .heatmap .hcell:hover:not(.hd):not(.lbl){filter:brightness(1.2);outline:1px solid var(--blu)}
-/* Linhas sobrepostas sazonalidade */
-.linesbox{position:relative;height:300px;margin-top:8px;padding:10px 4px 22px}
-.linesbox svg{width:100%;height:100%;overflow:visible}
+/* Linhas sobrepostas sazonalidade — largura 100% com altura proporcional (8:3) */
+.linesbox{position:relative;margin-top:8px;padding:10px 4px 0;width:100%}
+.linesbox svg{width:100%;height:auto;display:block;overflow:visible;aspect-ratio:800/300}
+/* Tooltip concentração (aparece ao passar o mouse sobre os dots) */
+#contip{position:fixed;z-index:9999;pointer-events:none;background:var(--card);border:1px solid var(--brd);border-radius:8px;padding:8px 10px;font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);box-shadow:0 8px 24px rgba(0,0,0,0.45);min-width:180px;display:none}
+#contip .th{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+#contip .row{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+#contip .row .n{color:var(--txt);font-weight:600}
+#contip .row .v{color:var(--cya);font-family:'JetBrains Mono',monospace;font-weight:700}
+.con-dot:hover, .inad-dot:hover{filter:brightness(1.3)}
 .lineslegend{display:flex;gap:12px;justify-content:center;font-size:11px;color:var(--dim);margin-top:4px;flex-wrap:wrap}
 .lineslegend span{display:flex;gap:5px;align-items:center;font-weight:600}
 .lineslegend i{display:inline-block;width:14px;height:3px;border-radius:2px}
@@ -194,6 +201,12 @@ D.socios_tri={"2022":{"q1":{"pro_labore":0.0,"comissao_socio":0.0},"q2":{"pro_la
 D.pmr_pmp_tri={"2022":{"q1":{"pmr_concedido":0.0,"pmr_efetivo":0.0,"pmp_concedido":29.4,"pmp_efetivo":29.7},"q2":{"pmr_concedido":23.2,"pmr_efetivo":32.7,"pmp_concedido":39.8,"pmp_efetivo":48.6},"q3":{"pmr_concedido":22.8,"pmr_efetivo":35.0,"pmp_concedido":34.5,"pmp_efetivo":36.5},"q4":{"pmr_concedido":18.6,"pmr_efetivo":26.2,"pmp_concedido":38.2,"pmp_efetivo":43.8}},"2023":{"q1":{"pmr_concedido":21.4,"pmr_efetivo":24.7,"pmp_concedido":36.5,"pmp_efetivo":38.4},"q2":{"pmr_concedido":22.0,"pmr_efetivo":32.0,"pmp_concedido":42.5,"pmp_efetivo":65.8},"q3":{"pmr_concedido":23.9,"pmr_efetivo":37.2,"pmp_concedido":36.9,"pmp_efetivo":63.0},"q4":{"pmr_concedido":22.7,"pmr_efetivo":27.1,"pmp_concedido":36.2,"pmp_efetivo":105.4}},"2024":{"q1":{"pmr_concedido":27.5,"pmr_efetivo":27.7,"pmp_concedido":56.7,"pmp_efetivo":57.1},"q2":{"pmr_concedido":20.0,"pmr_efetivo":23.4,"pmp_concedido":34.4,"pmp_efetivo":33.9},"q3":{"pmr_concedido":21.2,"pmr_efetivo":23.5,"pmp_concedido":19.5,"pmp_efetivo":236.2},"q4":{"pmr_concedido":22.5,"pmr_efetivo":26.3,"pmp_concedido":31.4,"pmp_efetivo":42.9}},"2025":{"q1":{"pmr_concedido":20.9,"pmr_efetivo":23.7,"pmp_concedido":42.0,"pmp_efetivo":42.3},"q2":{"pmr_concedido":21.9,"pmr_efetivo":27.5,"pmp_concedido":30.6,"pmp_efetivo":30.6},"q3":{"pmr_concedido":20.2,"pmr_efetivo":25.5,"pmp_concedido":92.1,"pmp_efetivo":28.1},"q4":{"pmr_concedido":24.9,"pmr_efetivo":27.9,"pmp_concedido":31.8,"pmp_efetivo":30.5}},"2026":{"q1":{"pmr_concedido":19.1,"pmr_efetivo":17.3,"pmp_concedido":26.2,"pmp_efetivo":23.4},"q2":{"pmr_concedido":18.3,"pmr_efetivo":0.9,"pmp_concedido":19.9,"pmp_efetivo":-7.0},"q3":{"pmr_concedido":0.0,"pmr_efetivo":0.0,"pmp_concedido":0.0,"pmp_efetivo":0.0},"q4":{"pmr_concedido":0.0,"pmr_efetivo":0.0,"pmp_concedido":0.0,"pmp_efetivo":0.0}}};
 D.inad_tri={"2022":{"q1":{"total_faturado":0.0,"inadimplente":0.0,"pct":0.0},"q2":{"total_faturado":1245007.84,"inadimplente":41053.23,"pct":3.3},"q3":{"total_faturado":886545.38,"inadimplente":63273.3,"pct":7.14},"q4":{"total_faturado":376194.75,"inadimplente":22243.78,"pct":5.91}},"2023":{"q1":{"total_faturado":510465.45,"inadimplente":27543.89,"pct":5.4},"q2":{"total_faturado":787267.21,"inadimplente":82112.08,"pct":10.43},"q3":{"total_faturado":513463.81,"inadimplente":38580.55,"pct":7.51},"q4":{"total_faturado":318172.82,"inadimplente":4385.37,"pct":1.38}},"2024":{"q1":{"total_faturado":304467.52,"inadimplente":34939.95,"pct":11.48},"q2":{"total_faturado":235269.77,"inadimplente":1334.87,"pct":0.57},"q3":{"total_faturado":532179.32,"inadimplente":15759.74,"pct":2.96},"q4":{"total_faturado":575196.39,"inadimplente":2021.96,"pct":0.35}},"2025":{"q1":{"total_faturado":587546.06,"inadimplente":11172.87,"pct":1.9},"q2":{"total_faturado":974119.33,"inadimplente":8427.75,"pct":0.87},"q3":{"total_faturado":1230513.12,"inadimplente":26486.35,"pct":2.15},"q4":{"total_faturado":1403510.14,"inadimplente":31319.8,"pct":2.23}},"2026":{"q1":{"total_faturado":1988217.14,"inadimplente":85058.88,"pct":4.28},"q2":{"total_faturado":292579.64,"inadimplente":4043.5,"pct":1.38},"q3":{"total_faturado":0.0,"inadimplente":0.0,"pct":0.0},"q4":{"total_faturado":0.0,"inadimplente":0.0,"pct":0.0}}};
 D.tri_completos=["2022-q1","2022-q2","2022-q3","2022-q4","2023-q1","2023-q2","2023-q3","2023-q4","2024-q1","2024-q2","2024-q3","2024-q4","2025-q1","2025-q2","2025-q3","2025-q4","2026-q1"];
+
+
+// === PAYLOAD SOCIOS DETALHADO (Thompson+Glauco somando 3.4.07+2.3.02 por fornecedor) ===
+D.socios_det_full={"2022":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":27676.04},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":27500.0}},"2023":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":21406.38},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":7500.0}},"2024":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":16960.16},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":45571.44}},"2025":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":26105.9},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":139236.43}},"2026":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":10678.09},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":86388.62}}};
+D.socios_det_ytd={"2022":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":0.0},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"2023":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4555.02},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"2024":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":5605.91},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"2025":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":5309.74},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":30983.2}},"2026":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":10678.09},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":86388.62}}};
+D.socios_det_tri={"2022":{"q1":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":0.0},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q2":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4764.63},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":2000.0}},"q3":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":14748.99},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":13500.0}},"q4":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":8162.42},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":12000.0}}},"2023":{"q1":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":3396.24},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q2":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":10961.34},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":7500.0}},"q3":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":3524.4},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q4":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":3524.4},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}}},"2024":{"q1":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4181.22},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q2":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4274.05},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q3":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4252.44},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":20092.12}},"q4":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4252.44},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":25479.32}}},"2025":{"q1":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":3958.72},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":19705.2}},"q2":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4053.06},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":32455.48}},"q3":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":4053.06},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":39324.99}},"q4":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":14041.06},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":47750.76}}},"2026":{"q1":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":9235.4},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":72469.39}},"q2":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":1442.69},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":13919.23}},"q3":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":0.0},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}},"q4":{"Thompson":{"pro_labore":0.0,"comissao":0.0,"total":0.0},"Glauco":{"pro_labore":0.0,"comissao":0.0,"total":0.0}}}};
 
 // --- estado ---
 var S = {
@@ -354,6 +367,18 @@ function sociosDoPeriodo(ano){
     return (D.socios_ytd && D.socios_ytd[k]) || {pro_labore:0,comissao_socio:0};
   }
   return (D.socios_full && D.socios_full[k]) || {pro_labore:0,comissao_socio:0};
+}
+// retorna { Thompson:{pro_labore,comissao,total}, Glauco:{...} } conforme período do painel
+function sociosDetDoPeriodo(ano){
+  var k=String(ano);
+  var vazio = {Thompson:{pro_labore:0,comissao:0,total:0}, Glauco:{pro_labore:0,comissao:0,total:0}};
+  if(S.periodo && S.periodo!=='ano'){
+    return (D.socios_det_tri && D.socios_det_tri[k] && D.socios_det_tri[k][S.periodo]) || vazio;
+  }
+  if(S.modo==='ytd' || ano===2026){
+    return (D.socios_det_ytd && D.socios_det_ytd[k]) || vazio;
+  }
+  return (D.socios_det_full && D.socios_det_full[k]) || vazio;
 }
 function pmrPmpDoPeriodo(ano){
   var k=String(ano);
@@ -941,6 +966,18 @@ function render(){
   h+='<div style="font-size:9px;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px solid var(--brd)">DRE gerencial reconstruída a partir das vendas analíticas (Receita/CMV) e do demonstrativo de despesas. Pode divergir ~5% da DRE contábil oficial devido a diferenças de regime (competência vs caixa) e classificações contábeis específicas.</div>';
   h+='</div>';
 
+  // ============ DESPESAS POR CATEGORIA ============
+  h+=renderDespesas();
+
+  // ============ PMR/PMP ============
+  h+=renderPmrPmp();
+
+  // ============ EVOLUÇÃO CONCENTRAÇÃO TOP 5 ============
+  h+=renderConcentracao();
+
+  // ============ INADIMPLÊNCIA ============
+  h+=renderInadimplencia();
+
   // ============ TOP 10 CLIENTES ============
   h+=renderTopClientes();
 
@@ -949,18 +986,6 @@ function render(){
 
   // ============ RETIRADAS DOS SÓCIOS + SOBRA ============
   h+=renderSocios();
-
-  // ============ EVOLUÇÃO CONCENTRAÇÃO TOP 5 ============
-  h+=renderConcentracao();
-
-  // ============ DESPESAS POR CATEGORIA ============
-  h+=renderDespesas();
-
-  // ============ PMR/PMP ============
-  h+=renderPmrPmp();
-
-  // ============ INADIMPLÊNCIA ============
-  h+=renderInadimplencia();
 
   // ============ ALERTAS ============
   h+=renderAlertas();
@@ -982,8 +1007,79 @@ function render(){
   if(_activeId==='bcli' || _activeId==='bprod'){
     hookBusca(_activeId, _activeId==='bcli'?'busca_cli':'busca_prod');
   }
+
+  // hookar tooltip dos dots da Concentração
+  hookConTooltip();
 }
 
+
+// ========== TOOLTIP DOS DOTS (CONCENTRAÇÃO + INADIMPLÊNCIA) ==========
+function hookConTooltip(){
+  // cria elemento uma vez e reusa
+  var tip = document.getElementById('contip');
+  if(!tip){
+    tip = document.createElement('div');
+    tip.id = 'contip';
+    document.body.appendChild(tip);
+  }
+  function esc(s){return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/&/g,'&amp;');}
+  function fmtBR(n){
+    if(n===null||n===undefined||isNaN(n)) return '0';
+    return Math.round(n).toLocaleString('pt-BR');
+  }
+  function show(ev){ tip.style.display='block'; posicionar(ev); }
+  function hide(){ tip.style.display='none'; }
+  function posicionar(ev){
+    var pad = 14;
+    var x = ev.clientX + pad;
+    var y = ev.clientY + pad;
+    var rect = tip.getBoundingClientRect();
+    if(x + rect.width + 8 > window.innerWidth)  x = ev.clientX - rect.width - pad;
+    if(y + rect.height + 8 > window.innerHeight) y = ev.clientY - rect.height - pad;
+    tip.style.left = x+'px';
+    tip.style.top = y+'px';
+  }
+
+  // ---- dots da Concentração ----
+  document.querySelectorAll('.con-dot').forEach(function(el){
+    el.addEventListener('mouseenter', function(ev){
+      var ano = el.getAttribute('data-ano');
+      var raw = el.getAttribute('data-top5') || '';
+      if(!raw){ tip.style.display='none'; return; }
+      var itens = raw.split(';;').map(function(pair){
+        var sp = pair.split('|');
+        return {n: sp[0], v: parseFloat(sp[1]||'0')};
+      });
+      var html = '<div class="th">Top 5 clientes · '+esc(ano)+'</div>';
+      itens.forEach(function(x, i){
+        html += '<div class="row"><span class="n">'+(i+1)+'. '+esc(x.n)+'</span><span class="v">R$ '+fmtBR(x.v)+'</span></div>';
+      });
+      tip.innerHTML = html;
+      show(ev);
+    });
+    el.addEventListener('mousemove', posicionar);
+    el.addEventListener('mouseleave', hide);
+  });
+
+  // ---- dots da Inadimplência ----
+  document.querySelectorAll('.inad-dot').forEach(function(el){
+    el.addEventListener('mouseenter', function(ev){
+      var ano = el.getAttribute('data-ano');
+      var raw = el.getAttribute('data-inad') || '';
+      if(!raw){ tip.style.display='none'; return; }
+      var sp = raw.split('|');
+      var inad = parseFloat(sp[0]||'0');
+      var total = parseFloat(sp[1]||'0');
+      var html = '<div class="th">Inadimplência · '+esc(ano)+'</div>';
+      html += '<div class="row"><span class="n">Em aberto</span><span class="v">R$ '+fmtBR(inad)+'</span></div>';
+      html += '<div class="row"><span class="n">Faturado no ano</span><span class="v" style="color:var(--dim)">R$ '+fmtBR(total)+'</span></div>';
+      tip.innerHTML = html;
+      show(ev);
+    });
+    el.addEventListener('mousemove', posicionar);
+    el.addEventListener('mouseleave', hide);
+  });
+}
 
 // ========== EVOLUÇÃO MENSAL — SVG COM EIXO DUPLO ==========
 function svgEvolMensal(meses, receitas, resultados, nomesMes, ano){
@@ -1417,7 +1513,8 @@ function renderTopClientes(){
 
   top10.forEach(function(c, i){
     var marca = S.ordCli;
-    var corMP = c.margem_pct>=15?'var(--grn)':(c.margem_pct>=8?'var(--yel)':'var(--red)');
+    // cor semafórica baseada na margem % (≥18 verde / ≥10 amarelo / <10 vermelho) — aplicada nas 3 colunas
+    var corSem = c.margem_pct>=18?'var(--grn)':(c.margem_pct>=10?'var(--yel)':'var(--red)');
     var deltaTxt = '—';
     if(c.delta_pct!==null && c.delta_pct!==undefined){
       var cls = c.delta_pct>0?'up':(c.delta_pct<0?'dn':'neu');
@@ -1426,17 +1523,16 @@ function renderTopClientes(){
     } else if(c.fat_ant===0){
       deltaTxt = '<span class="up">novo</span>';
     }
-    var corFat = (marca==='fat')?'var(--txt)':'var(--dim)';
-    var corMg  = (marca==='margem')?'var(--cya)':'var(--dim)';
+    // peso da fonte: coluna ativa do filtro fica bold
     var fwFat  = (marca==='fat')?'700':'400';
     var fwMg   = (marca==='margem')?'700':'400';
     var fwPct  = (marca==='margem_pct')?'700':'400';
     out += '<div class="fr">';
     out += '<div class="lft" title="'+c.c+'"><span style="color:var(--mut);font-family:\'JetBrains Mono\',monospace;font-size:10px;margin-right:6px">'+String(i+1).padStart(2,'0')+'</span>'+c.c+'</div>';
     out += '<div class="rgt">';
-    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corFat+';font-weight:'+fwFat+'">R$ '+f(c.fat)+'</span>';
-    out += '<span style="min-width:105px;text-align:right;color:'+corMg+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(c.margem)+'</span>';
-    out += '<span style="color:'+(marca==='margem_pct'?corMP:'var(--cya)')+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(c.margem_pct)+'%</span>';
+    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corSem+';font-weight:'+fwFat+'">R$ '+f(c.fat)+'</span>';
+    out += '<span style="min-width:105px;text-align:right;color:'+corSem+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(c.margem)+'</span>';
+    out += '<span style="color:'+corSem+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(c.margem_pct)+'%</span>';
     out += '<span class="delta" style="min-width:70px">'+deltaTxt+'</span>';
     out += '</div></div>';
   });
@@ -1500,7 +1596,8 @@ function renderTopProdutos(){
 
   top10.forEach(function(p, i){
     var marca = S.ordProd;
-    var corMP = p.margem_pct>=15?'var(--grn)':(p.margem_pct>=8?'var(--yel)':'var(--red)');
+    // cor semafórica baseada na margem % — aplicada nas 3 colunas
+    var corSem = p.margem_pct>=18?'var(--grn)':(p.margem_pct>=10?'var(--yel)':'var(--red)');
     var deltaTxt = '—';
     if(p.delta_pct!==null && p.delta_pct!==undefined){
       var cls = p.delta_pct>0?'up':(p.delta_pct<0?'dn':'neu');
@@ -1509,8 +1606,7 @@ function renderTopProdutos(){
     } else if(p.fat_ant===0){
       deltaTxt = '<span class="up">novo</span>';
     }
-    var corFat = (marca==='fat')?'var(--txt)':'var(--dim)';
-    var corMg  = (marca==='margem')?'var(--cya)':'var(--dim)';
+    // peso da fonte: coluna ativa do filtro fica bold
     var fwFat  = (marca==='fat')?'700':'400';
     var fwMg   = (marca==='margem')?'700':'400';
     var fwPct  = (marca==='margem_pct')?'700':'400';
@@ -1518,9 +1614,9 @@ function renderTopProdutos(){
     out += '<div class="lft" title="'+p.p+'"><span style="color:var(--mut);font-family:\'JetBrains Mono\',monospace;font-size:10px;margin-right:6px">'+String(i+1).padStart(2,'0')+'</span>'+p.p+'</div>';
     out += '<div class="rgt">';
     out += '<span style="color:var(--dim);min-width:80px;text-align:right;font-family:\'JetBrains Mono\',monospace">'+f2(p.qtde)+'</span>';
-    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corFat+';font-weight:'+fwFat+'">R$ '+f(p.fat)+'</span>';
-    out += '<span style="min-width:105px;text-align:right;color:'+corMg+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(p.margem)+'</span>';
-    out += '<span style="color:'+(marca==='margem_pct'?corMP:'var(--cya)')+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(p.margem_pct)+'%</span>';
+    out += '<span class="vl" style="min-width:105px;text-align:right;color:'+corSem+';font-weight:'+fwFat+'">R$ '+f(p.fat)+'</span>';
+    out += '<span style="min-width:105px;text-align:right;color:'+corSem+';font-weight:'+fwMg+';font-family:\'JetBrains Mono\',monospace">R$ '+f(p.margem)+'</span>';
+    out += '<span style="color:'+corSem+';min-width:62px;text-align:right;font-weight:'+fwPct+';font-family:\'JetBrains Mono\',monospace">'+f2(p.margem_pct)+'%</span>';
     out += '<span class="delta" style="min-width:70px">'+deltaTxt+'</span>';
     out += '</div></div>';
   });
@@ -1541,108 +1637,364 @@ function renderTopProdutos(){
 
 // ========== RETIRADAS SÓCIOS + SOBRA ==========
 function renderSocios(){
-  var out = '<div class="sc">RETIRADAS DOS SÓCIOS & SOBRA POTENCIAL <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">Thompson Jacon Cavalcante (pro-labore, sub 3.4.07) · Glauco Cicero Barbosa (comissão, sub 2.3.02) · Resultado Gerencial = sobra após pagar sócios = potencial dividendo</small></div>';
+  var out = '<div class="sc">RETIRADAS DOS SÓCIOS & SOBRA POTENCIAL <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">Thompson Jacon Cavalcante e Glauco Cicero Barbosa · Pro-labore (3.4.07), Salários (3.4.08) e/ou Comissões (2.3.02) conforme o ano · Resultado Gerencial = sobra após pagar sócios = potencial dividendo</small></div>';
   out += '<div class="card">';
   out += '<div class="socbox">';
 
-  // função auxiliar para pegar retiradas conforme período do painel
-  function getSoc(ano){
-    return sociosDoPeriodo(ano);
-  }
-
-  // cada ano como card
+  // cada ano como card — agora usando totais reais (pro_labore + comissao por fornecedor)
   D.anos.forEach(function(a){
     var dd = getDataAno(a);
     if(!dd) return;
-    var soc = getSoc(a);
-    var pl = soc.pro_labore || 0;
-    var com = soc.comissao_socio || 0;
-    var ret = pl + com;
+    var det = sociosDetDoPeriodo(a);
+    var th = det.Thompson || {pro_labore:0,comissao:0,total:0};
+    var gl = det.Glauco   || {pro_labore:0,comissao:0,total:0};
+    var ret = (th.total || 0) + (gl.total || 0);
     var res = dd.resultado || 0;
     var totSoma = ret + Math.max(res, 0);
-    var pctPL = totSoma>0 ? pl/totSoma*100 : 0;
-    var pctCom = totSoma>0 ? com/totSoma*100 : 0;
+    var pctTh  = totSoma>0 ? (th.total||0)/totSoma*100 : 0;
+    var pctGl  = totSoma>0 ? (gl.total||0)/totSoma*100 : 0;
     var pctRes = totSoma>0 ? Math.max(res,0)/totSoma*100 : 0;
     out += '<div class="socyr '+(a===S.ano?'hi':'')+'">';
     out += '<div class="socyrh"><span class="yr">'+a+(a===2026?' YTD':(S.modo==='ytd'?' YTD':''))+'</span><span class="tot">R$ '+f(dd.receita)+' receita</span></div>';
-    out += '<div class="socrow"><span class="nm">Thompson — Pro-labore</span><span class="vl" style="color:var(--pur)">R$ '+f(pl)+'</span></div>';
-    out += '<div class="socrow"><span class="nm">Glauco — Comissão</span><span class="vl" style="color:var(--yel)">R$ '+f(com)+'</span></div>';
+    // Thompson
+    out += '<div class="socrow"><span class="nm">Thompson</span><span class="vl" style="color:var(--pur)">R$ '+f(th.total)+'</span></div>';
+    // Glauco
+    out += '<div class="socrow"><span class="nm">Glauco</span><span class="vl" style="color:var(--cya)">R$ '+f(gl.total)+'</span></div>';
+    // Total
     out += '<div class="socrow" style="border-top:1px solid var(--brd);padding-top:6px;margin-top:3px"><span class="nm"><b>Total retiradas</b></span><span class="vl"><b>R$ '+f(ret)+'</b></span></div>';
     var corRes = res>=0?'var(--grn)':'var(--red)';
     out += '<div class="socrow"><span class="nm">Resultado Gerencial (sobra)</span><span class="vl" style="color:'+corRes+';font-weight:700">'+(res<0?'−':'')+'R$ '+f(Math.abs(res))+'</span></div>';
     if(totSoma>0){
       out += '<div class="sobra-bar">';
-      if(pctPL>0) out += '<div style="background:var(--pur);width:'+pctPL+'%" title="Pro-labore">'+(pctPL>=10?f2(pctPL)+'%':'')+'</div>';
-      if(pctCom>0) out += '<div style="background:var(--yel);width:'+pctCom+'%" title="Comissão">'+(pctCom>=10?f2(pctCom)+'%':'')+'</div>';
+      if(pctTh>0)  out += '<div style="background:var(--pur);width:'+pctTh+'%" title="Thompson">'+(pctTh>=10?f2(pctTh)+'%':'')+'</div>';
+      if(pctGl>0)  out += '<div style="background:var(--cya);width:'+pctGl+'%" title="Glauco">'+(pctGl>=10?f2(pctGl)+'%':'')+'</div>';
       if(pctRes>0) out += '<div style="background:var(--grn);width:'+pctRes+'%" title="Sobra/Dividendo">'+(pctRes>=10?f2(pctRes)+'%':'')+'</div>';
       out += '</div>';
-      out += '<div style="font-size:9px;color:var(--mut);margin-top:4px;font-family:\'JetBrains Mono\',monospace">Distribuição de R$ '+f(totSoma)+'</div>';
+      out += '<div style="font-size:9px;color:var(--mut);margin-top:4px;font-family:\'JetBrains Mono\',monospace">Distribuição de R$ '+f(totSoma)+' (<span style="color:var(--pur)">■</span> Thompson <span style="color:var(--cya)">■</span> Glauco <span style="color:var(--grn)">■</span> Sobra)</div>';
     } else if(res<0){
       out += '<div style="font-size:10px;color:var(--red);margin-top:6px;font-weight:600">⚠ Prejuízo: sócios retiraram mais do que a empresa gerou</div>';
     }
     out += '</div>';
   });
+
+  // ===== Card CONSOLIDADO (soma de todos os anos) =====
+  var cTh = 0, cGl = 0, cRec = 0, cRes = 0;
+  D.anos.forEach(function(a){
+    var dd = getDataAno(a);
+    if(!dd) return;
+    var det = sociosDetDoPeriodo(a);
+    cTh  += ((det.Thompson && det.Thompson.total) || 0);
+    cGl  += ((det.Glauco && det.Glauco.total) || 0);
+    cRec += dd.receita || 0;
+    cRes += dd.resultado || 0;
+  });
+  var cRet = cTh + cGl;
+  var cTot = cRet + Math.max(cRes, 0);
+  var cPctTh  = cTot>0 ? cTh/cTot*100 : 0;
+  var cPctGl  = cTot>0 ? cGl/cTot*100 : 0;
+  var cPctRes = cTot>0 ? Math.max(cRes,0)/cTot*100 : 0;
+  var periodoTxt = (D.anos[0]) + '–' + (D.anos[D.anos.length-1]);
+  out += '<div class="socyr" style="border:1px solid var(--blu);background:rgba(88,166,255,0.04)">';
+  out += '<div class="socyrh"><span class="yr" style="color:var(--blu)">CONSOLIDADO <span style="font-size:10px;color:var(--mut);font-weight:500">('+periodoTxt+')</span></span><span class="tot">R$ '+f(cRec)+' receita</span></div>';
+  out += '<div class="socrow"><span class="nm">Thompson</span><span class="vl" style="color:var(--pur)">R$ '+f(cTh)+'</span></div>';
+  out += '<div class="socrow"><span class="nm">Glauco</span><span class="vl" style="color:var(--cya)">R$ '+f(cGl)+'</span></div>';
+  out += '<div class="socrow" style="border-top:1px solid var(--brd);padding-top:6px;margin-top:3px"><span class="nm"><b>Total retiradas</b></span><span class="vl"><b>R$ '+f(cRet)+'</b></span></div>';
+  var cCorRes = cRes>=0?'var(--grn)':'var(--red)';
+  out += '<div class="socrow"><span class="nm">Resultado Gerencial (sobra)</span><span class="vl" style="color:'+cCorRes+';font-weight:700">'+(cRes<0?'−':'')+'R$ '+f(Math.abs(cRes))+'</span></div>';
+  if(cTot>0){
+    out += '<div class="sobra-bar">';
+    if(cPctTh>0)  out += '<div style="background:var(--pur);width:'+cPctTh+'%" title="Thompson">'+(cPctTh>=10?f2(cPctTh)+'%':'')+'</div>';
+    if(cPctGl>0)  out += '<div style="background:var(--cya);width:'+cPctGl+'%" title="Glauco">'+(cPctGl>=10?f2(cPctGl)+'%':'')+'</div>';
+    if(cPctRes>0) out += '<div style="background:var(--grn);width:'+cPctRes+'%" title="Sobra/Dividendo">'+(cPctRes>=10?f2(cPctRes)+'%':'')+'</div>';
+    out += '</div>';
+    // comparativo direto Thompson vs Glauco
+    var difAbs = cGl - cTh;
+    var difPct = cTh>0 ? ((cGl-cTh)/cTh*100) : null;
+    var corDif = difAbs>=0 ? 'var(--cya)' : 'var(--pur)';
+    var quem = difAbs>=0 ? 'Glauco retirou mais' : 'Thompson retirou mais';
+    var detDif = 'R$ '+f(Math.abs(difAbs)) + (difPct!==null ? ' ('+(difAbs>=0?'+':'−')+f2(Math.abs(difPct))+'%)' : '');
+    out += '<div style="font-size:10px;color:var(--mut);margin-top:6px;line-height:1.5">';
+    out += '<div style="font-family:\'JetBrains Mono\',monospace">Distribuição de R$ '+f(cTot)+' (<span style="color:var(--pur)">■</span> Thompson <span style="color:var(--cya)">■</span> Glauco <span style="color:var(--grn)">■</span> Sobra)</div>';
+    out += '<div style="margin-top:3px"><b style="color:'+corDif+'">'+quem+'</b>: '+detDif+' no período</div>';
+    out += '</div>';
+  }
   out += '</div>';
 
-  // Linha horizontal — histórico + % sobre receita
-  out += '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--brd)">';
-  out += '<div class="klb" style="margin-bottom:8px">EVOLUÇÃO — RETIRADAS vs RECEITA (%)</div>';
-  out += '<div class="yybars">';
-  var pctsRet = D.anos.map(function(a){
-    var dd = getDataAno(a);
-    if(!dd || !dd.receita) return 0;
-    var soc = getSoc(a);
-    return ((soc.pro_labore||0)+(soc.comissao_socio||0))/dd.receita*100;
-  });
-  var maxPct = Math.max.apply(null, pctsRet.concat([1]));
-  D.anos.forEach(function(a, i){
-    var v = pctsRet[i];
-    var pct = maxPct>0 ? v/maxPct*100 : 0;
-    var cls = a===S.ano?'bar cur':(a===2026?'bar parc':'bar ok');
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
-    out += '</div>';
-  });
   out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:6px">Percentual das retiradas dos sócios sobre o faturamento total de cada período.</div>';
+
+  // ----- Gráfico comparativo entre sócios (barras agrupadas) -----
+  out += '<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--brd)">';
+  out += '<div class="klb" style="margin-bottom:8px">COMPARATIVO DE RETIRADAS POR SÓCIO <span style="color:var(--mut);font-weight:400;text-transform:none">(R$ total: pro-labore + comissão por fornecedor)</span></div>';
+  out += svgSociosComparativo();
   out += '</div>';
 
   out += '</div>';
   return out;
 }
 
+// ========== SVG barras agrupadas Thompson x Glauco por ano ==========
+function svgSociosComparativo(){
+  var W = 900, H = 260;
+  var mgT = 28, mgB = 44, mgL = 60, mgR = 20;
+  var plotW = W - mgL - mgR;
+  var plotH = H - mgT - mgB;
+  var n = D.anos.length;
+
+  // coletar valores por sócio
+  var rows = D.anos.map(function(a){
+    var det = sociosDetDoPeriodo(a);
+    return {
+      ano: a,
+      th:  (det.Thompson && det.Thompson.total) || 0,
+      gl:  (det.Glauco && det.Glauco.total) || 0,
+    };
+  });
+  var maxV = 0;
+  rows.forEach(function(r){ if(r.th>maxV) maxV=r.th; if(r.gl>maxV) maxV=r.gl; });
+  if(maxV===0) maxV = 1;
+  var yTop = maxV * 1.12;
+
+  function niceTickStep(range, approxTicks){
+    if(range<=0) return 1;
+    var raw = range / approxTicks;
+    var p = Math.pow(10, Math.floor(Math.log10(raw)));
+    var n_ = raw/p;
+    var step = n_<1.5?1:(n_<3?2:(n_<7?5:10));
+    return step * p;
+  }
+  var stepY = niceTickStep(yTop, 4);
+  var yTicks = [];
+  for(var tk=0; tk*stepY <= yTop + stepY*0.01; tk++){ yTicks.push(tk*stepY); }
+  if(yTicks[yTicks.length-1] < yTop){ yTicks.push(yTicks[yTicks.length-1]+stepY); }
+  var yTopReal = yTicks[yTicks.length-1];
+
+  // geometria — duas barras por grupo (Thompson em roxo, Glauco em ciano)
+  var bandW = plotW / n;
+  var gap = Math.max(18, bandW * 0.28);   // espaço entre grupos
+  var innerGap = 4;                        // espaço entre as 2 barras do mesmo grupo
+  var grupoW = bandW - gap;
+  var barW = (grupoW - innerGap) / 2;
+  function xGrupo(i){ return mgL + i*bandW + gap/2; }
+  function yPos(v){ return mgT + plotH - (v/yTopReal)*plotH; }
+
+  var s = '<div style="width:100%">';
+  s += '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;aspect-ratio:'+W+'/'+H+';overflow:visible">';
+
+  // gradientes
+  s += '<defs>';
+  s += '<linearGradient id="gradSocTh" x1="0%" y1="0%" x2="0%" y2="100%">';
+  s += '<stop offset="0%" stop-color="#d7b8ff" stop-opacity="1"/>';
+  s += '<stop offset="55%" stop-color="#a277f0" stop-opacity="1"/>';
+  s += '<stop offset="100%" stop-color="#6a4bb3" stop-opacity="0.95"/>';
+  s += '</linearGradient>';
+  s += '<linearGradient id="gradSocGl" x1="0%" y1="0%" x2="0%" y2="100%">';
+  s += '<stop offset="0%" stop-color="#7de8d8" stop-opacity="1"/>';
+  s += '<stop offset="55%" stop-color="#39d2c0" stop-opacity="1"/>';
+  s += '<stop offset="100%" stop-color="#1a8c7f" stop-opacity="0.95"/>';
+  s += '</linearGradient>';
+  s += '</defs>';
+
+  // grid + labels Y
+  yTicks.forEach(function(v){
+    var y = yPos(v);
+    s += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+y+'" y2="'+y+'" stroke="var(--brd)" stroke-dasharray="3,4" stroke-width="1" opacity="0.5"/>';
+    s += '<text x="'+(mgL-8)+'" y="'+(y+4)+'" text-anchor="end" fill="var(--mut)" font-size="10" font-family="JetBrains Mono,monospace">R$ '+fk(v)+'</text>';
+  });
+
+  // barras
+  rows.forEach(function(r, i){
+    var x0 = xGrupo(i);
+    // Thompson
+    if(r.th>0){
+      var yTh = yPos(r.th);
+      var hTh = mgT+plotH - yTh;
+      s += '<rect x="'+x0+'" y="'+yTh+'" width="'+barW+'" height="'+hTh+'" rx="3" ry="3" fill="url(#gradSocTh)"/>';
+      s += '<text x="'+(x0+barW/2)+'" y="'+(yTh-5)+'" text-anchor="middle" fill="var(--pur)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">'+fk(r.th)+'</text>';
+    }
+    // Glauco
+    if(r.gl>0){
+      var xGl = x0+barW+innerGap;
+      var yGl = yPos(r.gl);
+      var hGl = mgT+plotH - yGl;
+      s += '<rect x="'+xGl+'" y="'+yGl+'" width="'+barW+'" height="'+hGl+'" rx="3" ry="3" fill="url(#gradSocGl)"/>';
+      s += '<text x="'+(xGl+barW/2)+'" y="'+(yGl-5)+'" text-anchor="middle" fill="var(--cya)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">'+fk(r.gl)+'</text>';
+    }
+    // label do ano embaixo do grupo
+    var ehCur = (r.ano === S.ano);
+    var cor = ehCur ? 'var(--blu)' : 'var(--dim)';
+    var weight = ehCur ? '700' : '600';
+    var xCentro = x0 + grupoW/2;
+    s += '<text x="'+xCentro+'" y="'+(mgT+plotH+22)+'" text-anchor="middle" fill="'+cor+'" font-size="12" font-weight="'+weight+'" font-family="Plus Jakarta Sans,sans-serif">'+r.ano+(r.ano===2026?' YTD':'')+'</text>';
+  });
+
+  s += '</svg></div>';
+  // legenda
+  s += '<div style="display:flex;gap:16px;justify-content:center;margin-top:4px;font-size:11px;color:var(--dim);font-weight:600">';
+  s += '<span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--pur)"></span>Thompson</span>';
+  s += '<span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--cya)"></span>Glauco</span>';
+  s += '</div>';
+  return s;
+}
+
 // ========== CONCENTRAÇÃO TOP 5 AO LONGO DOS ANOS ==========
 function renderConcentracao(){
   var out = '<div class="sc">EVOLUÇÃO DA CONCENTRAÇÃO (TOP 5 CLIENTES)</div>';
   out += '<div class="card">';
-  out += '<div class="klb" style="margin-bottom:8px">% que os 5 maiores clientes representam do faturamento (quanto menor, mais diversificado)</div>';
+  out += '<div class="klb" style="margin-bottom:8px">% que os 5 maiores clientes representam do faturamento (quanto menor, mais diversificado) <span style="color:var(--yel);margin-left:6px">• limites: 30% e 50%</span></div>';
+
+  // para cada ano: calcula % de concentração e guarda o top 5 (nome+fat) para o tooltip
+  var top5Ano = {};
   var pcts = D.anos.map(function(a){
     var cl = topCliDoPeriodo(a);
-    var top5 = cl.slice(0,5).reduce(function(ac,x){return ac+x.fat;},0);
+    var top5arr = cl.slice(0,5);
+    var top5 = top5arr.reduce(function(ac,x){return ac+x.fat;},0);
     var total = cl.reduce(function(ac,x){return ac+x.fat;},0);
+    top5Ano[a] = top5arr.map(function(x){
+      // primeiro "nome" = primeira palavra significativa (razão social costuma começar com pessoa ou empresa)
+      var nome = String(x.c||'').trim().split(/\s+/)[0];
+      return {n: nome, v: x.fat};
+    });
     return total>0 ? top5/total*100 : 0;
   });
-  var maxP = Math.max.apply(null, pcts.concat([1]));
-  out += '<div class="yybars">';
+  var LIM_OK = 30;   // abaixo = verde (diversificado)
+  var LIM_BAD = 50;  // acima = vermelho (alta dependência)
+
+  // dimensões SVG responsivas via aspect-ratio
+  var W = 900, H = 260;
+  var mgT = 30, mgB = 44, mgL = 46, mgR = 20;
+  var plotW = W - mgL - mgR;
+  var plotH = H - mgT - mgB;
+  var n = D.anos.length;
+
+  // topo: max(valores, 60%) + folga de 12%
+  var maxV = Math.max.apply(null, pcts.concat([60]));
+  var yTop = maxV * 1.12;
+  function xPos(i){ return mgL + (plotW / (n - 1)) * i; }
+  function yPos(v){ return mgT + plotH - (v / yTop) * plotH; }
+
+  // cor por faixa: <30 grn, 30-50 yel, ≥50 red
+  function corFaixa(v){
+    if(v>=LIM_BAD) return 'var(--red)';
+    if(v>=LIM_OK)  return 'var(--yel)';
+    return 'var(--grn)';
+  }
+
+  out += '<div style="width:100%">';
+  out += '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;aspect-ratio:'+W+'/'+H+';overflow:visible">';
+
+  // ---- defs: três gradientes verticais (verde, amarelo, vermelho) ----
+  out += '<defs>';
+  out += '<linearGradient id="gradConOk" x1="0%" y1="0%" x2="0%" y2="100%">';
+  out += '<stop offset="0%" stop-color="#3fb950" stop-opacity="0.55"/>';
+  out += '<stop offset="100%" stop-color="#3fb950" stop-opacity="0.05"/>';
+  out += '</linearGradient>';
+  out += '<linearGradient id="gradConWarn" x1="0%" y1="0%" x2="0%" y2="100%">';
+  out += '<stop offset="0%" stop-color="#d29922" stop-opacity="0.55"/>';
+  out += '<stop offset="100%" stop-color="#d29922" stop-opacity="0.05"/>';
+  out += '</linearGradient>';
+  out += '<linearGradient id="gradConBad" x1="0%" y1="0%" x2="0%" y2="100%">';
+  out += '<stop offset="0%" stop-color="#f85149" stop-opacity="0.55"/>';
+  out += '<stop offset="100%" stop-color="#f85149" stop-opacity="0.05"/>';
+  out += '</linearGradient>';
+  // clipPaths: 3 faixas verticais definidas pelas linhas 30% e 50%
+  var yOk = yPos(LIM_OK);
+  var yBad = yPos(LIM_BAD);
+  out += '<clipPath id="clipZonaOk"><rect x="0" y="'+yOk+'" width="'+W+'" height="'+(mgT + plotH - yOk)+'"/></clipPath>';
+  out += '<clipPath id="clipZonaWarn"><rect x="0" y="'+yBad+'" width="'+W+'" height="'+(yOk - yBad)+'"/></clipPath>';
+  out += '<clipPath id="clipZonaBad"><rect x="0" y="'+mgT+'" width="'+W+'" height="'+(yBad - mgT)+'"/></clipPath>';
+  out += '</defs>';
+
+  // ---- grid horizontal + labels do eixo Y ----
+  var yTicks = 4;
+  for(var g=0; g<=yTicks; g++){
+    var v = yTop * g / yTicks;
+    var y = yPos(v);
+    out += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+y+'" y2="'+y+'" stroke="var(--brd)" stroke-dasharray="3,4" stroke-width="1" opacity="0.5"/>';
+    out += '<text x="'+(mgL-8)+'" y="'+(y+4)+'" text-anchor="end" fill="var(--mut)" font-size="10" font-family="JetBrains Mono,monospace">'+f2(v)+'%</text>';
+  }
+
+  // ---- linhas dos limites (30% verde-amarelo / 50% amarelo-vermelho) — tracejadas ----
+  out += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+yOk+'" y2="'+yOk+'" stroke="var(--grn)" stroke-width="1" stroke-dasharray="5,4" opacity="0.7"/>';
+  out += '<text x="'+(W-mgR-6)+'" y="'+(yOk-6)+'" text-anchor="end" fill="var(--grn)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">limite 30%</text>';
+  out += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+yBad+'" y2="'+yBad+'" stroke="var(--red)" stroke-width="1" stroke-dasharray="5,4" opacity="0.7"/>';
+  out += '<text x="'+(W-mgR-6)+'" y="'+(yBad-6)+'" text-anchor="end" fill="var(--red)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">limite 50%</text>';
+
+  // ---- pontos ----
+  var pts = [];
   D.anos.forEach(function(a, i){
-    var v = pcts[i];
-    var pct = maxP>0 ? v/maxP*100 : 0;
-    var cls = 'bar';
-    if(a===S.ano) cls += ' cur';
-    else if(a===2026) cls += ' parc';
-    else if(v>=50) cls += ' bad';
-    else if(v>=30) cls += ' parc';
-    else cls += ' ok';
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+(a===2026?' YTD':'')+'</div>';
-    out += '</div>';
+    pts.push({ano:a, v:pcts[i], x:xPos(i), y:yPos(pcts[i])});
   });
+
+  // ---- área preenchida, recortada em 3 faixas ----
+  var areaD = 'M '+pts[0].x+' '+(mgT+plotH)+' ';
+  pts.forEach(function(p){ areaD += 'L '+p.x+' '+p.y+' '; });
+  areaD += 'L '+pts[pts.length-1].x+' '+(mgT+plotH)+' Z';
+  out += '<path d="'+areaD+'" fill="url(#gradConOk)"   clip-path="url(#clipZonaOk)"/>';
+  out += '<path d="'+areaD+'" fill="url(#gradConWarn)" clip-path="url(#clipZonaWarn)"/>';
+  out += '<path d="'+areaD+'" fill="url(#gradConBad)"  clip-path="url(#clipZonaBad)"/>';
+
+  // ---- linha: segmentos coloridos por faixa (quebra no cruzamento de cada limite) ----
+  function interpY(a, b, yAlvo){
+    // retorna x onde o segmento ab cruza y=yAlvo (assumindo cruzamento existe)
+    var t = (yAlvo - a.y) / (b.y - a.y);
+    return a.x + (b.x - a.x) * t;
+  }
+  for(var si=0; si<pts.length-1; si++){
+    var a = pts[si], b = pts[si+1];
+    // identifica cruzamentos desse segmento com os 2 limites
+    var cruzou = [];
+    [LIM_OK, LIM_BAD].forEach(function(lim){
+      if((a.v - lim) * (b.v - lim) < 0){
+        var yL = yPos(lim);
+        cruzou.push({x:interpY(a,b,yL), y:yL, v:lim});
+      }
+    });
+    // ordena cruzamentos ao longo do segmento (por x crescente se b.x>a.x)
+    cruzou.sort(function(p1,p2){return (b.x>a.x?1:-1)*(p1.x-p2.x);});
+    // desenha sub-segmentos
+    var sub = [a].concat(cruzou).concat([b]);
+    for(var sj=0; sj<sub.length-1; sj++){
+      var s1 = sub[sj], s2 = sub[sj+1];
+      // cor do sub-segmento: usa o valor do ponto médio (mais estável que extremos)
+      var vMid = (s1===a ? a.v : s1.v) + ((s2===b ? b.v : s2.v) - (s1===a ? a.v : s1.v)) * 0.5;
+      // como s1/s2 podem ser cruzamentos (com v=LIM), usamos a faixa correspondente ao "lado" da curva
+      // abordagem simples: pega o valor médio em y e converte
+      var yMid = (s1.y + s2.y) / 2;
+      var vAtMid = yTop - (yMid - mgT)/plotH*yTop;
+      var cor = corFaixa(vAtMid);
+      out += '<line x1="'+s1.x+'" y1="'+s1.y+'" x2="'+s2.x+'" y2="'+s2.y+'" stroke="'+cor+'" stroke-width="1.5" stroke-linecap="round"/>';
+    }
+  }
+
+  // ---- pontos + label do valor ----
+  pts.forEach(function(p){
+    var cor = corFaixa(p.v);
+    // dados JSON dos top 5 deste ano, codificados com escape mínimo para caber em atributo
+    var lst = top5Ano[p.ano] || [];
+    var dados = lst.map(function(x){return (x.n||'').replace(/"/g,'')+'|'+Math.round(x.v);}).join(';;');
+    // círculo visível
+    out += '<circle class="con-dot" data-ano="'+p.ano+'" data-top5="'+dados+'" cx="'+p.x+'" cy="'+p.y+'" r="4" fill="#0d1117" stroke="'+cor+'" stroke-width="1.8" style="cursor:pointer"/>';
+    // área de clique maior invisível sobre o círculo (hit area)
+    out += '<circle class="con-dot con-hit" data-ano="'+p.ano+'" data-top5="'+dados+'" cx="'+p.x+'" cy="'+p.y+'" r="14" fill="transparent" style="cursor:pointer"/>';
+    out += '<text x="'+p.x+'" y="'+(p.y - 12)+'" text-anchor="middle" fill="'+cor+'" font-size="11" font-weight="700" font-family="JetBrains Mono,monospace">'+f2(p.v)+'%</text>';
+  });
+
+  // ---- eixo X: anos ----
+  pts.forEach(function(p){
+    var ehCur = (p.ano === S.ano);
+    var cor = ehCur ? 'var(--blu)' : 'var(--dim)';
+    var weight = ehCur ? '700' : '600';
+    out += '<text x="'+p.x+'" y="'+(mgT+plotH+22)+'" text-anchor="middle" fill="'+cor+'" font-size="12" font-weight="'+weight+'" font-family="Plus Jakarta Sans,sans-serif">'+p.ano+(p.ano===2026?' YTD':'')+'</text>';
+  });
+
+  out += '</svg>';
   out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:6px">🟢 &lt;30% diversificada • 🟡 30-50% atenção • 🔴 ≥50% alta dependência</div>';
+
+  out += '<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">';
+  out += '<span style="color:var(--grn)">Verde</span>: &lt;30% — diversificada. ';
+  out += '<span style="color:var(--yel)">Amarelo</span>: 30-50% — atenção. ';
+  out += '<span style="color:var(--red)">Vermelho</span>: ≥50% — alta dependência.';
+  out += '</div>';
   out += '</div>';
   return out;
 }
@@ -1706,6 +2058,20 @@ function renderDespesas(){
 // ========== PMR / PMP ==========
 function renderPmrPmp(){
   var lbl = labelPeriodo();
+  // escala de cor para Atraso PMR / Atraso PMP (em dias, valor absoluto)
+  function corAtraso(d){
+    if(d===null||d===undefined||isNaN(d)) return 'var(--mut)';
+    var v = Math.abs(d);
+    if(v<2)  return 'var(--grn)';
+    if(v<5)  return 'var(--yel)';
+    if(v<10) return 'var(--ora)';
+    return 'var(--red)';
+  }
+  // cor do Ciclo (PMP-PMR): positivo = verde, negativo = vermelho
+  function corCiclo(d){
+    if(d===null||d===undefined||isNaN(d)) return 'var(--mut)';
+    return d>=0 ? 'var(--grn)' : 'var(--red)';
+  }
   var out = '<div class="sc">PRAZOS MÉDIOS — RECEBIMENTO & PAGAMENTO <small style="font-weight:400;text-transform:none;letter-spacing:.3px;color:var(--mut);margin-left:8px">'+lbl+' · ponderado por valor</small></div>';
   out += '<div class="card">';
   out += '<div class="klb" style="margin-bottom:10px">Evolução do PMR (dias até receber do cliente) e PMP (dias até pagar o fornecedor) — quanto maior o PMP em relação ao PMR, melhor o fluxo de caixa</div>';
@@ -1716,19 +2082,18 @@ function renderPmrPmp(){
     var atrasoR = (p.pmr_efetivo!==null && p.pmr_concedido!==null)?(p.pmr_efetivo-p.pmr_concedido):null;
     var atrasoP = (p.pmp_efetivo!==null && p.pmp_concedido!==null)?(p.pmp_efetivo-p.pmp_concedido):null;
     var ciclo = (p.pmp_efetivo!==null && p.pmr_efetivo!==null)?(p.pmp_efetivo-p.pmr_efetivo):null;
-    var cicloCls = ciclo===null?'':(ciclo>=0?'up':'dn');
-    // Atraso PMP alto = ruim (vermelho)
-    var atrPCls = atrasoP===null?'':(atrasoP>=15?'dn':(atrasoP>=5?'':'up'));
-    var atrRCls = atrasoR===null?'':(atrasoR>=10?'dn':(atrasoR>=5?'':'up'));
+    var corAtR  = corAtraso(atrasoR);
+    var corAtP  = corAtraso(atrasoP);
+    var corCic  = corCiclo(ciclo);
     out += '<tr'+(a===S.ano?' style="background:var(--card-h)"':'')+'>';
     out += '<td class="l"><b>'+a+'</b></td>';
-    out += '<td class="vl">'+(p.pmr_concedido!==null?f2(p.pmr_concedido)+' d':'—')+'</td>';
-    out += '<td class="vl" style="color:var(--grn)">'+(p.pmr_efetivo!==null?f2(p.pmr_efetivo)+' d':'—')+'</td>';
-    out += '<td class="vl '+atrRCls+'">'+(atrasoR!==null?(atrasoR>=0?'+':'')+f2(atrasoR)+' d':'—')+'</td>';
-    out += '<td class="vl">'+(p.pmp_concedido!==null?f2(p.pmp_concedido)+' d':'—')+'</td>';
-    out += '<td class="vl" style="color:var(--red)">'+(p.pmp_efetivo!==null?f2(p.pmp_efetivo)+' d':'—')+'</td>';
-    out += '<td class="vl '+atrPCls+'">'+(atrasoP!==null?(atrasoP>=0?'+':'')+f2(atrasoP)+' d':'—')+'</td>';
-    out += '<td class="vl '+cicloCls+'"><b>'+(ciclo!==null?(ciclo>=0?'+':'')+f2(ciclo)+' d':'—')+'</b></td>';
+    out += '<td class="vl" style="color:var(--blu)">'+(p.pmr_concedido!==null?f2(p.pmr_concedido)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:var(--blu)">'+(p.pmr_efetivo!==null?f2(p.pmr_efetivo)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:'+corAtR+'">'+(atrasoR!==null?(atrasoR>=0?'+':'')+f2(atrasoR)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:var(--cya)">'+(p.pmp_concedido!==null?f2(p.pmp_concedido)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:var(--cya)">'+(p.pmp_efetivo!==null?f2(p.pmp_efetivo)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:'+corAtP+'">'+(atrasoP!==null?(atrasoP>=0?'+':'')+f2(atrasoP)+' d':'—')+'</td>';
+    out += '<td class="vl" style="color:'+corCic+'"><b>'+(ciclo!==null?(ciclo>=0?'+':'')+f2(ciclo)+' d':'—')+'</b></td>';
     out += '</tr>';
   });
   out += '</tbody></table></div>';
@@ -1747,29 +2112,136 @@ function renderPmrPmp(){
 function renderInadimplencia(){
   var out = '<div class="sc">INADIMPLÊNCIA (VENCIDOS NÃO PAGOS)</div>';
   out += '<div class="card">';
-  out += '<div class="klb" style="margin-bottom:10px">% do faturamento por ano de vencimento que está vencido e ainda não foi quitado</div>';
-  out += '<div class="yybars">';
+  out += '<div class="klb" style="margin-bottom:8px">% do faturamento por ano de recebimentos em aberto <span style="color:var(--yel);margin-left:6px">• limite: &lt; 2%</span></div>';
+
+  // coleta % e detalhes (valor em R$ e total faturado) para cada ano
+  var inadDet = {};
   var pcts = D.anos.map(function(a){
     var i = inadDoPeriodo(a);
+    inadDet[a] = {
+      pct: i?i.pct:0,
+      inad: i?i.inadimplente:0,
+      total: i?i.total_faturado:0
+    };
     return i?i.pct:0;
   });
-  var maxP = Math.max.apply(null, pcts.concat([1]));
+  var META = 2.0;
+
+  // dimensões SVG — responsivo via aspect-ratio
+  var W = 900, H = 260;
+  var mgT = 30, mgB = 44, mgL = 46, mgR = 20;
+  var plotW = W - mgL - mgR;
+  var plotH = H - mgT - mgB;
+  var n = D.anos.length;
+
+  // escala Y: topo = max(valores, limite*2) + 10% folga
+  var maxV = Math.max.apply(null, pcts.concat([META * 2]));
+  var yTop = maxV * 1.12;
+  function xPos(i){ return mgL + (plotW / (n - 1)) * i; }
+  function yPos(v){ return mgT + plotH - (v / yTop) * plotH; }
+
+  out += '<div style="width:100%">';
+  out += '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;aspect-ratio:'+W+'/'+H+';overflow:visible">';
+
+  // ---- defs: gradientes verde e vermelho para a área ----
+  out += '<defs>';
+  out += '<linearGradient id="gradInadOk" x1="0%" y1="0%" x2="0%" y2="100%">';
+  out += '<stop offset="0%" stop-color="#3fb950" stop-opacity="0.55"/>';
+  out += '<stop offset="100%" stop-color="#3fb950" stop-opacity="0.05"/>';
+  out += '</linearGradient>';
+  out += '<linearGradient id="gradInadBad" x1="0%" y1="0%" x2="0%" y2="100%">';
+  out += '<stop offset="0%" stop-color="#f85149" stop-opacity="0.55"/>';
+  out += '<stop offset="100%" stop-color="#f85149" stop-opacity="0.05"/>';
+  out += '</linearGradient>';
+  // clipPaths: dividir a área em "abaixo do limite" e "acima do limite"
+  out += '<clipPath id="clipAcimaMeta"><rect x="0" y="'+mgT+'" width="'+W+'" height="'+(yPos(META) - mgT)+'"/></clipPath>';
+  out += '<clipPath id="clipAbaixoMeta"><rect x="0" y="'+yPos(META)+'" width="'+W+'" height="'+(mgT + plotH - yPos(META))+'"/></clipPath>';
+  out += '</defs>';
+
+  // ---- grid horizontal + labels do eixo Y ----
+  var yTicks = 4;
+  for(var g=0; g<=yTicks; g++){
+    var v = yTop * g / yTicks;
+    var y = yPos(v);
+    out += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+y+'" y2="'+y+'" stroke="var(--brd)" stroke-dasharray="3,4" stroke-width="1" opacity="0.5"/>';
+    out += '<text x="'+(mgL-8)+'" y="'+(y+4)+'" text-anchor="end" fill="var(--mut)" font-size="10" font-family="JetBrains Mono,monospace">'+f2(v)+'%</text>';
+  }
+
+  // ---- linha do limite (2%) — tracejada amarela, atravessa todo o plot ----
+  var yMeta = yPos(META);
+  out += '<line x1="'+mgL+'" x2="'+(W-mgR)+'" y1="'+yMeta+'" y2="'+yMeta+'" stroke="var(--yel)" stroke-width="1" stroke-dasharray="5,4" opacity="0.75"/>';
+  out += '<text x="'+(W-mgR-6)+'" y="'+(yMeta-6)+'" text-anchor="end" fill="var(--yel)" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">limite 2,00%</text>';
+
+  // ---- pontos reais ----
+  var pts = [];
   D.anos.forEach(function(a, i){
-    var v = pcts[i];
-    var pct = maxP>0 ? v/maxP*100 : 0;
-    var cls = 'bar';
-    if(a===S.ano) cls += ' cur';
-    else if(v>=5) cls += ' bad';
-    else if(v>=3) cls += ' parc';
-    else cls += ' ok';
-    out += '<div class="col">';
-    out += '<div class="barval">'+f2(v)+'%</div>';
-    out += '<div class="'+cls+'" style="height:'+pct+'%"></div>';
-    out += '<div class="lbl'+(a===S.ano?' cur':'')+'">'+a+'</div>';
-    out += '</div>';
+    pts.push({ano:a, v:pcts[i], x:xPos(i), y:yPos(pcts[i])});
   });
+
+  // ---- área preenchida (caminho fechado até a baseline) ----
+  // construir polyline dos pontos da curva
+  var curva = pts.map(function(p){ return p.x+','+p.y; }).join(' ');
+  var xFim = pts[pts.length-1].x;
+  var xIni = pts[0].x;
+  var baseY = mgT + plotH;
+  var areaPath = 'M '+xIni+','+baseY+' L ' + curva.replace(/,/g,' ').replace(/ /g,',').replace(/,/g,' ') + ' L '+xFim+','+baseY+' Z';
+  // Aproximação mais simples:
+  var areaD = 'M '+xIni+' '+baseY+' ';
+  pts.forEach(function(p){ areaD += 'L '+p.x+' '+p.y+' '; });
+  areaD += 'L '+xFim+' '+baseY+' Z';
+
+  // desenhar a mesma área duas vezes, com clipPaths diferentes (verde abaixo, vermelho acima da meta)
+  out += '<path d="'+areaD+'" fill="url(#gradInadOk)"  clip-path="url(#clipAbaixoMeta)"/>';
+  out += '<path d="'+areaD+'" fill="url(#gradInadBad)" clip-path="url(#clipAcimaMeta)"/>';
+
+  // ---- linha (segmentos coloridos por posição relativa à meta) ----
+  // se um segmento cruza a meta, dividir em dois no ponto exato
+  function corPos(v){ return v > META ? 'var(--red)' : 'var(--grn)'; }
+  for(var si=0; si<pts.length-1; si++){
+    var a = pts[si], b = pts[si+1];
+    var cruzaMeta = (a.v > META) !== (b.v > META);
+    if(cruzaMeta){
+      // interpolar ponto de cruzamento
+      var t = (META - a.v) / (b.v - a.v);
+      var xC = a.x + (b.x - a.x) * t;
+      var yC = yMeta;
+      out += '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+xC+'" y2="'+yC+'" stroke="'+corPos(a.v)+'" stroke-width="1.5" stroke-linecap="round"/>';
+      out += '<line x1="'+xC+'" y1="'+yC+'" x2="'+b.x+'" y2="'+b.y+'" stroke="'+corPos(b.v)+'" stroke-width="1.5" stroke-linecap="round"/>';
+    } else {
+      out += '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" stroke="'+corPos(b.v)+'" stroke-width="1.5" stroke-linecap="round"/>';
+    }
+  }
+
+  // ---- pontos com fill escuro + borda colorida + label do % acima ----
+  pts.forEach(function(p){
+    var cor = corPos(p.v);
+    var det = inadDet[p.ano] || {pct:0, inad:0, total:0};
+    var dados = Math.round(det.inad)+'|'+Math.round(det.total);
+    // círculo visível
+    out += '<circle class="inad-dot" data-ano="'+p.ano+'" data-inad="'+dados+'" cx="'+p.x+'" cy="'+p.y+'" r="4" fill="#0d1117" stroke="'+cor+'" stroke-width="1.8" style="cursor:pointer"/>';
+    // área de hit invisível
+    out += '<circle class="inad-dot" data-ano="'+p.ano+'" data-inad="'+dados+'" cx="'+p.x+'" cy="'+p.y+'" r="14" fill="transparent" style="cursor:pointer"/>';
+    // label do valor: acima do ponto
+    out += '<text x="'+p.x+'" y="'+(p.y - 12)+'" text-anchor="middle" fill="'+cor+'" font-size="11" font-weight="700" font-family="JetBrains Mono,monospace">'+f2(p.v)+'%</text>';
+  });
+
+  // ---- eixo X: anos ----
+  pts.forEach(function(p){
+    var ehCur = (p.ano === S.ano);
+    var cor = ehCur ? 'var(--blu)' : 'var(--dim)';
+    var weight = ehCur ? '700' : '600';
+    out += '<text x="'+p.x+'" y="'+(mgT+plotH+22)+'" text-anchor="middle" fill="'+cor+'" font-size="12" font-weight="'+weight+'" font-family="Plus Jakarta Sans,sans-serif">'+p.ano+(p.ano===2026?' YTD':'')+'</text>';
+  });
+
+  out += '</svg>';
   out += '</div>';
-  out += '<div style="font-size:10px;color:var(--mut);margin-top:8px">Obs.: 2026 ainda tem muitos recebíveis em aberto no tempo — valor inicial, tende a cair conforme os pagamentos entram.</div>';
+
+  out += '<div style="font-size:10px;color:var(--mut);margin-top:8px;line-height:1.5">';
+  out += '<b style="color:var(--txt)">Limite tracejado em 2%</b>: teto de tolerância. ';
+  out += '<span style="color:var(--grn)">Verde</span>: dentro do aceitável. ';
+  out += '<span style="color:var(--red)">Vermelho</span>: acima do limite. ';
+  out += 'Obs.: 2026 ainda tem muitos recebíveis em aberto — valor inicial, tende a cair conforme os pagamentos entram.';
+  out += '</div>';
   out += '</div>';
   return out;
 }

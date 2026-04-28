@@ -467,12 +467,25 @@ function matchSearch(texto, query){
 function hookBusca(id, campo){
   var el=document.getElementById(id);
   if(!el)return;
-  var cursor=el.selectionStart;
+  // posição do cursor salva ANTES do re-render (em S._curCli / S._curProd)
+  var pos = (id==='bcli') ? S._curCli : S._curProd;
+  if(pos===undefined || pos===null) pos = (el.value||'').length;
   try{el.focus({preventScroll:true});}catch(e){el.focus();}
-  try{el.setSelectionRange(cursor,cursor);}catch(e){}
+  try{el.setSelectionRange(pos, pos);}catch(e){}
 }
-function setBuscaCli(v){S.busca_cli=v;renderLite();}
-function setBuscaProd(v){S.busca_prod=v;renderLite();}
+function setBuscaCli(v){
+  // captura a posição do cursor ANTES do render (depois o input é recriado e a posição vira 0)
+  var el = document.getElementById('bcli');
+  S._curCli = el ? el.selectionStart : (v||'').length;
+  S.busca_cli=v;
+  renderLite();
+}
+function setBuscaProd(v){
+  var el = document.getElementById('bprod');
+  S._curProd = el ? el.selectionStart : (v||'').length;
+  S.busca_prod=v;
+  renderLite();
+}
 
 function renderLite(){ render(); }
 

@@ -1,0 +1,27 @@
+{
+  "sucesso": true,
+  "exit_code": 0,
+  "fase_final": "concluido",
+  "processados": [
+    {
+      "origem": "vendas_2026.xlsx",
+      "destino": "vendas_2026.xlsx",
+      "tipo": "vendas",
+      "ano": 2026,
+      "sobrescreveu": true
+    }
+  ],
+  "avisos": [],
+  "erros": [],
+  "payloads_gerados": [
+    "gestor/payload.js",
+    "financeiro/payload.js"
+  ],
+  "metadata": {
+    "data_ref": "2026-05-03",
+    "data_extratos": "2026-05-01",
+    "inicio": "2026-05-03T19:51:35",
+    "fim": "2026-05-03T19:51:41",
+    "host": "runnervmeorf1"
+  }
+}

@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/27317767/README.md)
 # Painel Financeiro Bigtex
 
 Painel web hospedado em Cloudflare Pages com acesso restrito por Cloudflare Access.

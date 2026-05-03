@@ -1,0 +1,6 @@
+# Redirecionamento Cloudflare Pages
+# Quando alguém acessa a raiz da pasta sem arquivo, vai pro semanal
+/financeiro    /financeiro/semanal.html   302
+/financeiro/   /financeiro/semanal.html   302
+/gestor        /gestor/semanal.html       302
+/gestor/       /gestor/semanal.html       302

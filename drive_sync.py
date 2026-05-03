@@ -147,12 +147,24 @@ def atualizar_arquivo(service, file_id: str, src: Path) -> dict:
     ).execute()
 
 
-def deletar_arquivo(service, file_id: str) -> None:
-    """Move arquivo pra lixeira (não deleta permanentemente)."""
+def remover_de_pasta(service, file_id: str, folder_id: str) -> None:
+    """Desvincula um arquivo de uma pasta (NÃO deleta o arquivo).
+
+    Usa `removeParents` em vez de mover pra lixeira porque a Service Account,
+    sendo apenas Editora da pasta (não proprietária dos arquivos dentro),
+    não tem permissão para deletar/trashear arquivos do usuário. Mas pode
+    desvinculá-los da pasta — isso é uma operação na pasta, que ela tem
+    permissão de editar.
+
+    O arquivo desvinculado continua existindo no "Meu Drive" do dono
+    (propriedade preservada). Cópia auditável fica em processados/<data>/
+    no Git, então órfãos no Drive podem ser apagados pelo usuário sem perda.
+    """
     service.files().update(
         fileId=file_id,
-        body={'trashed': True},
+        removeParents=folder_id,
         supportsAllDrives=True,
+        fields='id, parents',
     ).execute()
 
 
@@ -300,8 +312,12 @@ def cmd_clear_inbox(args):
         if not arq:
             print(f'   ⚠️  não encontrado no INBOX: {nome}')
             continue
-        deletar_arquivo(service, arq['id'])
-        print(f'   ✓ removido: {nome}')
+        try:
+            remover_de_pasta(service, arq['id'], folder_id)
+            print(f'   ✓ removido: {nome}')
+        except HttpError as e:
+            # Não interrompe o lote — loga e segue
+            print(f'   ❌ falha ao remover {nome}: {e}')
 
 
 # ----------------------------------------------------------------------------

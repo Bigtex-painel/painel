@@ -1,0 +1,15 @@
+# Dependências do workflow GitHub Actions.
+# Inclui também as deps do gerar_payload.py por segurança (caso o repo
+# não tenha requirements.txt próprio).
+
+# Drive API
+google-api-python-client>=2.100.0
+google-auth>=2.20.0
+
+# gerar_payload.py
+pandas>=2.0.0
+openpyxl>=3.1.0
+pdfplumber>=0.10.0
+
+# notify.py (CallMeBot via HTTP)
+requests>=2.31.0

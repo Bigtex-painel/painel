@@ -1,9 +1,11 @@
 name: Atualizar Dashboard Bigtex
 
 on:
-  # Cron diário às 12h30 UTC = 9h30 BR (Brasil é UTC-3 fixo, sem DST)
+  # Cron diário às 12h17 UTC = 9h17 BR (Brasil é UTC-3 fixo, sem DST).
+  # Nota: minutos não-redondos (:17 em vez de :00 ou :30) reduzem a chance
+  # de ser atrasado pelo agendador do GitHub em horários de pico.
   schedule:
-    - cron: '30 12 * * *'
+    - cron: '17 12 * * *'
 
   # Botão manual na aba Actions do GitHub
   workflow_dispatch:

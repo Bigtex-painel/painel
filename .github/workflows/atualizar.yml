@@ -190,6 +190,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           DRIVE_INBOX_ID: ${{ secrets.DRIVE_INBOX_ID }}
+          DRIVE_LIXEIRA_ID: ${{ secrets.DRIVE_LIXEIRA_ID }}
         run: |
           # Só remove os que de fato foram processados (não os que ficaram
           # no INBOX por erro de identificação). Lê do status.json.

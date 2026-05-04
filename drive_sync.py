@@ -8,6 +8,8 @@ de ambiente (em produção, são Secrets do GitHub Actions):
     GOOGLE_SERVICE_ACCOUNT_JSON  Conteúdo (string) do JSON da Service Account
     DRIVE_INBOX_ID               ID da pasta INBOX no Drive
     DRIVE_BASES_ID               ID da pasta BASES no Drive
+    DRIVE_LIXEIRA_ID             ID da pasta LIXEIRA no Drive (destino dos
+                                 arquivos do INBOX após processamento)
 
 Subcomandos:
 
@@ -147,25 +149,34 @@ def atualizar_arquivo(service, file_id: str, src: Path) -> dict:
     ).execute()
 
 
-def remover_de_pasta(service, file_id: str, folder_id: str) -> None:
-    """Desvincula um arquivo de uma pasta (NÃO deleta o arquivo).
+def mover_para_pasta(service, file_id: str,
+                     from_folder_id: str, to_folder_id: str) -> None:
+    """Move um arquivo de uma pasta para outra (NÃO deleta).
 
-    Usa `removeParents` em vez de mover pra lixeira porque a Service Account,
-    sendo apenas Editora da pasta (não proprietária dos arquivos dentro),
-    não tem permissão para deletar/trashear arquivos do usuário. Mas pode
-    desvinculá-los da pasta — isso é uma operação na pasta, que ela tem
-    permissão de editar.
+    Atomicamente remove `from_folder_id` da lista de parents e adiciona
+    `to_folder_id`. Funciona mesmo quando a Service Account não é
+    proprietária do arquivo, desde que tenha permissão de edição em ambas
+    as pastas (`from` e `to`).
 
-    O arquivo desvinculado continua existindo no "Meu Drive" do dono
-    (propriedade preservada). Cópia auditável fica em processados/<data>/
-    no Git, então órfãos no Drive podem ser apagados pelo usuário sem perda.
+    Usado pra mover arquivos do INBOX pra LIXEIRA depois do processamento.
     """
     service.files().update(
         fileId=file_id,
-        removeParents=folder_id,
+        addParents=to_folder_id,
+        removeParents=from_folder_id,
         supportsAllDrives=True,
         fields='id, parents',
     ).execute()
+
+
+def calcular_md5(caminho: Path) -> str:
+    """MD5 de um arquivo local — pra comparar com md5Checksum do Drive."""
+    import hashlib
+    h = hashlib.md5()
+    with open(caminho, 'rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 # ----------------------------------------------------------------------------
@@ -221,6 +232,9 @@ def cmd_download_bases(args):
 def cmd_upload_bases(args):
     """Sobe arquivos de ./bases/ pra Drive(BASES) — APENAS UPDATE.
 
+    Otimização: se o MD5 do arquivo local é idêntico ao md5Checksum no Drive,
+    pula o upload (idempotência verdadeira).
+
     Se um arquivo local NÃO tem correspondente no Drive, é registrado como
     faltante (SA não pode criar). Demais são atualizados normalmente.
     Termina com exit 1 se houver algum faltante.
@@ -241,7 +255,7 @@ def cmd_upload_bases(args):
     por_nome = {a['name']: a for a in arquivos_drive}
 
     print(f'📤 BASES: {len(arquivos_locais)} arquivo(s) local(is)')
-    atualizados, faltantes, erros = [], [], []
+    atualizados, inalterados, faltantes, erros = [], [], [], []
 
     for arq in arquivos_locais:
         if arq.stat().st_size > MAX_FILE_BYTES:
@@ -254,6 +268,15 @@ def cmd_upload_bases(args):
             print(f'   ⚠️  FALTA NO DRIVE: {arq.name}')
             continue
 
+        # Comparação MD5: se local == drive, pula upload
+        md5_drive = existente.get('md5Checksum')
+        if md5_drive:
+            md5_local = calcular_md5(arq)
+            if md5_local == md5_drive:
+                inalterados.append(arq.name)
+                print(f'   ⏭️  {arq.name} (inalterado)')
+                continue
+
         try:
             atualizar_arquivo(service, existente['id'], arq)
             atualizados.append(arq.name)
@@ -264,6 +287,7 @@ def cmd_upload_bases(args):
 
     print()
     print(f'   ✅ atualizados:  {len(atualizados)}')
+    print(f'   ⏭️  inalterados:  {len(inalterados)}')
     if faltantes:
         print(f'   ⚠️  faltantes:    {len(faltantes)}')
         print('        (precisam ser criados manualmente em BASES no Drive '
@@ -281,12 +305,15 @@ def cmd_upload_bases(args):
 
 
 def cmd_clear_inbox(args):
-    """Remove (lixeira) arquivos do Drive(INBOX) pelos nomes dados.
+    """Move arquivos do INBOX para a LIXEIRA (Drive) pelos nomes dados.
 
     Recebe --names ou --names-file (um nome por linha).
+    Os arquivos NÃO são deletados — são movidos para `LIXEIRA` (DRIVE_LIXEIRA_ID),
+    de onde o usuário pode esvaziar manualmente quando quiser.
     """
     service = get_service()
-    folder_id = _get_env('DRIVE_INBOX_ID')
+    inbox_id = _get_env('DRIVE_INBOX_ID')
+    lixeira_id = _get_env('DRIVE_LIXEIRA_ID')
 
     nomes: list[str] = []
     if args.names:
@@ -304,8 +331,8 @@ def cmd_clear_inbox(args):
         print('⚠️  Nenhum nome fornecido — nada a fazer')
         return
 
-    print(f'🗑️  INBOX: removendo {len(nomes)} arquivo(s)')
-    arquivos_inbox = listar_arquivos(service, folder_id)
+    print(f'🗑️  INBOX → LIXEIRA: movendo {len(nomes)} arquivo(s)')
+    arquivos_inbox = listar_arquivos(service, inbox_id)
     por_nome = {a['name']: a for a in arquivos_inbox}
     for nome in nomes:
         arq = por_nome.get(nome)
@@ -313,11 +340,11 @@ def cmd_clear_inbox(args):
             print(f'   ⚠️  não encontrado no INBOX: {nome}')
             continue
         try:
-            remover_de_pasta(service, arq['id'], folder_id)
-            print(f'   ✓ removido: {nome}')
+            mover_para_pasta(service, arq['id'], inbox_id, lixeira_id)
+            print(f'   ✓ movido: {nome}')
         except HttpError as e:
             # Não interrompe o lote — loga e segue
-            print(f'   ❌ falha ao remover {nome}: {e}')
+            print(f'   ❌ falha ao mover {nome}: {e}')
 
 
 # ----------------------------------------------------------------------------

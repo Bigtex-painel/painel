@@ -1,0 +1,52 @@
+{
+  "sucesso": true,
+  "exit_code": 0,
+  "fase_final": "concluido",
+  "processados": [
+    {
+      "origem": "2026.05.04-CAIXA.pdf",
+      "destino": "extrato_caixa.pdf",
+      "banco": "Caixa",
+      "saldo": 560.37,
+      "data_extrato": "2026-05-04",
+      "sobrescreveu": true
+    },
+    {
+      "origem": "2026.05.04-INTER.pdf",
+      "destino": "extrato_inter.pdf",
+      "banco": "Inter",
+      "saldo": 5377.8,
+      "data_extrato": "2026-05-04",
+      "sobrescreveu": true
+    },
+    {
+      "origem": "2026.05.04-ITAU.pdf",
+      "destino": "extrato_itau.pdf",
+      "banco": "Itaú",
+      "saldo": 141112.08,
+      "data_extrato": "2026-05-04",
+      "sobrescreveu": true
+    },
+    {
+      "origem": "2026.05.04-STONE.pdf",
+      "destino": "extrato_stone.pdf",
+      "banco": "Stone",
+      "saldo": 11338.15,
+      "data_extrato": "2026-05-04",
+      "sobrescreveu": true
+    }
+  ],
+  "avisos": [],
+  "erros": [],
+  "payloads_gerados": [
+    "gestor/payload.js",
+    "financeiro/payload.js"
+  ],
+  "metadata": {
+    "data_ref": "2026-05-04",
+    "data_extratos": "2026-05-04",
+    "inicio": "2026-05-04T12:46:57",
+    "fim": "2026-05-04T12:47:03",
+    "host": "runnervmeorf1"
+  }
+}

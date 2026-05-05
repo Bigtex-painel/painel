@@ -2,7 +2,7 @@
 
 Painel web hospedado em Cloudflare Pages com acesso restrito por Cloudflare Access.
 
-## Estrutura
+## Estrutura:
 
 ```
 painel/
